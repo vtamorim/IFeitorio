@@ -1,0 +1,73 @@
+erdiagram ProjetoIFeitorio
+notation = chen
+
+entity Aluno {
+    matricula key
+    senha
+    nome
+    restricoes_alimentares
+}
+entity Coordenador {
+    matricula key
+    senha
+    nome
+}
+entity Cardapio {
+    data_inicial key
+    data_final
+}
+entity Refeicao {
+    id key
+    nome
+    descricao
+    tipo
+    data
+}
+entity Avaliacao {
+    id key
+    nota
+    titulo optional
+    conteudo optional
+}
+entity Notificacao {
+    id key
+    titulo
+    conteudo optional
+}
+entity Justificativa {
+    id key
+    motivo
+    data
+}
+
+relationship Gerenciar {
+    Coordenador[1..N] -> Cardapio[0..N]
+}
+relationship Vincula {
+    Cardapio[0..N] -> Refeicao[1..N]
+}
+relationship Aluno_Avalia {
+    Aluno[0..1] -> Avaliacao[0..N]
+}
+relationship Coordenador_Avalia {
+    Coordenador[0..1] -> Avaliacao[0..N]
+}
+relationship Criar {
+    Coordenador[1..1] -> Notificacao[0..N]
+}
+relationship Notifica {
+    Notificacao[0..N] -> Aluno[1..N]
+}
+relationship Associado_Avaliacao {
+    Avaliacao[0..N] -> Refeicao[1..1]
+}
+relationship Enviar {
+    Aluno[1..1] -> Justificativa[0..N]
+}
+relationship Analisar {
+    Coordenador[1..N] -> Justificativa[0..N]
+    Aprovacao
+}
+relationship Vinculada_Justificativa {
+    Justificativa[0..N] -> Refeicao[1..1]
+}

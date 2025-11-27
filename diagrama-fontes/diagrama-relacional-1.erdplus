@@ -1,0 +1,985 @@
+{
+  "diagramType": 2,
+  "data": {
+    "nodes": [
+      {
+        "id": "8b738df8-dd07-47c2-8a30-178aa73a90c1",
+        "type": "Table",
+        "position": {
+          "x": 1817.6413914354791,
+          "y": 375.34001714710183
+        },
+        "data": {
+          "label": "coordenador",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "21ec5d34-266a-4ef4-88b6-c1fe28cb431d",
+              "name": "nome",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "50b43422-0f8e-40fc-83a2-b9264d80e0ef",
+              "name": "senha",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "d246844a-9d11-4189-83ba-4ff2df50f10f",
+              "name": "matricula",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 101
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "22d8a6cd-d2db-4e66-bb50-0312a3bb1abc",
+        "type": "Table",
+        "position": {
+          "x": 868.6175011068732,
+          "y": 275.4540316279788
+        },
+        "data": {
+          "label": "cardapio",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "d9a0cec3-bdbf-46e6-bf04-24dd6e68fe3b",
+              "name": "data_inicial",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "51b66b8f-a5f4-4639-852e-94a2c16e231d",
+              "name": "data_final",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 76
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "7c81cb30-766e-4b66-adc4-3d8aa6f71c97",
+        "type": "Table",
+        "position": {
+          "x": 1499.144349554681,
+          "y": 47.089407575413446
+        },
+        "data": {
+          "label": "justificativa",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "f9f2cb2f-ac09-43c4-9909-d10b5c1cb5c4",
+              "name": "id",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "4eaa973f-6dfd-4ea8-a81b-73d8a8ea06c2",
+              "name": "data",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "d8f4f256-1b65-4580-a0b2-069570fa33de",
+              "name": "motivo",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "fk_b4b7fdc0-dae2-455a-955e-2ee177afb132",
+              "name": "fk_aluno",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "5fabc581-fd1a-463e-8809-693e208be193",
+                "sourceTableId": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+                "columns": [
+                  {
+                    "id": "fk_045039ff-49d9-43f8-8972-7535436aefe4",
+                    "name": "aluno_matricula",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "groupNumbers": [
+                1
+              ]
+            },
+            {
+              "id": "fk_1a3dba66-06dc-41bd-8520-4ce547145b2b",
+              "name": "fk_refeicao",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "b54cc5df-5931-416e-b08a-eb1a80a40759",
+                "sourceTableId": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+                "columns": [
+                  {
+                    "id": "fk_dc040cd3-9a9c-4600-9104-b4a6622abb1d",
+                    "name": "refeicao_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "groupNumbers": [
+                1
+              ]
+            }
+          ],
+          "numberOfGroups": 1,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 253,
+          "height": 152
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+        "type": "Table",
+        "position": {
+          "x": 1806.871775122039,
+          "y": 121.89075290750552
+        },
+        "data": {
+          "label": "aluno",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "045039ff-49d9-43f8-8972-7535436aefe4",
+              "name": "matricula",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "e99d826b-ed0d-4262-af45-d408e556f4a2",
+              "name": "nome",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "0220cb80-9d8e-4d29-a600-5c87841348f6",
+              "name": "senha",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 101
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "fa8e3386-cc2d-459a-9880-293b3f8a365d",
+        "type": "Table",
+        "position": {
+          "x": 1804.0861428033509,
+          "y": 275.5297433208643
+        },
+        "data": {
+          "label": "restricao",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "8fb408d1-21dc-4160-b386-bd0fa745ce48",
+              "name": "nome",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "fk_4271f9d3-4a5a-4a82-96a4-1a23c01b96b9",
+              "name": "fk_aluno",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "501f39b7-4d86-4b10-a83d-2fee5e295516",
+                "sourceTableId": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+                "columns": [
+                  {
+                    "id": "fk_045039ff-49d9-43f8-8972-7535436aefe4",
+                    "name": "aluno_matricula",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isPrimaryKey": true,
+              "isOptional": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 77
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "bc55bb2b-4207-4434-815c-6ac2cd35966b",
+        "type": "Table",
+        "position": {
+          "x": 1195.714062025277,
+          "y": -54.35908282271286
+        },
+        "data": {
+          "label": "notificacao",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "d4919eb0-ca75-4888-815f-01efbfe7b657",
+              "name": "id",
+              "type": "INT",
+              "position": 0,
+              "isOptional": false,
+              "isPrimaryKey": true
+            },
+            {
+              "id": "cd733991-8978-404f-9d51-b918392acf19",
+              "name": "titulo",
+              "type": "INT",
+              "position": 0,
+              "isOptional": false,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "74d9b7e5-f8e6-4f70-a6d4-6d294046e3aa",
+              "name": "conteudo",
+              "type": "INT",
+              "position": 0,
+              "isOptional": true,
+              "isPrimaryKey": false
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 101
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "11755040-6d86-49fd-80c8-33b1679c0b87",
+        "type": "Table",
+        "position": {
+          "x": 1195.8874514502359,
+          "y": 371.5732285871172
+        },
+        "data": {
+          "label": "avaliacao",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "91fd3213-8d7e-4e14-99e2-1d2664eca0f0",
+              "name": "id",
+              "type": "INT",
+              "position": 0,
+              "isOptional": false,
+              "isPrimaryKey": true
+            },
+            {
+              "id": "ac5cac30-977c-4c3e-b0b0-393d978a361d",
+              "name": "nota",
+              "type": "INT",
+              "position": 0,
+              "isOptional": false,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "bd226755-5062-45e9-bd44-28686582514f",
+              "name": "titulo",
+              "type": "INT",
+              "position": 0,
+              "isOptional": true,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "1a095fc1-a33c-41d3-b408-0e30dcf1c2bb",
+              "name": "conteudo",
+              "type": "INT",
+              "position": 0,
+              "isOptional": true,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "fk_f520ce1f-5a02-4c9c-99dc-3c2c3ceeab10",
+              "name": "fk_refeicao",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "eb0dab48-d064-4185-984c-0674667447a4",
+                "sourceTableId": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+                "columns": [
+                  {
+                    "id": "fk_dc040cd3-9a9c-4600-9104-b4a6622abb1d",
+                    "name": "refeicao_id",
+                    "type": "INT"
+                  }
+                ]
+              }
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 152
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+        "type": "Table",
+        "position": {
+          "x": 1498.6623803650373,
+          "y": 250.34456429405589
+        },
+        "data": {
+          "label": "refeicao",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "dc040cd3-9a9c-4600-9104-b4a6622abb1d",
+              "name": "id",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "3326473e-6600-4df7-81b2-432bf0f0398a",
+              "name": "nome",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false,
+              "isOptional": false
+            },
+            {
+              "id": "2f0ae597-d05c-4383-8553-95879a83ad02",
+              "name": "descricao",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false,
+              "isOptional": false
+            },
+            {
+              "id": "78b5f8fc-e9d7-4178-905f-5b362cb6ec18",
+              "name": "tipo",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": false,
+              "isOptional": false
+            },
+            {
+              "id": "fk_67db04b2-5f01-4f40-9741-98d1eacbf811",
+              "name": "fk_aluno",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "87b7be98-e47d-4cc8-824d-c3091fb573ee",
+                "sourceTableId": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+                "columns": [
+                  {
+                    "id": "fk_045039ff-49d9-43f8-8972-7535436aefe4",
+                    "name": "aluno_matricula",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isOptional": true
+            },
+            {
+              "id": "fk_b324f9a8-8afa-40ac-bd34-bc8f964b117d",
+              "name": "fk_coordenador",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "9179e20d-e9f8-4299-8779-92961ecb0ded",
+                "sourceTableId": "8b738df8-dd07-47c2-8a30-178aa73a90c1",
+                "columns": [
+                  {
+                    "id": "fk_d246844a-9d11-4189-83ba-4ff2df50f10f",
+                    "name": "coord_matricula",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isOptional": true
+            }
+          ],
+          "numberOfGroups": 0,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 177
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "9e5fc9b5-b064-49bc-a323-c2672d3b570f",
+        "type": "Table",
+        "position": {
+          "x": 2118.582714548548,
+          "y": 0.1815510191892855
+        },
+        "data": {
+          "label": "analise_coord_just",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "a36efa1d-012d-405f-a3c8-5b89eb478b92",
+              "name": "id",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "5bc02c8b-50dc-4b50-8d90-19eeba06cbf1",
+              "name": "aprovacao",
+              "type": "INT",
+              "position": 1,
+              "isPrimaryKey": false
+            },
+            {
+              "id": "fk_90f608bb-42d5-4643-a72e-f8a21b963fd2",
+              "name": "fk_justificativa",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "45f84405-6ccb-4512-9bb4-8bed4db8f8b6",
+                "sourceTableId": "7c81cb30-766e-4b66-adc4-3d8aa6f71c97",
+                "columns": [
+                  {
+                    "id": "fk_f9f2cb2f-ac09-43c4-9909-d10b5c1cb5c4",
+                    "name": "just_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "groupNumbers": [
+                1
+              ],
+              "position": 2
+            },
+            {
+              "id": "fk_7241de78-4e00-455f-9d39-346855a4f281",
+              "name": "fk_coordenador",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "12dd06c0-74ee-42f7-8890-feb392b0a040",
+                "sourceTableId": "8b738df8-dd07-47c2-8a30-178aa73a90c1",
+                "columns": [
+                  {
+                    "id": "fk_d246844a-9d11-4189-83ba-4ff2df50f10f",
+                    "name": "coord_matricula",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "groupNumbers": [
+                1
+              ],
+              "position": 3
+            }
+          ],
+          "numberOfGroups": 1,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 253,
+          "height": 127
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "430183d2-b12c-44b9-987b-10f891d63531",
+        "type": "Table",
+        "position": {
+          "x": 1501.122474395305,
+          "y": -79.35992535893664
+        },
+        "data": {
+          "label": "notif-aluno",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "b762d1e6-fa08-44d6-9a68-fe23d1788615",
+              "name": "id",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "fk_84645a6d-9b8c-4c8d-8e88-a5078e89e452",
+              "name": "fk_notificacao",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "4d670540-dc6e-44f6-b47c-1dc88fb82055",
+                "sourceTableId": "bc55bb2b-4207-4434-815c-6ac2cd35966b",
+                "columns": [
+                  {
+                    "id": "fk_d4919eb0-ca75-4888-815f-01efbfe7b657",
+                    "name": "notif_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isPrimaryKey": false,
+              "groupNumbers": []
+            },
+            {
+              "id": "fk_867a8e14-c634-4491-83d2-7656b865b78f",
+              "name": "fk_aluno",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "b6fb2292-faf9-4727-87b7-e2033f42f94e",
+                "sourceTableId": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+                "columns": [
+                  {
+                    "id": "fk_045039ff-49d9-43f8-8972-7535436aefe4",
+                    "name": "aluno_matricula",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "isPrimaryKey": false,
+              "groupNumbers": []
+            }
+          ],
+          "numberOfGroups": 1,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 102
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "b5cdb370-4f99-4a28-8a60-ad615d671cf8",
+        "type": "Table",
+        "position": {
+          "x": 1170.7548474190469,
+          "y": 200.1978286586012
+        },
+        "data": {
+          "label": "vincula_card_refei",
+          "isConnectable": false,
+          "columns": [
+            {
+              "id": "e0a84332-0373-4c46-aa2e-109b3fd7065f",
+              "name": "id",
+              "type": "INT",
+              "position": 0,
+              "isPrimaryKey": true,
+              "isOptional": false
+            },
+            {
+              "id": "fk_d313ba45-b204-4e04-b031-16f801862501",
+              "name": "fk_refeicao",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "16e4a5c8-6a36-4e70-ace4-3bc6b75ee0ae",
+                "sourceTableId": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+                "columns": [
+                  {
+                    "id": "fk_dc040cd3-9a9c-4600-9104-b4a6622abb1d",
+                    "name": "refei_id",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "groupNumbers": []
+            },
+            {
+              "id": "fk_87a5bc8f-6eb0-4888-b21b-90e3e72fdf34",
+              "name": "fk_cardapio",
+              "type": "None",
+              "isForeignKey": true,
+              "foreignKeyProps": {
+                "foreignKeyGroupId": "0e31864f-f709-4295-ad23-9279a72fe337",
+                "sourceTableId": "22d8a6cd-d2db-4e66-bb50-0312a3bb1abc",
+                "columns": [
+                  {
+                    "id": "fk_d9a0cec3-bdbf-46e6-bf04-24dd6e68fe3b",
+                    "name": "card_data_inicial",
+                    "type": "INT"
+                  }
+                ]
+              },
+              "groupNumbers": []
+            },
+            {
+              "id": "9f20d3ed-74c0-407b-99aa-95a94e986a51",
+              "name": "data",
+              "type": "INT",
+              "position": 0
+            }
+          ],
+          "numberOfGroups": 1,
+          "isSelected": false
+        },
+        "measured": {
+          "width": 240,
+          "height": 127
+        },
+        "selected": false,
+        "dragging": false
+      }
+    ],
+    "edges": [
+      {
+        "id": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed->fa8e3386-cc2d-459a-9880-293b3f8a365d_501f39b7-4d86-4b10-a83d-2fee5e295516",
+        "type": "Relational",
+        "source": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+        "targetHandle": "foreign-key-handle-501f39b7-4d86-4b10-a83d-2fee5e295516",
+        "target": "fa8e3386-cc2d-459a-9880-293b3f8a365d",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "501f39b7-4d86-4b10-a83d-2fee5e295516",
+            "sourceTableId": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+            "columns": [
+              {
+                "id": "fk_045039ff-49d9-43f8-8972-7535436aefe4",
+                "name": "matricula",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "8b738df8-dd07-47c2-8a30-178aa73a90c1->9e5fc9b5-b064-49bc-a323-c2672d3b570f_12dd06c0-74ee-42f7-8890-feb392b0a040",
+        "type": "Relational",
+        "source": "8b738df8-dd07-47c2-8a30-178aa73a90c1",
+        "targetHandle": "foreign-key-handle-12dd06c0-74ee-42f7-8890-feb392b0a040",
+        "target": "9e5fc9b5-b064-49bc-a323-c2672d3b570f",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "12dd06c0-74ee-42f7-8890-feb392b0a040",
+            "sourceTableId": "8b738df8-dd07-47c2-8a30-178aa73a90c1",
+            "columns": [
+              {
+                "id": "fk_d246844a-9d11-4189-83ba-4ff2df50f10f",
+                "name": "matricula",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "7c81cb30-766e-4b66-adc4-3d8aa6f71c97->9e5fc9b5-b064-49bc-a323-c2672d3b570f_45f84405-6ccb-4512-9bb4-8bed4db8f8b6",
+        "type": "Relational",
+        "source": "7c81cb30-766e-4b66-adc4-3d8aa6f71c97",
+        "targetHandle": "foreign-key-handle-45f84405-6ccb-4512-9bb4-8bed4db8f8b6",
+        "target": "9e5fc9b5-b064-49bc-a323-c2672d3b570f",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "45f84405-6ccb-4512-9bb4-8bed4db8f8b6",
+            "sourceTableId": "7c81cb30-766e-4b66-adc4-3d8aa6f71c97",
+            "columns": [
+              {
+                "id": "fk_f9f2cb2f-ac09-43c4-9909-d10b5c1cb5c4",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "bc55bb2b-4207-4434-815c-6ac2cd35966b->430183d2-b12c-44b9-987b-10f891d63531_4d670540-dc6e-44f6-b47c-1dc88fb82055",
+        "type": "Relational",
+        "source": "bc55bb2b-4207-4434-815c-6ac2cd35966b",
+        "targetHandle": "foreign-key-handle-4d670540-dc6e-44f6-b47c-1dc88fb82055",
+        "target": "430183d2-b12c-44b9-987b-10f891d63531",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "4d670540-dc6e-44f6-b47c-1dc88fb82055",
+            "sourceTableId": "bc55bb2b-4207-4434-815c-6ac2cd35966b",
+            "columns": [
+              {
+                "id": "fk_d4919eb0-ca75-4888-815f-01efbfe7b657",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed->430183d2-b12c-44b9-987b-10f891d63531_b6fb2292-faf9-4727-87b7-e2033f42f94e",
+        "type": "Relational",
+        "source": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+        "targetHandle": "foreign-key-handle-b6fb2292-faf9-4727-87b7-e2033f42f94e",
+        "target": "430183d2-b12c-44b9-987b-10f891d63531",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "b6fb2292-faf9-4727-87b7-e2033f42f94e",
+            "sourceTableId": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+            "columns": [
+              {
+                "id": "fk_045039ff-49d9-43f8-8972-7535436aefe4",
+                "name": "matricula",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "9d59955a-0df8-4d58-90ca-99c3f90fab50->11755040-6d86-49fd-80c8-33b1679c0b87_eb0dab48-d064-4185-984c-0674667447a4",
+        "type": "Relational",
+        "source": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+        "targetHandle": "foreign-key-handle-eb0dab48-d064-4185-984c-0674667447a4",
+        "target": "11755040-6d86-49fd-80c8-33b1679c0b87",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "eb0dab48-d064-4185-984c-0674667447a4",
+            "sourceTableId": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+            "columns": [
+              {
+                "id": "fk_dc040cd3-9a9c-4600-9104-b4a6622abb1d",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        },
+        "selected": false
+      },
+      {
+        "id": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed->7c81cb30-766e-4b66-adc4-3d8aa6f71c97_5fabc581-fd1a-463e-8809-693e208be193",
+        "type": "Relational",
+        "source": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+        "targetHandle": "foreign-key-handle-5fabc581-fd1a-463e-8809-693e208be193",
+        "target": "7c81cb30-766e-4b66-adc4-3d8aa6f71c97",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "5fabc581-fd1a-463e-8809-693e208be193",
+            "sourceTableId": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+            "columns": [
+              {
+                "id": "fk_045039ff-49d9-43f8-8972-7535436aefe4",
+                "name": "matricula",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "9d59955a-0df8-4d58-90ca-99c3f90fab50->7c81cb30-766e-4b66-adc4-3d8aa6f71c97_b54cc5df-5931-416e-b08a-eb1a80a40759",
+        "type": "Relational",
+        "source": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+        "targetHandle": "foreign-key-handle-b54cc5df-5931-416e-b08a-eb1a80a40759",
+        "target": "7c81cb30-766e-4b66-adc4-3d8aa6f71c97",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "b54cc5df-5931-416e-b08a-eb1a80a40759",
+            "sourceTableId": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+            "columns": [
+              {
+                "id": "fk_dc040cd3-9a9c-4600-9104-b4a6622abb1d",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "9d59955a-0df8-4d58-90ca-99c3f90fab50->b5cdb370-4f99-4a28-8a60-ad615d671cf8_16e4a5c8-6a36-4e70-ace4-3bc6b75ee0ae",
+        "type": "Relational",
+        "source": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+        "targetHandle": "foreign-key-handle-16e4a5c8-6a36-4e70-ace4-3bc6b75ee0ae",
+        "target": "b5cdb370-4f99-4a28-8a60-ad615d671cf8",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "16e4a5c8-6a36-4e70-ace4-3bc6b75ee0ae",
+            "sourceTableId": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+            "columns": [
+              {
+                "id": "fk_dc040cd3-9a9c-4600-9104-b4a6622abb1d",
+                "name": "id",
+                "type": "INT"
+              }
+            ]
+          }
+        },
+        "selected": false
+      },
+      {
+        "id": "22d8a6cd-d2db-4e66-bb50-0312a3bb1abc->b5cdb370-4f99-4a28-8a60-ad615d671cf8_0e31864f-f709-4295-ad23-9279a72fe337",
+        "type": "Relational",
+        "source": "22d8a6cd-d2db-4e66-bb50-0312a3bb1abc",
+        "targetHandle": "foreign-key-handle-0e31864f-f709-4295-ad23-9279a72fe337",
+        "target": "b5cdb370-4f99-4a28-8a60-ad615d671cf8",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "0e31864f-f709-4295-ad23-9279a72fe337",
+            "sourceTableId": "22d8a6cd-d2db-4e66-bb50-0312a3bb1abc",
+            "columns": [
+              {
+                "id": "fk_d9a0cec3-bdbf-46e6-bf04-24dd6e68fe3b",
+                "name": "data_inicial",
+                "type": "INT"
+              }
+            ]
+          }
+        },
+        "selected": false
+      },
+      {
+        "id": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed->9d59955a-0df8-4d58-90ca-99c3f90fab50_87b7be98-e47d-4cc8-824d-c3091fb573ee",
+        "type": "Relational",
+        "source": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+        "targetHandle": "foreign-key-handle-87b7be98-e47d-4cc8-824d-c3091fb573ee",
+        "target": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "87b7be98-e47d-4cc8-824d-c3091fb573ee",
+            "sourceTableId": "8b4aa303-51f0-4545-bfaa-c2c6eb41eaed",
+            "columns": [
+              {
+                "id": "fk_045039ff-49d9-43f8-8972-7535436aefe4",
+                "name": "matricula",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "8b738df8-dd07-47c2-8a30-178aa73a90c1->9d59955a-0df8-4d58-90ca-99c3f90fab50_9179e20d-e9f8-4299-8779-92961ecb0ded",
+        "type": "Relational",
+        "source": "8b738df8-dd07-47c2-8a30-178aa73a90c1",
+        "targetHandle": "foreign-key-handle-9179e20d-e9f8-4299-8779-92961ecb0ded",
+        "target": "9d59955a-0df8-4d58-90ca-99c3f90fab50",
+        "markerStart": {
+          "type": "arrow"
+        },
+        "data": {
+          "foreignKeyProps": {
+            "foreignKeyGroupId": "9179e20d-e9f8-4299-8779-92961ecb0ded",
+            "sourceTableId": "8b738df8-dd07-47c2-8a30-178aa73a90c1",
+            "columns": [
+              {
+                "id": "fk_d246844a-9d11-4189-83ba-4ff2df50f10f",
+                "name": "matricula",
+                "type": "INT"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "viewport": {
+      "x": -312.7890287026223,
+      "y": 182.0009107840611,
+      "zoom": 0.7641882603825831
+    }
+  },
+  "name": "Ifeitorio",
+  "folder": {
+    "name": "Diagrams",
+    "folderType": 1,
+    "depth": 0,
+    "id": 93263
+  },
+  "id": 102898,
+  "updatedAtTimestamp": 1760365395
+}
