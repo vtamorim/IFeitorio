@@ -33,19 +33,21 @@ Os principais casos de uso identificados são:
 2. Gerenciar cardápio
 3. Cadastrar restrição alimentar
 
-Para mais detalhes, acesse o arquivo [`casos-de-uso.md`](casos-de-uso.md) e veja o [Diagrama de Casos de Uso](imagens/diagrama-casos-uso.png).
+Para mais detalhes, acesse o arquivo [`casos-de-uso.md`](docs/casos-de-uso/casos-de-uso.md) e veja o [Diagrama de Casos de Uso](docs/casos-de-uso/diagrama-casos-uso.png).
 
 ## 🧠 Modelo Conceitual
 
 O modelo conceitual representa as classes de análise do sistema, com seus principais atributos e relacionamentos.
 
-As descrições das classes estão disponíveis no arquivo [`modelo-conceitual.md`](modelo-conceitual.md) e [clique aqui](imagens/modelo-conceitual.png) para o Diagrama de Classes de Análise.
+As descrições das classes estão disponíveis no arquivo [`modelo-conceitual.md`](docs/diagrama-de-classes/modelo-conceitual.md) e [clique aqui](docs/diagrama-de-classes/modelo-conceitual.png) para o Diagrama de Classes de Análise.
 
 ## 🛠️ Tecnologias Utilizadas
 
 - Documentação escrita em **Markdown**
-- Diagramas elaborados com **Astah**
+- Diagramas elaborados com **Astah** e **Lucidchart**
 - Repositório hospedado no **GitHub**
+- Código feito em **Streamlit**
+- Banco de Dados em **SQLite**
 
 ## 👨‍💻 Equipe
 

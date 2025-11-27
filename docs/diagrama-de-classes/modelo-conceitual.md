@@ -2,7 +2,7 @@
 
 ## Diagrama de Classes de Análise do projeto:
 
-![Modelo Slsa](./imagens/modelo-conceitual.png)
+![Modelo Conceitual](./modelo-conceitual.png)
 
 ## Principais Entidades:
 
