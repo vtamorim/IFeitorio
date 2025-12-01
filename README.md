@@ -33,7 +33,7 @@ Os principais casos de uso identificados são:
 2. Gerenciar cardápio
 3. Cadastrar restrição alimentar
 
-Para mais detalhes, acesse o arquivo [`casos-de-uso.md`](docs/casos-de-uso/casos-de-uso.md) e veja o [Diagrama de Casos de Uso](docs/casos-de-uso/diagrama-casos-uso.png).
+Para mais detalhes, acesse a pasta [`casos-de-uso`](docs/casos-de-uso/) para ver as especificações de todos os casos de uso e veja o [Diagrama de Casos de Uso](docs/casos-de-uso/diagrama-casos-uso.png).
 
 ## 🧠 Modelo Conceitual
 
