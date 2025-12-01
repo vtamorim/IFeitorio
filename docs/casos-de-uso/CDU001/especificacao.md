@@ -1,6 +1,6 @@
 # CDU001 – Iniciar Sessão
 
-**Ator Primário:** Aluno ou Coordenador.  
+**Ator Primário:** Visistante.  
 **Descrição:** Permite que o usuário faça login no sistema utilizando sua matrícula e senha.  
 **Pré-condições:** *Nenhuma*.  
 **Pós-condições:** Usuário estará logado.  

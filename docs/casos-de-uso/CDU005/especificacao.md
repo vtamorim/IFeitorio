@@ -17,6 +17,7 @@
 - **FA1 - Ir para a Página de Justificativa pela notificação**
     
     **Ponto de Inserção:** Antes do passo 1 do Fluxo Principal o aluno entra na página de justificativa pela notificação e o resto segue MUDAR FLUXO ALTERNATIVO
+
 ## Fluxos De Exceção
 
 ... (se houver)
