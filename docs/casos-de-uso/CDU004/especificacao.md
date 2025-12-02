@@ -4,6 +4,7 @@
 **Descrição:** Permite o visitante abrir a sua conta.  
 **Pré-condições:** *Nenhuma*.
 **Pós-condições:** O usuário deve ter a sua conta cadastrada no sistema.
+
 ## Fluxo Principal
 
 1. O aluno acessa o aplicativo e coloque os dados necessários( matrícula e senha).
@@ -15,4 +16,4 @@
 - **FE3 – Conta já registrada**
 
     **Ponto de inserção:** Após o passo 2 do Fluxo Principal
-Caso os dados registrados pelo usuário já estejam inseridos no sistema, o próprio sistema exibirá uma mensagem de erro "Esta conta já está cadastrada, Tente Novamente"
+2. Caso os dados registrados pelo usuário já estejam inseridos no sistema, o próprio sistema exibirá uma mensagem de erro "Esta conta já está cadastrada, Tente Novamente"
