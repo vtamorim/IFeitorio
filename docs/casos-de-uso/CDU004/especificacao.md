@@ -2,7 +2,7 @@
 
 **Ator Primário:** Visitante.  
 **Descrição:** Permite o visitante abrir a sua conta.  
-**Pré-condições:** *Nenhuma*.
+**Pré-condições:** *Nenhuma*.  
 **Pós-condições:** O usuário deve ter a sua conta cadastrada no sistema.
 
 ## Fluxo Principal

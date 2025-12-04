@@ -1,7 +1,7 @@
 # CDU015 – Gerar QR-Code
 
 **Ator Primário:** Aluno.  
-**Descrição:** Permite ao aluno ver o seu QR-Code de matricula.
+**Descrição:** Permite ao aluno ver o seu QR-Code de matricula.  
 **Pré-condições:** O Usuário deve estar cadastrado como Aluno.  
 **Pós-condições:** *Nenhuma*.  
 

@@ -1,6 +1,6 @@
 # CDU005 – Justificar Falta no Almoço
         
-**Ator Primário:** Aluno .  
+**Ator Primário:** Aluno.  
 **Descrição:** Permite o Aluno enviar a justificativa para o Coordenador.  
 **Pré-condições:** O aluno deve possuir o auxilio do almoço, ter faltado.  
 **Pós-condições:** O coordenador receber a justificativa do aluno que a enviou.  
