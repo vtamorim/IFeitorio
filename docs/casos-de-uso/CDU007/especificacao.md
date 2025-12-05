@@ -12,4 +12,4 @@
 3. O sistema exibe as refeições e quantas avaliações foram feitas em cada uma.
 4. O coordenador seleciona alguma refeição.
 5. O sistema exibe todas as avaliações da refeição selecionada, assim como algumas estatísticas sobre elas.
-6. O coordenador pode selecionar alguma refeição em específico para excluí-la.
+6. O coordenador pode selecionar alguma avaliação em específico para excluí-la.

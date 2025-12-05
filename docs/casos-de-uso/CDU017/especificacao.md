@@ -1,9 +1,9 @@
 # CDU017 – Avaliar refeição 
 
 **Ator Primário:** Aluno e Coordenador.  
-**Descrição:** .  Permitir o aluno avaliar a refeição para enviar para o Coordenador.  
-**Pré-condições:** .  A matrícula do aluno estar registrada no sistema.  
-**Pós-condições:** .  O coordenador receber a avaliação.
+**Descrição:** Permitir o aluno avaliar a refeição para enviar para o Coordenador.  
+**Pré-condições:** A matrícula do aluno estar registrada no sistema.  
+**Pós-condições:** O coordenador receber a avaliação.
 
 ## Fluxo Principal
 
