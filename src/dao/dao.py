@@ -4,11 +4,14 @@ from typing import Any
 
 class AbstractDAO(ABC):
     """Classe Abstrata de todos os DAOs contendo a 'generalização' de suas funções. Ela também padronizará os DAOs para facilitar os seus usos."""
-    _db_path = "../data/database.db" # Caminho do arquivo do Banco de Dados
+    _db_path = "./data/database.db" # Caminho do arquivo do Banco de Dados. Esse caminho é em relação a pasta "src".
 
     @classmethod
-    @abstractmethod
-    def _get_db_connection(cls) -> sqlite3.Connection: pass # Função que retorna o objeto da conexão com o Banco de Dados SQLite. Provavelmente será necessária.
+    def _get_db_connection(cls) -> sqlite3.Connection: 
+        """Retorna o objeto da conexão com o Banco de Dados."""
+        conn = sqlite3.connect(cls._db_path)
+        conn.row_factory = sqlite3.Row # Permite acessar o Banco de Dados como um dicionário ao invés de uma tupla.
+        return conn
 
     @classmethod
     @abstractmethod
@@ -20,14 +23,15 @@ class AbstractDAO(ABC):
 
     @classmethod
     @abstractmethod
-    def get_id(cls, searched_id: int) -> Any: pass # Talvez devéssemos usar outra coisa ao invés de um "id de tipo inteiro", visto que há algumas classes que não possuem um "ID" de tipo inteiro.
-
-    @classmethod
-    @abstractmethod
     def update(cls, new_obj: Any) -> None: pass
 
     @classmethod
     @abstractmethod
-    def delete(cls, searched_id: int) -> None: pass # Talvez devéssemos usar outra coisa ao invés de um "id de tipo inteiro", visto que há algumas classes que não possuem um "ID" de tipo inteiro.
+    def delete(cls, searched_obj: Any) -> None: pass # Não sei qual poderia ser o tipo desse "searched_obj", pois nem todas as tabelas tem um id.
+
+    # @classmethod
+    # @abstractmethod
+    # def get_id(cls, searched_obj: Any) -> Any: pass # Não sei qual poderia ser o tipo desse "searched_obj", pois nem todas as tabelas tem um id.
+    # Não sei se deveríamos ter um "get_id" aqui, pois nem todas as classes tem "id",
 
     # Talvez um método para inicializar o banco de dados?
