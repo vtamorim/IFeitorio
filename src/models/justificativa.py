@@ -14,27 +14,26 @@ class Justificativa:
     def get_motivo(self) -> str:
         return self.__motivo
     def get_alu_mat(self) -> str:
-        return self.__alu_mat
+        return self.__aluno_matricula
     def get_ref_id(self) -> int:
-        return self.__ref_id
+        return self.__refeicao_id
     
     def set_id(self, id: int) -> None:
         if not isinstance(id, (int)): raise ValueError
         self.__id = id
-    def set_matricula(self, matricula: str) -> None: 
-        if matricula == "": raise ValueError
-        self.__matricula = matricula
-    def set_nome(self, nome: str) -> None: 
-        nome = nome.strip() # retira "espaços" dos lados da string
-        if nome == "": raise ValueError
-        self.__nome = nome
-    def set_senha(self, senha: str) -> None: 
-        senha = senha.strip() # retira "espaços" dos lados da string
-        if senha == "": raise ValueError
-        self.__senha = senha
-    def set_restricoes(self, restricoes: list) -> None: 
-        if not isinstance(restricoes, (list)): raise ValueError
-        self.__restricoes = restricoes
+    def set_data(self, d: datetime) -> None: 
+        if not isinstance(d, (datetime)): raise ValueError
+        self.__data = d
+    def set_motivo(self, m: str) -> None: 
+        m = m.strip() # retira "espaços" dos lados da string
+        if m == "": raise ValueError
+        self.__motivo = m
+    def set_alu_mat(self, am: str) -> None: 
+        if am == "": raise ValueError
+        self.__aluno_matricula = am
+    def set_refeicao_id(self, ri: int) -> None: 
+        if not isinstance(ri, (int)): raise ValueError
+        self.__refeicao_id = ri
 
     def __str__(self) -> str:
-           return f"{self.__id} - {self.__nome} - {self.__matricula} - {self.__senha} - {self.__restricoes}"
+           return f"{self.__id} - {self.__data} - {self.__motivo} - {self.__aluno_matricula} - {self.__refeicao_id}"
