@@ -1,39 +1,47 @@
-from datetime import datetime
+from .coordenador import Coordenador
+from .falta import Falta
+from typing import Optional
+
 class Justificativa:
-    def __init__(self, id: int, d: datetime, m: str,) -> None:
+    def __init__(self, id: int, falta: Falta, motivo: str, aprovada: Optional[bool] = None, coordenador: Optional[Coordenador] = None) -> None:
         self.set_id(id)
-        self.set_data(d)
-        self.set_motivo(m)
-        self.__aluno_matricula = None
-        self.__refeicao_id = None
+        self.set_falta(falta)
+        self.set_motivo(motivo)
+        self.set_aprovada(aprovada)
+        self.set_coordenador(coordenador)
     
     def get_id(self) -> int:
-        return self.__id 
-    def get_data(self) -> datetime:
-        return self.__data
+        return self.__id
+    def get_falta(self) -> Falta:
+        return self.__falta
     def get_motivo(self) -> str:
         return self.__motivo
-    def get_alu_mat(self) -> str:
-        return self.__aluno_matricula
-    def get_ref_id(self) -> int:
-        return self.__refeicao_id
-    
-    def set_id(self, id: int) -> None:
-        if not isinstance(id, (int)): raise ValueError
-        self.__id = id
-    def set_data(self, d: datetime) -> None: 
-        if not isinstance(d, (datetime)): raise ValueError
-        self.__data = d
-    def set_motivo(self, m: str) -> None: 
-        m = m.strip() # retira "espaços" dos lados da string
-        if m == "": raise ValueError
-        self.__motivo = m
-    def set_alu_mat(self, am: str) -> None: 
-        if am == "": raise ValueError
-        self.__aluno_matricula = am
-    def set_refeicao_id(self, ri: int) -> None: 
-        if not isinstance(ri, (int)): raise ValueError
-        self.__refeicao_id = ri
+    def get_aprovada(self) -> Optional[bool]:
+        return self.__aprovada
+    def get_coordenador(self) -> Optional[Coordenador]:
+        return self.__coordenador
 
-    def __str__(self) -> str:
-           return f"{self.__id} - {self.__data} - {self.__motivo} - {self.__aluno_matricula} - {self.__refeicao_id}"
+    def set_id(self, id: int) -> None:
+        if not isinstance(id, int): raise ValueError
+
+        self.__id = id
+    def set_falta(self, falta: Falta) -> None:
+        if not isinstance(falta, Falta): raise ValueError
+
+        self.__falta = falta
+    def set_motivo(self, motivo: str) -> None:
+        if not isinstance(motivo, str): raise ValueError
+
+        self.__motivo = motivo
+    def set_aprovada(self, aprovada: bool) -> None:
+        if not isinstance(aprovada, bool): raise ValueError
+
+        self.__aprovada = aprovada
+    def set_coordenador(self, coordenador: Coordenador) -> None:
+        if not isinstance(coordenador, Coordenador): raise ValueError
+
+        self.__coordenador = coordenador
+    
+    def __str__(self) -> None:
+        aprovada_texto = f" | {self.__aprovada} - {self.__coordenador.get_nome()}" if self.__aprovada is not None and self.__coordenador is not None else " | Ainda Não Analisada"
+        return f"Justificativa {self.__id} - Falta {self.__falta.get_id()}: {self.__motivo}{aprovada_texto}"

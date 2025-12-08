@@ -1,9 +1,18 @@
 class Coordenador:
-    def __init__(self, id : int, mat : str, n : str, s : str,):
+    def __init__(self, id : int, matricula : str, nome : str, senha : str,):
         self.set_id(id)
-        self.set_matricula(mat)
-        self.set_nome(n)
-        self.set_senha(s)
+        self.set_matricula(matricula)
+        self.set_nome(nome)
+        self.set_senha(senha)
+
+    def get_id(self) -> int:
+        return self.__id 
+    def get_matricula(self) -> str:
+        return self.__matricula
+    def get_nome(self) -> str:
+        return self.__nome
+    def get_senha(self) -> str:
+        return self.__senha
 
     def set_id(self, id: int) -> None:
         if not isinstance(id, (int)): raise ValueError
@@ -19,15 +28,6 @@ class Coordenador:
         senha = senha.strip() # retira "espaços" dos lados da string
         if senha == "": raise ValueError
         self.__senha = senha
-
-    def get_id(self) -> int:
-        return self.__id 
-    def get_matricula(self) -> str:
-        return self.__matricula
-    def get_nome(self) -> str:
-        return self.__nome
-    def get_senha(self) -> str:
-        return self.__senha
 
     def __str__(self):
         return f"{self.__id} - {self.__nome} - {self.__matricula} - {self.__senha}"

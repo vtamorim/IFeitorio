@@ -1,18 +1,17 @@
 class Restricao:
-    def __init__(self, am: str, n: str) -> None:
-        self.set_aluno_matricula(am)
-        self.set_nome(n)
+    def __init__(self, id: int, nome: str) -> None:
+        self.set_id(id)
+        self.set_nome(nome)
     
-    def get_aluno_matricula(self) -> str:
-        return self.__aluno_matricula
+    def get_id(self) -> str:
+        return self.__id
     def get_nome(self) -> str:
         return self.__nome
     
-    def set_aluno_matricula(self, aluno_matricula: str) -> None:
-        aluno_matricula = aluno_matricula.strip()
-        if aluno_matricula == "": raise ValueError
+    def set_id(self, id: int) -> None:
+        if not isinstance(id, int): raise ValueError
 
-        self.__aluno_matricula = aluno_matricula
+        self.__id = id
     def set_nome(self, nome: str) -> None:
         nome = nome.strip()
         if nome == "": raise ValueError
@@ -20,4 +19,4 @@ class Restricao:
         self.__nome = nome
 
     def __str__(self) -> str:
-        return f"{self.__aluno_matricula}: {self.__nome}"
+        return f"{self.__id}: {self.__nome}"

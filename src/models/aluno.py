@@ -1,10 +1,12 @@
+from .restricao import Restricao
+
 class Aluno:
-    def __init__(self, id: int, mat: str, n: str, s: str, res: list) -> None:
+    def __init__(self, id: int, matricula: str, nome: str, senha: str, restricoes: list[Restricao]) -> None:
         self.set_id(id)
-        self.set_matricula(mat)
-        self.set_nome(n)
-        self.set_senha(s)
-        self.set_restricoes(res)
+        self.set_matricula(matricula)
+        self.set_nome(nome)
+        self.set_senha(senha)
+        self.set_restricoes(restricoes)
     
     def get_id(self) -> int:
         return self.__id 

@@ -2,6 +2,7 @@ from .aluno import Aluno
 from .avaliacao import Avaliacao
 from .cardapio import Cardapio
 from .coordenador import Coordenador
+from .falta import Falta
 from .justificativa import Justificativa
 from .notificacao import Notificacao
 from .refeicao import Refeicao

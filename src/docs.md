@@ -34,7 +34,6 @@ alunos
 - matricula
 - nome
 - senha
-- restricoes ( lista de restrições que o aluno tem )
 
 restricoes_alimentares
 - id [PK] 
@@ -64,10 +63,11 @@ cardapio
 - data_final
 
 vincula_cardapio_refeicao
-- cardapio_data_inicial [PK] (identificador do cardápio)
-- refeicao_id [PK]
+- id [PK] (Acho q devemos pôr um id, pois o cardápio e o refeicao_id como PK faria com que não fosse possível repetir um prato em uma mesma semana... Provavelmente todos esses 4 valores abaixo devem ser únicos entre si, ou 3 tirando o refeicao_id)
+- cardapio_data_inicial (identificador do cardápio)
+- refeicao_id
 - data (dia da refeicao naquele cardapio)
-- tipo (lanche, almoço, jantar)
+- tipo (lanche manhã, lanche tarde, lanche noite, almoço, jantar)
 
 aluno_falta
 - id [PK]

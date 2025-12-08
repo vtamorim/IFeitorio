@@ -1,50 +1,62 @@
-from datetime import datetime
+from datetime import date
+from .restricao import Restricao
+from typing import Optional
 
 class Refeicao:
-    def __init__(self, id: int, n: str, d: str, t: str, dt: datetime) -> None:
+    def __init__(self, id: int, nome: str, descricao: str, restricoes_compativeis: list[Restricao], data: Optional[date] = None, tipo: Optional[str] = None) -> None: # tipo = lanche / almoço / jantar
         self.set_id(id)
-        self.set_nome(n)
-        self.set_descricao(d)
-        self.set_tipo(t)
-        self.set_data(dt)
-        self.set_mat_alu()
-        self.set_mat_coo()
+        self.set_nome(nome)
+        self.set_descricao(descricao)
+        self.set_restricoes_compativeis(restricoes_compativeis)
+        self.set_data(data) # "data" e "tipo" são opcionais, pois eles serão atribuídos caso esse objeto "Refeição" seja colocado em um cardápio, pois é ele quem decidirá o seu horário e dia.
+        self.set_tipo(tipo)
     
-    def get_id(self) -> int:
+    def get_id(self) -> int: 
         return self.__id
-    def get_nome(self) -> str:
+    def get_nome(self) -> str: 
         return self.__nome
-    def get_descricao(self) -> str:
+    def get_descricao(self) -> str: 
         return self.__descricao
-    def get_tipo(self) -> str:
-        return self.__tipo
-    def get_data(self) -> datetime:
+    def get_restricoes_compativeis(self) -> list[Restricao]: 
+        return self.__restricoes_compativeis
+    def get_data(self) -> Optional[date]: 
         return self.__data
+    def get_tipo(self) -> Optional[str]: 
+        return self.__tipo
 
     def set_id(self, id: int) -> None:
-        if not isinstance(id, (int)): raise ValueError
+        if not isinstance(id, int): raise ValueError
 
         self.__id = id
     def set_nome(self, nome: str) -> None:
         nome = nome.strip()
-        if not isinstance(nome, (str)): raise ValueError
+        if nome == "": raise ValueError
 
         self.__nome = nome
     def set_descricao(self, descricao: str) -> None:
         descricao = descricao.strip()
-        if not isinstance(descricao, (str)): raise ValueError
+        if descricao == "": raise ValueError
 
         self.__descricao = descricao
-    def set_tipo(self, tipo: str) -> None:
-        tipo = tipo.strip()
-        if not isinstance(tipo, (str)): raise ValueError
+    def set_restricoes_compativeis(self, restricoes_compativeis: list[Restricao]) -> None:
+        if not isinstance(restricoes_compativeis, list): raise ValueError
+
+        self.__restricoes_compativeis = restricoes_compativeis
+    def set_data(self, data: Optional[date]) -> None:
+        if data is not None and not isinstance(data, date): raise ValueError
+
+        self.__data = data
+    def set_tipo(self, tipo: Optional[str]) -> None:
+        if tipo is not None and not isinstance(tipo, str): raise ValueError
 
         self.__tipo = tipo
-    def set_data(self, data: datetime) -> None:
-        if not isinstance(data, (datetime)): raise ValueError
-        self.__data = data
-    def set_mat_alu(self) -> None:
-        self.__mat_alu = None
+    
+    def get_data_formatada(self) -> Optional[str]:
+        """Retorna a data da Refeição de forma formatada (função "strftime") para uma string."""
+        return self.__data.strftime("%d/%m/%Y") if self.__data is not None else None
     
     def __str__(self) -> str:
-        return f"{self.__id}: {self.__nome} - {self.__descricao} - {self.__tipo} - {self.__data}"
+        restricoes = " ".join([ rc.get_nome() for rc in self.__restricoes_compativeis ]) # Junta os nomes de todas as restrições
+        if restricoes == "": restricoes = "Nenhuma Restrição"
+        data_tipo = f" | {self.get_data_formatada()} - {self.__tipo}" if self.get_data_formatada() is not None and self.__tipo is not None else "" # Escreve a data e tipo se eles não forem nulos.
+        return f"{self.__id}: {self.__nome} - {self.__descricao} - {restricoes}{data_tipo}"

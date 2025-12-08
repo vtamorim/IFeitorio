@@ -1,10 +1,12 @@
+from .aluno import Aluno
 from typing import Optional
 
 class Notificacao:
-    def __init__(self, id: int, titulo : str, conteudo : Optional[str]) -> None:
+    def __init__(self, id: int, titulo : str, conteudo: Optional[str], alunos_destinatarios: list[Aluno] = []) -> None:
         self.set_id(id)
         self.set_titulo(titulo)
         self.set_conteudo(conteudo)
+        self.set_alunos_destinatarios(alunos_destinatarios)
     
     def get_id(self) -> int:
         return self.__id 
@@ -12,17 +14,27 @@ class Notificacao:
         return self.__titulo
     def get_conteudo(self) -> Optional[str]:
         return self.__conteudo
+    def get_alunos_destinatarios(self) -> list[Aluno]:
+        return self.__alunos_destinatarios
     
     def set_id(self, id: int) -> None:
         if not isinstance(id, (int)): raise ValueError
+
         self.__id = id
     def set_titulo(self, titulo: str) -> None: 
         titulo = titulo.strip()
-        if not isinstance(titulo, (str)): raise ValueError
+        if titulo == "": raise ValueError
+
         self.__titulo = titulo
     def set_conteudo(self, conteudo: Optional[str]) -> None: 
-        if not isinstance(conteudo, (str)): raise ValueError
+        conteudo = conteudo.strip()
+        if conteudo == "": raise ValueError
+        
         self.__conteudo = conteudo
+    def set_alunos_destinatarios(self, alunos_destinatarios: list[Aluno]) -> None:
+        if not isinstance(alunos_destinatarios, list): raise ValueError
+
+        self.__alunos_destinatarios = alunos_destinatarios
 
     def __str__(self) -> str:
            return f"{self.__id} - {self.__titulo} - {self.__conteudo}"
