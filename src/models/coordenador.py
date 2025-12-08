@@ -1,4 +1,4 @@
-class Cordenador:
+class Coordenador:
     def __init__(self, id : int, mat : str, n : str, s : str,):
         self.set_id(id)
         self.set_matricula(mat)

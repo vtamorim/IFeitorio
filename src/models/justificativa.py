@@ -1,11 +1,11 @@
 from datetime import datetime
 class Justificativa:
-    def __init__(self, id: int, d: datetime, m: str, am: str, ri: int) -> None:
+    def __init__(self, id: int, d: datetime, m: str,) -> None:
         self.set_id(id)
         self.set_data(d)
         self.set_motivo(m)
-        self.set_alu_mat(am)
-        self.set_refeicao_id(ri)
+        self.__aluno_matricula = None
+        self.__refeicao_id = None
     
     def get_id(self) -> int:
         return self.__id 

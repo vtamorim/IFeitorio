@@ -7,6 +7,8 @@ class Refeicao:
         self.set_descricao(d)
         self.set_tipo(t)
         self.set_data(dt)
+        self.set_mat_alu()
+        self.set_mat_coo()
     
     def get_id(self) -> int:
         return self.__id
@@ -40,8 +42,9 @@ class Refeicao:
         self.__tipo = tipo
     def set_data(self, data: datetime) -> None:
         if not isinstance(data, (datetime)): raise ValueError
-
         self.__data = data
+    def set_mat_alu(self) -> None:
+        self.__mat_alu = None
     
     def __str__(self) -> str:
         return f"{self.__id}: {self.__nome} - {self.__descricao} - {self.__tipo} - {self.__data}"

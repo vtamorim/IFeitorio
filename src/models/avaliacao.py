@@ -1,10 +1,10 @@
 class Avaliacao:
-    def __init__(self, id: int, nota: float, conteudo: str, titulo: str, ref_id: int) -> None:
+    def __init__(self, id: int, nota: float, conteudo: str, titulo: str, ) -> None:
         self.set_id(id)
         self.set_nota(nota)
         self.set_conteudo(conteudo)
         self.set_titulo(titulo)
-        self.set_ref_id(ref_id)
+        self.__ref_id = None
     
     def get_id(self) -> int:
         return self.__id 

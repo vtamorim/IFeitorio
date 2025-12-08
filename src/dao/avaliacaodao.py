@@ -1,14 +1,14 @@
 from dao import AbstractDAO
 from models import Refeicao
-
-class RefeicaoDAO(AbstractDAO):
+from datetime import datetime
+class AvaliacaoDAO(AbstractDAO):
     @classmethod
-    def add(cls, obj: Refeicao) -> None:
+    def add(cls, obj : Refeicao) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO refeicao (id, nome, descricao, tipo, aluno_matricula, coordenador_matricula) VALUES (?, ?, ?, ?, ?, ?)"
-        cursor.execute(sql_code, (obj.get_id(), obj.get_nome(), obj.get_descricao(), obj.get_tipo(), obj.get_data()))
+        sql_code = "INSERT INTO cardapio (id, nota, conteudo, titulo, ref_id) VALUES (?, ?, ?, ?, ?)"
+        cursor.execute(sql_code, (obj.get_di(), obj.get_df()))
         
         conn.commit()
         conn.close()
@@ -25,8 +25,8 @@ class RefeicaoDAO(AbstractDAO):
         conn.close()
 
         return [
-            Refeicao(row["id"], row["nome"], row["descricao"], row["tipo"], row["data"])
-            for row in rows
+            Refeicao(i, rows[i]["id"], rows[i]["nota"], rows[i]["conteudo"], rows[i]["titulo"], rows[i]["ref_id"])
+            for i in range(len(rows))
         ]
 
     @classmethod
@@ -34,18 +34,18 @@ class RefeicaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "UPDATE refeicao SET nome = ?, descricao = ?, tipo = ?, data = ? WHERE id = ?"
-        cursor.execute(sql_code, (new_obj.get_nome(), new_obj.get_descricao(), new_obj.get_tipo(), new_obj.get_data(), new_obj.get_id()))
+        sql_code =  "UPDATE avaliacao SET nota = ?, conteudo = ?, titulo = ?, ref_id = ? WHERE id = ?" # Melhorar isso depois...
+        cursor.execute(sql_code, (new_obj.get_df(), new_obj.get_di()))
 
         conn.commit()
         conn.close()
     
     @classmethod
-    def delete(cls, searched_obj: int) -> None:
+    def delete(cls, searched_obj: datetime) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "DELETE FROM refeicao WHERE id = ?"
+        sql_code = "DELETE FROM cardapio WHERE id = ?"
         cursor.execute(sql_code, (searched_obj,))
 
         conn.commit()
