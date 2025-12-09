@@ -53,12 +53,13 @@ refeicao
 - id [PK]
 - nome
 - descricao (explicar esse atributo melhor)
+- tipo (lanche manhã, lanche tarde, lanche noite, almoço, jantar)
 
 refeicao_restricao_alimentar
 - refeicao_id [PK]
 - restricao_id [PK]
 
-cardapio
+cardapios
 - id [PK]
 - data_inicial
 - data_final
@@ -68,13 +69,11 @@ vincula_cardapio_refeicao
 - cardapio_id (identificador do cardápio)
 - refeicao_id
 - data (dia da refeicao naquele cardapio)
-- tipo (lanche manhã, lanche tarde, lanche noite, almoço, jantar)
 
 aluno_falta
 - id [PK]
 - aluno_id
-- cardapio_id
-- refeicao_id
+- vincula_cardapio_refeicao_id
 
 justificativa
 - id [PK]

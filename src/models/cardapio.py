@@ -2,11 +2,14 @@ from .refeicao import Refeicao
 from datetime import date
 
 class Cardapio:
-    def __init__(self, data_inicial: date, data_final: date, refeicoes: list[Refeicao] = []) -> None:
+    def __init__(self, id: int, data_inicial: date, data_final: date, refeicoes: list[Refeicao] = []) -> None:
+        self.set_id(id)
         self.set_data_inicial(data_inicial)
         self.set_data_final(data_final)
         self.set_refeicoes(refeicoes)
 
+    def get_id(self) -> int:
+        return self.__id
     def get_data_inicial(self) -> date:
         return self.__data_inicial
     def get_data_final(self) -> date:
@@ -14,11 +17,19 @@ class Cardapio:
     def get_refeicoes(self) -> list[Refeicao]:
         return self.__refeicoes
 
-    def set_data_inicial(self, data_inicial: date) -> None:
+    def set_id(self, id: int) -> None:
+        if not isinstance(id, int): raise ValueError
+
+        self.__id = id
+    def set_data_inicial(self, data_inicial: date | str) -> None:
+        if isinstance(data_inicial, str):
+            data_inicial = date.strptime(data_inicial, "%d/%m/%Y")
         if not isinstance(data_inicial, date): raise ValueError
 
         self.__data_inicial = data_inicial
-    def set_data_final(self, data_final: date) -> None:
+    def set_data_final(self, data_final: date | str) -> None:
+        if isinstance(data_final, str):
+            data_final = date.strptime(data_final, "%d/%m/%Y")
         if not isinstance(data_final, date): raise ValueError
 
         self.__data_final = data_final
@@ -40,4 +51,4 @@ class Cardapio:
         return data.strftime("%d/%m/%Y")
 
     def __str__(self) -> str:
-        return f"Cardápio {self.get_data_formatada(self.__data_inicial)} - {self.get_data_formatada(self.__data_final)}"
+        return f"Cardápio {self.__id}: {self.get_data_formatada(self.__data_inicial)} - {self.get_data_formatada(self.__data_final)}"
