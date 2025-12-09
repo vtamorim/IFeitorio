@@ -11,6 +11,7 @@ class AbstractDAO(ABC):
         """Retorna o objeto da conexão com o Banco de Dados."""
         conn = sqlite3.connect(cls._db_path)
         conn.row_factory = sqlite3.Row # Permite acessar o Banco de Dados como um dicionário ao invés de uma tupla.
+        conn.execute("PRAGMA foreign_keys = ON") # Por algum motivo o SQLite não vem com as verificações de Foreign Keys ativadas por padrão...
         return conn
 
     @classmethod

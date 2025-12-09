@@ -59,12 +59,13 @@ refeicao_restricao_alimentar
 - restricao_id [PK]
 
 cardapio
-- data_inicial [PK] (talvez tirar o PK da data_inicial e colocar um id como PK)
+- id [PK]
+- data_inicial
 - data_final
 
 vincula_cardapio_refeicao
 - id [PK] (Acho q devemos pôr um id, pois o cardápio e o refeicao_id como PK faria com que não fosse possível repetir um prato em uma mesma semana... Provavelmente todos esses 4 valores abaixo devem ser únicos entre si, ou 3 tirando o refeicao_id)
-- cardapio_data_inicial (identificador do cardápio)
+- cardapio_id (identificador do cardápio)
 - refeicao_id
 - data (dia da refeicao naquele cardapio)
 - tipo (lanche manhã, lanche tarde, lanche noite, almoço, jantar)

@@ -16,7 +16,7 @@ class Aluno:
         return self.__nome
     def get_senha(self) -> str:
         return self.__senha
-    def get_restricoes(self) -> list:
+    def get_restricoes(self) -> list[Restricao]:
         return self.__restricoes
     
     def set_id(self, id: int) -> None:
@@ -33,7 +33,7 @@ class Aluno:
         senha = senha.strip() # retira "espaços" dos lados da string
         if senha == "": raise ValueError
         self.__senha = senha
-    def set_restricoes(self, restricoes: list) -> None: 
+    def set_restricoes(self, restricoes: list[Restricao]) -> None: 
         if not isinstance(restricoes, (list)): raise ValueError
         self.__restricoes = restricoes
 
