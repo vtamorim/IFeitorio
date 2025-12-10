@@ -30,6 +30,19 @@ class CoordenadorDAO(AbstractDAO):
         ]
 
     @classmethod
+    def get(cls, id: int) -> Coordenador:
+        conn = cls._get_db_connection()
+        cursor = conn.cursor()
+
+        sql_code = "SELECT * FROM coordenadores WHERE id = ?"
+        cursor.execute(sql_code, (id,))
+
+        row = cursor.fetchone()
+        conn.close()
+
+        return Coordenador(row.id, row.matricula, row.nome, row.senha)
+
+    @classmethod
     def update(cls, new_obj: Coordenador) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()

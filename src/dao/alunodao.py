@@ -52,6 +52,34 @@ class AlunoDAO(AbstractDAO):
         ]
 
     @classmethod
+    def get(cls, id: int) -> Aluno:
+        conn = cls._get_db_connection()
+        cursor = conn.cursor()
+
+        sql_code = """
+            SELECT
+                a.id, a.matricula, a.nome, a.senha,
+                r.id AS ra_id, r.nome AS ra_nome
+            FROM
+                alunos a
+            LEFT JOIN aluno_restricao ar ON a.id = ar.aluno_id
+            LEFT JOIN restricoes_alimentares r ON ar.restricao_id = r.id
+            WHERE a.id = ?
+        """
+        cursor.execute(sql_code, (id,))
+        rows = cursor.fetchall()
+
+        conn.close()
+
+        restricoes: list[Restricao] = []
+
+        for row in rows: # Cria os objetos "Restricao" do Banco de Dados
+            if row.ra_id is not None:
+                restricoes.append(Restricao(row.ra_id, row.ra_nome))
+            
+        return Aluno(rows[0].id, rows[0].matricula, rows[0].nome, rows[0].senha, restricoes)
+
+    @classmethod
     def update(cls, new_obj: Aluno) -> None:
         id_restricoes = set([ restricao.get_id() for restricao in new_obj.get_restricoes() ])
         

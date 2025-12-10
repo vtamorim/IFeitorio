@@ -53,7 +53,7 @@ refeicao
 - id [PK]
 - nome
 - descricao (explicar esse atributo melhor)
-- tipo (lanche manhã, lanche tarde, lanche noite, almoço, jantar)
+- tipo (lanche, almoço, jantar)
 
 refeicao_restricao_alimentar
 - refeicao_id [PK]

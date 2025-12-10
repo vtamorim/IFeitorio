@@ -1,51 +1,51 @@
-from dao import AbstractDAO
-from models import Refeicao
-from datetime import datetime
+from dao import AbstractDAO, AlunoDAO, RefeicaoDAO
+from models import Avaliacao
+
 class AvaliacaoDAO(AbstractDAO):
     @classmethod
-    def add(cls, obj : Refeicao) -> None:
+    def add(cls, obj: Avaliacao) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO cardapio (id, nota, conteudo, titulo, ref_id) VALUES (?, ?, ?, ?, ?)"
-        cursor.execute(sql_code, (obj.get_di(), obj.get_df()))
+        sql_code = "INSERT INTO avaliacao (id, nota, aluno_id, refeicao_id, conteudo, titulo) VALUES (?, ?, ?, ?, ?, ?)"
+        cursor.execute(sql_code, (obj.get_id(), obj.get_nota(), obj.get_aluno().get_id(), obj.get_refeicao().get_id(), obj.get_conteudo(), obj.get_titulo()))
         
         conn.commit()
         conn.close()
     
     @classmethod
-    def get_all(cls) -> list[Refeicao]:
+    def get_all(cls) -> list[Avaliacao]:
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "SELECT * FROM refeicao"
+        sql_code = "SELECT * FROM avaliacao"
         cursor.execute(sql_code)
 
         rows = cursor.fetchall()
         conn.close()
 
         return [
-            Refeicao(i, rows[i]["id"], rows[i]["nota"], rows[i]["conteudo"], rows[i]["titulo"], rows[i]["ref_id"])
-            for i in range(len(rows))
+            Avaliacao(row.id, row.nota, AlunoDAO.get(row.aluno_id), RefeicaoDAO.get(row.refeicao_id), row.conteudo, row.titulo)
+            for row in rows
         ]
 
     @classmethod
-    def update(cls, new_obj: Refeicao) -> None:
+    def update(cls, new_obj: Avaliacao) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code =  "UPDATE avaliacao SET nota = ?, conteudo = ?, titulo = ?, ref_id = ? WHERE id = ?" # Melhorar isso depois...
-        cursor.execute(sql_code, (new_obj.get_df(), new_obj.get_di()))
+        sql_code = "UPDATE avaliacao SET nota = ?, aluno_id = ?, refeicao_id = ?, conteudo = ? titulo WHERE id = ?"
+        cursor.execute(sql_code, (new_obj.get_nota(), new_obj.get_aluno().get_id(), new_obj.get_refeicao().get_id(), new_obj.get_conteudo(), new_obj.get_titulo(), new_obj.get_id()))
 
         conn.commit()
         conn.close()
     
     @classmethod
-    def delete(cls, searched_obj: datetime) -> None:
+    def delete(cls, searched_obj: int) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "DELETE FROM cardapio WHERE id = ?"
+        sql_code = "DELETE FROM avaliacao WHERE id = ?"
         cursor.execute(sql_code, (searched_obj,))
 
         conn.commit()

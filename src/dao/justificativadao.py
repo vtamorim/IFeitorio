@@ -1,4 +1,4 @@
-from dao import AbstractDAO
+from dao import AbstractDAO, CoordenadorDAO, FaltaDAO
 from models import Justificativa
 
 class JustificativaDAO(AbstractDAO):
@@ -7,8 +7,13 @@ class JustificativaDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO justificativa (id, data, motivo, aluno_matricula, refeicao_id) VALUES (?, ?, ?, ?, ?)"
-        cursor.execute(sql_code, (obj.get_id(), obj.get_data(), obj.get_motivo(), obj.get_alu_mat(), obj.get_ref_id()))
+        sql_code = "INSERT INTO justificativa (id, aluno_falta_id, motivo) VALUES (?, ?, ?)"
+        cursor.execute(sql_code, (obj.get_id(), obj.get_falta().get_id(), obj.get_motivo()))
+
+        if obj.get_aprovada() is not None:
+            sql_code = "INSERT INTO analise_justificativa (aprovacao, justificativa_id, coordenador_id) VALUES (?, ?, ?)"
+            aprovacao_text = 1 if obj.get_aprovada() else 0 # SQLite não tem booleano, então representaremos como "0" e "1"
+            cursor.execute(sql_code, (aprovacao_text, obj.get_id(), obj.get_coordenador().get_id()))
         
         conn.commit()
         conn.close()
@@ -18,24 +23,61 @@ class JustificativaDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "SELECT * FROM justificativa"
+        sql_code = """
+            SELECT
+                j.id, j.aluno_falta_id, j.motivo,
+                aj.aprovacao, aj.coordenador_id
+            FROM
+                justificativa j
+            LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
+            ORDER BY j.id
+        """
         cursor.execute(sql_code)
 
         rows = cursor.fetchall()
         conn.close()
 
         return [
-            Justificativa(row["id"], row["data"], row["motivo"], row["aluno_matricula"], row["refeicao_id"])
+            Justificativa(row.id, FaltaDAO.get(row.aluno_falta_id), row.motivo, row.aprovacao == 1, CoordenadorDAO.get(row.coordenador_id) if row.coordenador_id else None)
             for row in rows
         ]
+
+    @classmethod
+    def get(cls, id: int) -> Justificativa:
+        conn = cls._get_db_connection()
+        cursor = conn.cursor()
+
+        sql_code = """
+            SELECT
+                j.id, j.aluno_falta_id, j.motivo,
+                aj.aprovacao, aj.coordenador_id
+            FROM
+                justificativa j
+            LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
+            WHERE j.id = ?
+        """
+        cursor.execute(sql_code, (id,))
+
+        row = cursor.fetchone()
+        conn.close()
+
+        return Justificativa(row.id, FaltaDAO.get(row.aluno_falta_id), row.motivo, row.aprovacao == 1, CoordenadorDAO.get(row.coordenador_id) if row.coordenador_id else None)
 
     @classmethod
     def update(cls, new_obj: Justificativa) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "UPDATE justificativa SET data = ?, motivo = ?, aluno_matricula = ?, refeicao_id = ? WHERE id = ?"
-        cursor.execute(sql_code, (new_obj.get_data(), new_obj.get_motivo(), new_obj.get_alu_mat(), new_obj.get_ref_id(), new_obj.get_id()))
+        sql_code = "UPDATE justificativa SET aluno_falta_id = ?, motivo = ? WHERE id = ?"
+        cursor.execute(sql_code, (new_obj.get_falta().get_id(), new_obj.get_motivo(), new_obj.get_id()))
+
+        if new_obj.get_aprovada() is None: # Tirar a análise dessa justificativa se ela não tiver análise
+            sql_code = "DELETE FROM analise_justificativa WHERE justificativa_id = ?"
+            cursor.execute(sql_code, (new_obj.get_id(),))
+        else: # Atualizar a análise dessa justificativa se ela tiver análise
+            sql_code = "UPDATE analise_justificativa SET aprovacao = ?, coordenador_id = ? WHERE justificativa_id = ?"
+            aprovacao_text = 1 if new_obj.get_aprovada() else 0 # SQLite não tem booleano, então representaremos como "0" e "1"
+            cursor.execute(sql_code, (aprovacao_text, new_obj.get_coordenador().get_id(), new_obj.get_id()))
 
         conn.commit()
         conn.close()

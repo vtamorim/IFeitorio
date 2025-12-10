@@ -33,15 +33,15 @@ class Justificativa:
         if not isinstance(motivo, str): raise ValueError
 
         self.__motivo = motivo
-    def set_aprovada(self, aprovada: bool) -> None:
-        if not isinstance(aprovada, bool): raise ValueError
+    def set_aprovada(self, aprovada: Optional[bool]) -> None:
+        if aprovada is not None and not isinstance(aprovada, bool): raise ValueError
 
         self.__aprovada = aprovada
-    def set_coordenador(self, coordenador: Coordenador) -> None:
-        if not isinstance(coordenador, Coordenador): raise ValueError
+    def set_coordenador(self, coordenador: Optional[Coordenador]) -> None:
+        if coordenador is not None and not isinstance(coordenador, Coordenador): raise ValueError
 
         self.__coordenador = coordenador
     
-    def __str__(self) -> None:
+    def __str__(self) -> str:
         aprovada_texto = f" | {self.__aprovada} - {self.__coordenador.get_nome()}" if self.__aprovada is not None and self.__coordenador is not None else " | Ainda Não Analisada"
         return f"Justificativa {self.__id} - Falta {self.__falta.get_id()}: {self.__motivo}{aprovada_texto}"

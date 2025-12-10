@@ -9,6 +9,16 @@ class CardapioDAO(AbstractDAO):
 
         sql_code = "INSERT INTO cardapios (id, data_inicial, data_final) VALUES (?, ?, ?)"
         cursor.execute(sql_code, (obj.get_id(), obj.get_data_formatada(obj.get_data_inicial()), obj.get_data_formatada(obj.get_data_final())))
+
+        if len(obj.get_refeicoes()) > 0: # Adiciona as refeições cadastradas do Cardápio
+            values_str = ", ".join(["(?, ?, ?)" for _ in range(len(obj.get_refeicoes()))])
+            values_parameter = []
+            for ref in obj.get_refeicoes():
+                values_parameter.append(obj.get_id())
+                values_parameter.append(ref.get_id())
+                values_parameter.append(ref.get_data_formatada())
+            sql_code = f"INSERT INTO vincula_cardapio_refeicao (cardapio_id, refeicao_id, data) VALUES {values_str}"
+            cursor.execute(sql_code, values_parameter)
         
         conn.commit()
         conn.close()
@@ -57,6 +67,44 @@ class CardapioDAO(AbstractDAO):
             Cardapio(row.id, row.data_inicial, row.data_final, cardapios_refeicoes[row.id])
             for row in rows
         ]
+    
+    @classmethod
+    def get(cls, id: int) -> Cardapio:
+        conn = cls._get_db_connection()
+        cursor = conn.cursor()
+
+        sql_code = """
+            SELECT
+                c.id, c.data_inicial, c.data_final,
+                vcr.refeicao_id, vcr.data, vcr.tipo
+            FROM
+                cardapios c
+            LEFT JOIN vincula_cardapio_refeicao vcr ON vcr.cardapio_id = c.id
+            WHERE c.id = ?
+        """
+        cursor.execute(sql_code, (id,))
+
+        rows = cursor.fetchall()
+        conn.close()
+
+        refeicoes = RefeicaoDAO.get_all()
+        cardapios_refeicoes: list[Refeicao] = []
+        cardapios_refeicoes_id: set[int] = set()
+        refeicoes_datatipo: dict[int, dict[str, str]] = {}
+        for row in rows: # De todos os dados pegos dos cardápios, preenche os dados acima
+            if row.refeicao_id is not None:
+                cardapios_refeicoes_id.add(row.refeicao_id)
+                refeicoes_datatipo[row.refeicao_id] = {
+                    "data": row.data,
+                    "tipo": row.tipo
+                }
+        
+        cardapios_refeicoes = [ ref for ref in refeicoes if ref.get_id() in cardapios_refeicoes_id ]
+        for ref in cardapios_refeicoes:
+            ref.set_data(refeicoes_datatipo[ref.get_id()].data)
+            ref.set_tipo(refeicoes_datatipo[ref.get_id()].tipo)
+        
+        return Cardapio(rows[0].id, rows[0].data_inicial, rows[0].data_final, cardapios_refeicoes)
 
     @classmethod
     def update(cls, new_obj: Cardapio) -> None:
@@ -66,10 +114,18 @@ class CardapioDAO(AbstractDAO):
         sql_code = "UPDATE cardapios SET data_inicial = ?, data_final = ? WHERE id = ?"
         cursor.execute(sql_code, (new_obj.get_data_formatada(new_obj.get_data_inicial()), new_obj.get_data_formatada(new_obj.get_data_final()), new_obj.get_id()))
 
-        sql_code = "DELETE FROM vincula_cardapio_refeicao WHERE cardapio_id = ? AND refeicao_id NOT IN ?" # Deleta as refeições que não estão mais no cardápio
-        cursor.execute(sql_code, (new_obj.get_id(), [ ref.get_id() for ref in new_obj.get_refeicoes() ]))
+        sql_code = "DELETE FROM vincula_cardapio_refeicao" # Limpa completamente a tabela de vínculos.
+        cursor.execute(sql_code) # Acho que pode ser adicionada uma restrição no próprio banco de dados que faça com que não seja necessária esse DELETE
 
-        sql_code = "INSERT INTO vincula_cardapio_refeicao (cardapio_id, refeicao_id, data, tipo) VALUES (?, ?, ?, ?)"
+        if len(new_obj.get_refeicoes()) > 0: # Adiciona as refeições cadastradas do Cardápio. Talvez seja ineficiente esse DELETE e depois INSERT para atualizar os vínculos.
+            values_str = ", ".join(["(?, ?, ?)" for _ in range(len(new_obj.get_refeicoes()))])
+            values_parameter = []
+            for ref in new_obj.get_refeicoes():
+                values_parameter.append(new_obj.get_id())
+                values_parameter.append(ref.get_id())
+                values_parameter.append(ref.get_data_formatada())
+            sql_code = f"INSERT INTO vincula_cardapio_refeicao (cardapio_id, refeicao_id, data) VALUES {values_str}"
+            cursor.execute(sql_code, values_parameter)
 
         conn.commit()
         conn.close()

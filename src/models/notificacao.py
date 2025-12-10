@@ -2,7 +2,7 @@ from .aluno import Aluno
 from typing import Optional
 
 class Notificacao:
-    def __init__(self, id: int, titulo : str, conteudo: Optional[str], alunos_destinatarios: list[Aluno] = []) -> None:
+    def __init__(self, id: int, titulo: str, conteudo: Optional[str], alunos_destinatarios: list[Aluno] = []) -> None:
         self.set_id(id)
         self.set_titulo(titulo)
         self.set_conteudo(conteudo)
