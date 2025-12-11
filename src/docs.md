@@ -30,8 +30,7 @@ Tabelas do Banco de Dados (nova)
 
 
 alunos
-- id [PK]
-- matricula
+- matricula [PK]
 - nome
 - senha
 
@@ -40,24 +39,22 @@ restricoes_alimentares
 - nome
 
 aluno_restricao
-- aluno_id [PK]
-- restricao_id [PK]
+- aluno_matricula [PK] [FK]
+- restricao_id [PK] [FK]
 
 coordenadores
-- id [PK]
-- matricula
+- matricula [PK]
 - nome
 - senha
 
-refeicao
+refeicoes
 - id [PK]
 - nome
-- descricao (explicar esse atributo melhor)
-- tipo (lanche, almoço, jantar)
+- descricao [O]
 
 refeicao_restricao_alimentar
-- refeicao_id [PK]
-- restricao_id [PK]
+- refeicao_id [PK] [FK]
+- restricao_id [PK] [FK]
 
 cardapios
 - id [PK]
@@ -66,40 +63,171 @@ cardapios
 
 vincula_cardapio_refeicao
 - id [PK] (Acho q devemos pôr um id, pois o cardápio e o refeicao_id como PK faria com que não fosse possível repetir um prato em uma mesma semana... Provavelmente todos esses 4 valores abaixo devem ser únicos entre si, ou 3 tirando o refeicao_id)
-- cardapio_id (identificador do cardápio)
-- refeicao_id
+- cardapio_id [FK] (identificador do cardápio)
+- refeicao_id [FK]
 - data (dia da refeicao naquele cardapio)
+- tipo (lanche manhã/tarde/noite, almoço, jantar)
 
 aluno_falta
 - id [PK]
-- aluno_id
-- vincula_cardapio_refeicao_id
+- aluno_matricula [FK]
+- cardapio_id [FK]
+- data
+- tipo (almoço, jantar)
 
-justificativa
+justificativas
 - id [PK]
-- aluno_falta_id
+- aluno_falta_id [FK]
 - motivo
 
 analise_justificativa
 - id [PK]
 - aprovacao (talvez um bool se foi aceita a justificativa do aluno?)
-- justificativa_id
-- coordenador_id
+- justificativa_id [FK]
+- coordenador_matricula [FK]
 
-avaliacao
+avaliacoes
 - id [PK]
 - nota
-- aluno_id
-- refeicao_id
+- aluno_matricula [FK]
+- refeicao_id [FK]
+- conteudo [O]
+- titulo [O]
 
-- conteudo
-- titulo 
-
-notificacao
+notificacoes
 - id [PK]
 - titulo
-- conteudo
+- conteudo [O]
 
 notificacao_aluno
-- notificacao_id [PK]
-- aluno_id [PK]
+- notificacao_id [PK] [FK]
+- aluno_matricula [PK] [FK]
+
+
+---
+Código SQLite
+
+
+PRAGMA foreign_keys = ON;
+CREATE TABLE IF NOT EXISTS alunos (
+    matricula TEXT PRIMARY KEY NOT NULL,
+    nome TEXT NOT NULL,
+    senha TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS restricoes_alimentares (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS aluno_restricao (
+    aluno_matricula TEXT NOT NULL,
+    restricao_id INTEGER NOT NULL,
+    FOREIGN KEY (aluno_matricula)
+        REFERENCES alunos (matricula)
+        ON DELETE CASCADE,
+    FOREIGN KEY (restricao_id)
+        REFERENCES restricoes_alimentares (id)
+        ON DELETE CASCADE,
+    PRIMARY KEY (aluno_matricula, restricao_id)
+);
+CREATE TABLE IF NOT EXISTS coordenadores (
+    matricula TEXT PRIMARY KEY NOT NULL,
+    nome TEXT NOT NULL,
+    senha TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS refeicoes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    descricao TEXT
+);
+CREATE TABLE IF NOT EXISTS refeicao_restricao_alimentar (
+    refeicao_id INTEGER NOT NULL,
+    restricao_id INTEGER NOT NULL,
+    FOREIGN KEY (refeicao_id)
+        REFERENCES refeicoes (id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (restricao_id)
+        REFERENCES restricoes_alimentares (id)
+        ON DELETE CASCADE,
+    PRIMARY KEY (refeicao_id, restricao_id)
+);
+CREATE TABLE IF NOT EXISTS cardapios (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data_inicial TEXT NOT NULL,
+    data_final TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS vincula_cardapio_refeicao (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cardapio_id INTEGER NOT NULL,
+    refeicao_id INTEGER NOT NULL,
+    data TEXT NOT NULL,
+    tipo TEXT NOT NULL,
+    FOREIGN KEY (cardapio_id)
+        REFERENCES cardapios (id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (refeicao_id)
+        REFERENCES refeicoes (id)
+        ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS aluno_falta (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    aluno_matricula TEXT NOT NULL,
+    cardapio_id INTEGER NOT NULL,
+    data TEXT NOT NULL,
+    tipo TEXT NOT NULL,
+    FOREIGN KEY (aluno_matricula)
+        REFERENCES alunos (matricula)
+        ON DELETE CASCADE,
+    FOREIGN KEY (cardapio_id)
+        REFERENCES cardapios (id)
+        ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS justificativas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    aluno_falta_id INTEGER NOT NULL,
+    motivo TEXT NOT NULL,
+    FOREIGN KEY (aluno_falta_id)
+        REFERENCES aluno_falta (id)
+        ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS analise_justificativa (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    aprovacao INTEGER NOT NULL,
+    justificativa_id INTEGER NOT NULL,
+    coordenador_matricula TEXT NOT NULL,
+    FOREIGN KEY (justificativa_id)
+        REFERENCES justificativas (id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (coordenador_matricula)
+        REFERENCES coordenadores (matricula)
+        ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS avaliacoes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nota REAL NOT NULL,
+    aluno_matricula TEXT NOT NULL,
+    refeicao_id INTEGER NOT NULL,
+    conteudo TEXT,
+    titulo TEXT,
+    FOREIGN KEY (aluno_matricula)
+        REFERENCES alunos (matricula)
+        ON DELETE CASCADE,
+    FOREIGN KEY (refeicao_id)
+        REFERENCES refeicoes (id)
+        ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS notificacoes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    conteudo TEXT
+);
+CREATE TABLE IF NOT EXISTS notificacao_aluno (
+    notificacao_id INTEGER NOT NULL,
+    aluno_matricula TEXT NOT NULL,
+    FOREIGN KEY (notificacao_id)
+        REFERENCES notificacoes (id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (aluno_matricula)
+        REFERENCES alunos (matricula)
+        ON DELETE CASCADE,
+    PRIMARY KEY (notificacao_id, aluno_matricula)
+);

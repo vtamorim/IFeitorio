@@ -114,7 +114,7 @@ class CardapioDAO(AbstractDAO):
         sql_code = "UPDATE cardapios SET data_inicial = ?, data_final = ? WHERE id = ?"
         cursor.execute(sql_code, (new_obj.get_data_formatada(new_obj.get_data_inicial()), new_obj.get_data_formatada(new_obj.get_data_final()), new_obj.get_id()))
 
-        sql_code = "DELETE FROM vincula_cardapio_refeicao" # Limpa completamente a tabela de vínculos.
+        sql_code = "DELETE FROM vincula_cardapio_refeicao" # Limpa completamente a tabela de vínculos daquele cardapio.
         cursor.execute(sql_code) # Acho que pode ser adicionada uma restrição no próprio banco de dados que faça com que não seja necessária esse DELETE
 
         if len(new_obj.get_refeicoes()) > 0: # Adiciona as refeições cadastradas do Cardápio. Talvez seja ineficiente esse DELETE e depois INSERT para atualizar os vínculos.
