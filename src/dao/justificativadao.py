@@ -7,13 +7,13 @@ class JustificativaDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO justificativa (id, aluno_falta_id, motivo) VALUES (?, ?, ?)"
-        cursor.execute(sql_code, (obj.get_id(), obj.get_falta().get_id(), obj.get_motivo()))
+        sql_code = "INSERT INTO justificativas (aluno_falta_id, motivo) VALUES (?, ?, ?)"
+        cursor.execute(sql_code, (obj.get_falta().get_id(), obj.get_motivo()))
 
         if obj.get_aprovada() is not None:
-            sql_code = "INSERT INTO analise_justificativa (aprovacao, justificativa_id, coordenador_id) VALUES (?, ?, ?)"
+            sql_code = "INSERT INTO analise_justificativa (justificativa_id, aprovacao, coordenador_matricula) VALUES (?, ?, ?)"
             aprovacao_text = 1 if obj.get_aprovada() else 0 # SQLite não tem booleano, então representaremos como "0" e "1"
-            cursor.execute(sql_code, (aprovacao_text, obj.get_id(), obj.get_coordenador().get_id()))
+            cursor.execute(sql_code, (obj.get_id(), aprovacao_text, obj.get_coordenador().get_matricula()))
         
         conn.commit()
         conn.close()
@@ -28,7 +28,7 @@ class JustificativaDAO(AbstractDAO):
                 j.id, j.aluno_falta_id, j.motivo,
                 aj.aprovacao, aj.coordenador_id
             FROM
-                justificativa j
+                justificativas j
             LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
             ORDER BY j.id
         """
@@ -38,7 +38,7 @@ class JustificativaDAO(AbstractDAO):
         conn.close()
 
         return [
-            Justificativa(row.id, FaltaDAO.get(row.aluno_falta_id), row.motivo, row.aprovacao == 1, CoordenadorDAO.get(row.coordenador_id) if row.coordenador_id else None)
+            Justificativa(row.id, FaltaDAO.get(row.aluno_falta_id), row.motivo, row.aprovacao == 1 if row.aprovacao else None, CoordenadorDAO.get(row.coordenador_id) if row.coordenador_id else None)
             for row in rows
         ]
 
@@ -52,7 +52,7 @@ class JustificativaDAO(AbstractDAO):
                 j.id, j.aluno_falta_id, j.motivo,
                 aj.aprovacao, aj.coordenador_id
             FROM
-                justificativa j
+                justificativas j
             LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
             WHERE j.id = ?
         """
@@ -68,16 +68,24 @@ class JustificativaDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "UPDATE justificativa SET aluno_falta_id = ?, motivo = ? WHERE id = ?"
+        sql_code = "UPDATE justificativas SET aluno_falta_id = ?, motivo = ? WHERE id = ?"
         cursor.execute(sql_code, (new_obj.get_falta().get_id(), new_obj.get_motivo(), new_obj.get_id()))
 
         if new_obj.get_aprovada() is None: # Tirar a análise dessa justificativa se ela não tiver análise
             sql_code = "DELETE FROM analise_justificativa WHERE justificativa_id = ?"
             cursor.execute(sql_code, (new_obj.get_id(),))
         else: # Atualizar a análise dessa justificativa se ela tiver análise
-            sql_code = "UPDATE analise_justificativa SET aprovacao = ?, coordenador_id = ? WHERE justificativa_id = ?"
+            sql_code = """
+                INSERT INTO analise_justificativa (justificativa_id, aprovacao, coordenador_matricula) 
+                VALUES (?, ?, ?)
+                ON CONFLICT (justificativa_id) DO
+                UPDATE
+                SET 
+                    aprovacao = excluded.aprovacao,
+                    coordenador_matricula = excluded.coordenador_matricula
+            """
             aprovacao_text = 1 if new_obj.get_aprovada() else 0 # SQLite não tem booleano, então representaremos como "0" e "1"
-            cursor.execute(sql_code, (aprovacao_text, new_obj.get_coordenador().get_id(), new_obj.get_id()))
+            cursor.execute(sql_code, (new_obj.get_id(), aprovacao_text, new_obj.get_coordenador().get_matricula()))
 
         conn.commit()
         conn.close()
@@ -87,7 +95,7 @@ class JustificativaDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "DELETE FROM justificativa WHERE id = ?"
+        sql_code = "DELETE FROM justificativas WHERE id = ?"
         cursor.execute(sql_code, (searched_obj,))
 
         conn.commit()

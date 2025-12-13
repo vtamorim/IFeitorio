@@ -2,7 +2,7 @@ from .refeicao import Refeicao
 from datetime import date
 
 class Cardapio:
-    def __init__(self, id: int, data_inicial: date, data_final: date, refeicoes: list[Refeicao] = []) -> None:
+    def __init__(self, id: int, data_inicial: date | str, data_final: date | str, refeicoes: list[Refeicao] = []) -> None:
         self.set_id(id)
         self.set_data_inicial(data_inicial)
         self.set_data_final(data_final)

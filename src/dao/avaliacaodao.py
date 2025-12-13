@@ -7,8 +7,8 @@ class AvaliacaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO avaliacao (id, nota, aluno_id, refeicao_id, conteudo, titulo) VALUES (?, ?, ?, ?, ?, ?)"
-        cursor.execute(sql_code, (obj.get_id(), obj.get_nota(), obj.get_aluno().get_id(), obj.get_refeicao().get_id(), obj.get_conteudo(), obj.get_titulo()))
+        sql_code = "INSERT INTO avaliacoes (nota, aluno_matricula, refeicao_id, conteudo, titulo) VALUES (?, ?, ?, ?, ?, ?)"
+        cursor.execute(sql_code, (obj.get_nota(), obj.get_aluno().get_matricula(), obj.get_refeicao().get_id(), obj.get_conteudo(), obj.get_titulo()))
         
         conn.commit()
         conn.close()
@@ -18,14 +18,14 @@ class AvaliacaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "SELECT * FROM avaliacao"
+        sql_code = "SELECT * FROM avaliacoes"
         cursor.execute(sql_code)
 
         rows = cursor.fetchall()
         conn.close()
 
         return [
-            Avaliacao(row.id, row.nota, AlunoDAO.get(row.aluno_id), RefeicaoDAO.get(row.refeicao_id), row.conteudo, row.titulo)
+            Avaliacao(row.id, row.nota, AlunoDAO.get(row.aluno_matricula), RefeicaoDAO.get(row.refeicao_id), row.conteudo, row.titulo)
             for row in rows
         ]
 
@@ -34,8 +34,8 @@ class AvaliacaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "UPDATE avaliacao SET nota = ?, aluno_id = ?, refeicao_id = ?, conteudo = ? titulo WHERE id = ?"
-        cursor.execute(sql_code, (new_obj.get_nota(), new_obj.get_aluno().get_id(), new_obj.get_refeicao().get_id(), new_obj.get_conteudo(), new_obj.get_titulo(), new_obj.get_id()))
+        sql_code = "UPDATE avaliacoes SET nota = ?, aluno_matricula = ?, refeicao_id = ?, conteudo = ? titulo = ? WHERE id = ?"
+        cursor.execute(sql_code, (new_obj.get_nota(), new_obj.get_aluno().get_matricula(), new_obj.get_refeicao().get_id(), new_obj.get_conteudo(), new_obj.get_titulo(), new_obj.get_id()))
 
         conn.commit()
         conn.close()
@@ -45,7 +45,7 @@ class AvaliacaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "DELETE FROM avaliacao WHERE id = ?"
+        sql_code = "DELETE FROM avaliacoes WHERE id = ?"
         cursor.execute(sql_code, (searched_obj,))
 
         conn.commit()

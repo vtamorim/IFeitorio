@@ -190,9 +190,8 @@ CREATE TABLE IF NOT EXISTS justificativas (
         ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS analise_justificativa (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    justificativa_id INTEGER PRIMARY KEY,
     aprovacao INTEGER NOT NULL,
-    justificativa_id INTEGER NOT NULL,
     coordenador_matricula TEXT NOT NULL,
     FOREIGN KEY (justificativa_id)
         REFERENCES justificativas (id)
@@ -231,3 +230,63 @@ CREATE TABLE IF NOT EXISTS notificacao_aluno (
         ON DELETE CASCADE,
     PRIMARY KEY (notificacao_id, aluno_matricula)
 );
+
+---
+models
+
+Aluno
+- matricula: str
+- nome: str
+- senha: str
+- restricoes: list[Restricao]
+
+Restricao
+- id: int
+- nome: str
+
+Coordenador
+- matricula: str
+- nome: str
+- senha: str
+
+Refeicao
+- id: int
+- nome: str
+- descricao: Optional[str]
+- restricoes_compatives: list[Restricao]
+- data: Optional[date]
+- tipo: Optional[str]
+
+Cardapio
+- id: int
+- data_inicial: date
+- data_final: date
+- refeicoes: list[Refeicao]
+
+Falta
+- id: int
+- aluno: Aluno
+- cardapio: Cardapio
+- data: date
+- tipo: str
+
+Justificativa
+- id: int
+- falta: Falta
+- motivo: str
+- aprovada: Optional[bool]
+- coordenador: Optional[Coordenador]
+
+Avaliacao
+- id: int
+- nota: float
+- aluno: Aluno
+- refeicao: Refeicao
+- conteudo: Optional[str]
+- titulo: Optional[str]
+
+Notificacao
+- id: int
+- titulo: str
+- conteudo: Optional[str]
+- alunos: list[Aluno]

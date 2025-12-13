@@ -36,13 +36,21 @@ class Avaliacao:
     def set_refeicao(self, refeicao: Refeicao) -> None: 
         if not isinstance(refeicao, (Refeicao)): raise ValueError
         self.__refeicao = refeicao
-    def set_conteudo(self, conteudo: str) -> None: 
+    def set_conteudo(self, conteudo: Optional[str]) -> None: 
+        if conteudo is None:
+            self.__conteudo = None
+            return
         conteudo = conteudo.strip() # retira "espaços" dos lados da string
         if conteudo == "": raise ValueError
+
         self.__conteudo = conteudo
-    def set_titulo(self, titulo: str) -> None: 
+    def set_titulo(self, titulo: Optional[str]) -> None: 
+        if titulo is None:
+            self.__titulo = None
+            return
         titulo = titulo.strip() # retira "espaços" dos lados da string
         if titulo == "": raise ValueError
+
         self.__titulo = titulo
 
     def __str__(self) -> str:

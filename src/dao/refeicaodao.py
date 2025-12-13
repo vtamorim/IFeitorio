@@ -7,17 +7,13 @@ class RefeicaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO refeicao (id, nome, descricao, tipo) VALUES (?, ?, ?, ?)"
-        cursor.execute(sql_code, (obj.get_id(), obj.get_nome(), obj.get_descricao(), obj.get_tipo()))
+        sql_code = "INSERT INTO refeicoes (nome, descricao) VALUES (?, ?) RETURNING id"
+        cursor.execute(sql_code, (obj.get_nome(), obj.get_descricao()))
 
-        if len(obj.get_restricoes_compativeis()) > 0: # Adiciona as relações entre refeição e restrições
-            values_str = ", ".join(["(?, ?)" for _ in range(len(obj.get_restricoes_compativeis()))])
-            values_parameter = []
-            for rest in obj.get_restricoes_compativeis():
-                values_parameter.append(obj.get_id())
-                values_parameter.append(rest.get_id())
-            sql_code = f"INSERT INTO refeicao_restricao_alimentar (refeicao_id, restricao_id) VALUES {values_str}"
-            cursor.execute(sql_code, values_parameter)
+        refeicao_id = cursor.fetchone().id
+
+        sql_code = "INSERT INTO refeicao_restricao_alimentar (refeicao_id, restricao_id) VALUES (?, ?)"
+        cursor.executemany(sql_code, [ (refeicao_id, rest.get_id()) for rest in obj.get_restricoes_compativeis() ])
         
         conn.commit()
         conn.close()
@@ -29,10 +25,10 @@ class RefeicaoDAO(AbstractDAO):
 
         sql_code = """
             SELECT 
-                r.id, r.nome, r.descricao, r.tipo,
+                r.id, r.nome, r.descricao,
                 ra.id AS ra_id, ra.nome AS ra_nome
             FROM
-                refeicao r
+                refeicoes r
             LEFT JOIN refeicao_restricao_alimentar rra ON rra.refeicao_id = r.id
             LEFT JOIN restricoes_alimentares ra ON ra.id = rra.restricao_id
             ORDER BY r.id
@@ -52,7 +48,7 @@ class RefeicaoDAO(AbstractDAO):
                 refeicao_restricoes[row.id].append(Restricao(row.ra_id, row.ra_nome))
 
         return [
-            Refeicao(row.id, row.nome, row.descricao, row.tipo, row.get(row.id, []))
+            Refeicao(row.id, row.nome, row.descricao, refeicao_restricoes.get(row.id, []))
             for row in rows
         ]
 
@@ -63,10 +59,10 @@ class RefeicaoDAO(AbstractDAO):
 
         sql_code = """
             SELECT 
-                r.id, r.nome, r.descricao, r.tipo,
+                r.id, r.nome, r.descricao,
                 ra.id AS ra_id, ra.nome AS ra_nome
             FROM
-                refeicao r
+                refeicoes r
             LEFT JOIN refeicao_restricao_alimentar rra ON rra.refeicao_id = r.id
             LEFT JOIN restricoes_alimentares ra ON ra.id = rra.restricao_id
             WHERE r.id = ?
@@ -82,7 +78,7 @@ class RefeicaoDAO(AbstractDAO):
             if row.ra_id is not None:
                 refeicao_restricoes.append(Restricao(row.ra_id, row.ra_nome))
         
-        return Refeicao(rows[0].id, rows[0].nome, rows[0].descricao, rows[0].tipo, refeicao_restricoes)
+        return Refeicao(rows[0].id, rows[0].nome, rows[0].descricao, refeicao_restricoes)
 
     @classmethod
     def update(cls, new_obj: Refeicao) -> None:
@@ -91,26 +87,18 @@ class RefeicaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "UPDATE refeicao SET nome = ?, descricao = ?, tipo = ? WHERE id = ?"
-        cursor.execute(sql_code, (new_obj.get_nome(), new_obj.get_descricao(), new_obj.get_tipo(), new_obj.get_id()))
+        sql_code = "UPDATE refeicoes SET nome = ?, descricao = ? WHERE id = ?"
+        cursor.execute(sql_code, (new_obj.get_nome(), new_obj.get_descricao(), new_obj.get_id()))
 
-        sql_code = "SELECT restricao_id FROM refeicao_restricao_alimentar WHERE refeicao_id = ?"
-        cursor.execute(sql_code, (new_obj.get_id(),))
-        restricoes_antigas = set([row.restricao_id for row in cursor.fetchall()])
+        sql_code = "DELETE FROM refeicao_restricao_alimentar WHERE refeicao_id = ? AND restricao_id NOT IN ?"
+        cursor.execute(sql_code, (new_obj.get_id(), tuple(id_restricoes)))
 
-        restricoes_novas = id_restricoes - restricoes_antigas # Adiciona as restrições novas adicionadas a refeição
-        amount_values = ", ".join([ "(?, ?)" for _ in range(len(restricoes_novas)) ])
-        sql_code = f"INSERT INTO refeicao_restricao_alimentar (refeicao_id, restricao_id) VALUES {amount_values}"
-        values = [ ]
-        for i in restricoes_novas:
-            values.append(new_obj.get_id())
-            values.append(i)
-        cursor.execute(sql_code, tuple(values))
-
-        restricoes_removidas = restricoes_antigas - id_restricoes # Remove as restrições antigas que foram removidas da refeição
-        sql_code = "DELETE FROM refeicao_restricao_alimentar WHERE refeicao_id = ? AND restricao_id IN ?"
-        values = [ new_obj.get_id(), tuple(restricoes_removidas) ]
-        cursor.execute(sql_code, tuple(values))
+        sql_code = """
+            INSERT INTO refeicao_restricao_alimentar (refeicao_id, restricao_id) 
+            VALUES (?, ?)
+            ON CONFLICT (refeicao_id, restricao_id) DO NOTHING
+        """
+        cursor.executemany(sql_code, [ (new_obj.get_id(), rest) for rest in id_restricoes ])
 
         conn.commit()
         conn.close()
@@ -120,7 +108,7 @@ class RefeicaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "DELETE FROM refeicao WHERE id = ?"
+        sql_code = "DELETE FROM refeicoes WHERE id = ?"
         cursor.execute(sql_code, (searched_obj,))
 
         conn.commit()

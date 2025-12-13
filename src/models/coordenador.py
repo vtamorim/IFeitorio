@@ -1,12 +1,9 @@
 class Coordenador:
-    def __init__(self, id : int, matricula : str, nome : str, senha : str,):
-        self.set_id(id)
+    def __init__(self, matricula : str, nome : str, senha : str,):
         self.set_matricula(matricula)
         self.set_nome(nome)
         self.set_senha(senha)
 
-    def get_id(self) -> int:
-        return self.__id 
     def get_matricula(self) -> str:
         return self.__matricula
     def get_nome(self) -> str:
@@ -14,9 +11,6 @@ class Coordenador:
     def get_senha(self) -> str:
         return self.__senha
 
-    def set_id(self, id: int) -> None:
-        if not isinstance(id, (int)): raise ValueError
-        self.__id = id
     def set_matricula(self, matricula: str) -> None: 
         if matricula == "": raise ValueError
         self.__matricula = matricula
@@ -30,4 +24,4 @@ class Coordenador:
         self.__senha = senha
 
     def __str__(self):
-        return f"{self.__id} - {self.__nome} - {self.__matricula} - {self.__senha}"
+        return f"{self.__matricula} - {self.__nome} - {self.__senha}"

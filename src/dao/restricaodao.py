@@ -7,8 +7,8 @@ class RestricaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO restricoes_alimentares (id, nome) VALUES (?, ?)"
-        cursor.execute(sql_code, (obj.get_id(), obj.get_nome()))
+        sql_code = "INSERT INTO restricoes_alimentares (nome) VALUES (?)"
+        cursor.execute(sql_code, (obj.get_nome(),))
         
         conn.commit()
         conn.close()

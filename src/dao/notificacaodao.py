@@ -7,18 +7,13 @@ class NotificacaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO notificacao (id, titulo, conteudo) VALUES (?, ?, ?)"
-        cursor.execute(sql_code, (obj.get_id(), obj.get_titulo(), obj.get_conteudo()))
+        sql_code = "INSERT INTO notificacoes (titulo, conteudo) VALUES (?, ?) RETURNING id"
+        cursor.execute(sql_code, (obj.get_titulo(), obj.get_conteudo()))
 
-        if len(obj.get_alunos_destinatarios()) > 0: # Alunos Destinatários
-            values_str = ", ".join([ "(?, ?)" for _ in range(len(obj.get_alunos_destinatarios())) ])
-            values_parameter = []
-            for aluno in obj.get_alunos_destinatarios():
-                values_parameter.append(obj.get_id())
-                values_parameter.append(aluno.get_id())
-            
-            sql_code = f"INSERT INTO notificacao_aluno (notificacao_id, aluno_id) VALUES {values_str}"
-            cursor.execute(sql_code, values_parameter)
+        notificacao_id = cursor.fetchone().id
+
+        sql_code = "INSERT INTO notificacao_aluno (notificacao_id, aluno_matricula) VALUES (?, ?)"
+        cursor.executemany(sql_code, [ (notificacao_id, aluno.get_matricula()) for aluno in obj.get_alunos_destinatarios() ])
         
         conn.commit()
         conn.close()
@@ -31,9 +26,9 @@ class NotificacaoDAO(AbstractDAO):
         sql_code = """
             SELECT
                 n.id, n.titulo, n.conteudo
-                na.aluno_id
+                na.aluno_matricula
             FROM
-                notificacao n
+                notificacoes n
             LEFT JOIN notificacao_aluno na ON na.notificacao_id = n.id
             ORDER BY n.id
         """
@@ -51,7 +46,7 @@ class NotificacaoDAO(AbstractDAO):
                 notificacoes_alunos[row.id].append(AlunoDAO.get(row.aluno_id))
 
         return [
-            Notificacao(row["id"], row["titulo"], row["conteudo"], notificacoes_alunos[row["aluno_id"]])
+            Notificacao(row.id, row.titulo, row.conteudo, notificacoes_alunos[row.aluno_id])
             for row in rows
         ]
 
@@ -60,14 +55,14 @@ class NotificacaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "UPDATE notificacao SET titulo = ?, conteudo = ? WHERE id = ?"
+        sql_code = "UPDATE notificacoes SET titulo = ?, conteudo = ? WHERE id = ?"
         cursor.execute(sql_code, (new_obj.get_titulo(), new_obj.get_conteudo(), new_obj.get_id()))
 
-        sql_code = "DELETE FROM notificacao_aluno WHERE notificacao_id = ? AND aluno_id NOT IN ?"
-        cursor.execute(sql_code, (new_obj.get_id(), [ aluno.get_id() for aluno in new_obj.get_alunos_destinatarios() ]))
+        sql_code = "DELETE FROM notificacao_aluno WHERE notificacao_id = ? AND aluno_matricula NOT IN ?"
+        cursor.execute(sql_code, (new_obj.get_id(), [ aluno.get_matricula() for aluno in new_obj.get_alunos_destinatarios() ]))
 
-        sql_code = "INSERT INTO notificacao_aluno (notificacao_id, aluno_id) VALUES (?) ON CONFLICT (notificacao_id, aluno_id) DO NOTHING" # Adiciona as novas relações de notificação-aluno_destinatário, ignora caso já esteja no banco de dados.
-        cursor.executemany(sql_code, [ (new_obj.get_id(), aluno.get_id()) for aluno in new_obj.get_alunos_destinatarios() ])
+        sql_code = "INSERT INTO notificacao_aluno (notificacao_id, aluno_matricula) VALUES (?) ON CONFLICT (notificacao_id, aluno_matricula) DO NOTHING" # Adiciona as novas relações de notificação-aluno_destinatário, ignora caso já esteja no banco de dados.
+        cursor.executemany(sql_code, [ (new_obj.get_id(), aluno.get_matricula()) for aluno in new_obj.get_alunos_destinatarios() ])
 
         conn.commit()
         conn.close()
@@ -77,7 +72,7 @@ class NotificacaoDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "DELETE FROM notificacao WHERE id = ?"
+        sql_code = "DELETE FROM notificacoes WHERE id = ?"
         cursor.execute(sql_code, (searched_obj,))
 
         conn.commit()
