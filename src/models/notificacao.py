@@ -2,11 +2,11 @@ from .aluno import Aluno
 from typing import Optional
 
 class Notificacao:
-    def __init__(self, id: int, titulo: str, conteudo: Optional[str], alunos_destinatarios: list[Aluno] = []) -> None:
+    def __init__(self, id: int, titulo: str, conteudo: Optional[str], alunos_destinatarios: Optional[list[Aluno]] = None) -> None:
         self.set_id(id)
         self.set_titulo(titulo)
         self.set_conteudo(conteudo)
-        self.set_alunos_destinatarios(alunos_destinatarios)
+        self.set_alunos_destinatarios(alunos_destinatarios if alunos_destinatarios else [])
     
     def get_id(self) -> int:
         return self.__id 
@@ -27,6 +27,9 @@ class Notificacao:
 
         self.__titulo = titulo
     def set_conteudo(self, conteudo: Optional[str]) -> None: 
+        if conteudo is None:
+            self.__conteudo = None
+            return
         conteudo = conteudo.strip()
         if conteudo == "": raise ValueError
         
@@ -35,6 +38,11 @@ class Notificacao:
         if not isinstance(alunos_destinatarios, list): raise ValueError
 
         self.__alunos_destinatarios = alunos_destinatarios
+    
+    def add_aluno_destinatario(self, aluno: Aluno) -> None:
+        if not isinstance(aluno, Aluno): raise ValueError
+
+        self.__alunos_destinatarios.append(aluno)
 
     def __str__(self) -> str:
            return f"{self.__id} - {self.__titulo} - {self.__conteudo}"

@@ -10,7 +10,7 @@ class RefeicaoDAO(AbstractDAO):
         sql_code = "INSERT INTO refeicoes (nome, descricao) VALUES (?, ?) RETURNING id"
         cursor.execute(sql_code, (obj.get_nome(), obj.get_descricao()))
 
-        refeicao_id = cursor.fetchone().id
+        refeicao_id = cursor.fetchone()["id"]
 
         sql_code = "INSERT INTO refeicao_restricao_alimentar (refeicao_id, restricao_id) VALUES (?, ?)"
         cursor.executemany(sql_code, [ (refeicao_id, rest.get_id()) for rest in obj.get_restricoes_compativeis() ])
@@ -38,19 +38,15 @@ class RefeicaoDAO(AbstractDAO):
         rows = cursor.fetchall()
         conn.close()
 
-        refeicao_restricoes: dict[int, list[Restricao]] = {}
+        refeicoes: dict[int, Refeicao] = {}
+        for row in rows:
+            if row["id"] not in refeicoes:
+                refeicoes[row["id"]] = Refeicao(row["id"], row["nome"], row["descricao"], [])
+            
+            if row["ra_id"] is not None:
+                refeicoes[row["id"]].add_restricao_compativel(Restricao(row["ra_id"], row["ra_nome"]))
 
-        for row in rows: # Cria os objetos "Restricao" do Banco de Dados
-            if row.ra_id is not None:
-                if refeicao_restricoes.get(row.id) is None:
-                    refeicao_restricoes[row.id] = []
-
-                refeicao_restricoes[row.id].append(Restricao(row.ra_id, row.ra_nome))
-
-        return [
-            Refeicao(row.id, row.nome, row.descricao, refeicao_restricoes.get(row.id, []))
-            for row in rows
-        ]
+        return list(refeicoes.values())
 
     @classmethod
     def get(cls, id: int) -> Refeicao:
@@ -75,10 +71,10 @@ class RefeicaoDAO(AbstractDAO):
         refeicao_restricoes: list[Restricao] = []
 
         for row in rows: # Cria os objetos "Restricao" do Banco de Dados
-            if row.ra_id is not None:
-                refeicao_restricoes.append(Restricao(row.ra_id, row.ra_nome))
+            if row["ra_id"] is not None:
+                refeicao_restricoes.append(Restricao(row["ra_id"], row["ra_nome"]))
         
-        return Refeicao(rows[0].id, rows[0].nome, rows[0].descricao, refeicao_restricoes)
+        return Refeicao(rows[0]["id"], rows[0]["nome"], rows[0]["descricao"], refeicao_restricoes)
 
     @classmethod
     def update(cls, new_obj: Refeicao) -> None:
@@ -90,8 +86,9 @@ class RefeicaoDAO(AbstractDAO):
         sql_code = "UPDATE refeicoes SET nome = ?, descricao = ? WHERE id = ?"
         cursor.execute(sql_code, (new_obj.get_nome(), new_obj.get_descricao(), new_obj.get_id()))
 
-        sql_code = "DELETE FROM refeicao_restricao_alimentar WHERE refeicao_id = ? AND restricao_id NOT IN ?"
-        cursor.execute(sql_code, (new_obj.get_id(), tuple(id_restricoes)))
+        restricao_parameters = ",".join([ "?" for _ in range(len(id_restricoes)) ])
+        sql_code = f"DELETE FROM refeicao_restricao_alimentar WHERE refeicao_id = ? AND restricao_id NOT IN ({restricao_parameters})"
+        cursor.execute(sql_code, (new_obj.get_id(), *id_restricoes))
 
         sql_code = """
             INSERT INTO refeicao_restricao_alimentar (refeicao_id, restricao_id) 

@@ -25,7 +25,7 @@ class CoordenadorDAO(AbstractDAO):
         conn.close()
 
         return [
-            Coordenador(row.matricula, row.nome, row.senha)
+            Coordenador(row["matricula"], row["nome"], row["senha"])
             for row in rows
         ]
 
@@ -40,7 +40,7 @@ class CoordenadorDAO(AbstractDAO):
         row = cursor.fetchone()
         conn.close()
 
-        return Coordenador(row.matricula, row.nome, row.senha)
+        return Coordenador(row["matricula"], row["nome"], row["senha"])
 
     @classmethod
     def update(cls, new_obj: Coordenador) -> None:

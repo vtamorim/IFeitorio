@@ -10,10 +10,10 @@ class CardapioDAO(AbstractDAO):
         sql_code = "INSERT INTO cardapios (data_inicial, data_final) VALUES (?, ?) RETURNING id"
         cursor.execute(sql_code, (obj.get_data_formatada(obj.get_data_inicial()), obj.get_data_formatada(obj.get_data_final())))
 
-        cardapio_id = cursor.fetchone().id # Pega o id do novo cardápio gerado pelo Banco de Dados
+        cardapio_id = cursor.fetchone()["id"] # Pega o id do novo cardápio gerado pelo Banco de Dados
 
         sql_code = "INSERT INTO vincula_cardapio_refeicao (cardapio_id, refeicao_id, data, tipo) VALUES (?, ?, ?, ?)"
-        cursor.executemany(sql_code, [ (cardapio_id, ref.get_id(), ref.get_data(), ref.get_tipo()) for ref in obj.get_refeicoes() ])
+        cursor.executemany(sql_code, [ (cardapio_id, ref.get_id(), ref.get_data_formatada(), ref.get_tipo()) for ref in obj.get_refeicoes() ])
         
         conn.commit()
         conn.close()
@@ -38,30 +38,24 @@ class CardapioDAO(AbstractDAO):
         conn.close()
 
         refeicoes = RefeicaoDAO.get_all()
-        cardapios_refeicoes: dict[int, list[Refeicao]] = {} # Dicionário de "id do cardápio" para "list de suas Refeições"
-        cardapios_refeicoes_id: dict[int, set[int]] = {} # Dicionário de "id do cardápio" para "conjunto de ids de suas Refeições"
-        refeicoes_datatipo: dict[int, dict[str, str]] = {} # Dicionário de "id da refeição" para "data e tipo dela"
-        for row in rows: # De todos os dados pegos dos cardápios, preenche os dados acima
-            if row.refeicao_id is not None:
-                if cardapios_refeicoes_id.get(row.id) is None:
-                    cardapios_refeicoes_id[row.id] = set()
+        cardapios: dict[int, Cardapio] = {}
+        for row in rows:
+            if row["id"] not in cardapios:
+                cardapios[row["id"]] = Cardapio(row["id"], row["data_inicial"], row["data_final"])
 
-                cardapios_refeicoes_id[row.id].add(row.refeicao_id)
-                refeicoes_datatipo[row.refeicao_id] = {
-                    "data": row.data,
-                    "tipo": row.tipo
-                }
+            if row["refeicao_id"] is not None:
+                refeicao_atual = next((ref for ref in refeicoes if ref.get_id() == row["refeicao_id"]))
+                refeicao = Refeicao( # Cria um novo objeto em Refeicao para evitar compartilhamento de identidade (bug díficil de notar)
+                    refeicao_atual.get_id(), 
+                    refeicao_atual.get_nome(), 
+                    refeicao_atual.get_descricao(), 
+                    refeicao_atual.get_restricoes_compativeis(), 
+                    row["data"], 
+                    row["tipo"]
+                )
+                cardapios[row["id"]].add_refeicao(refeicao)
         
-        for k in cardapios_refeicoes_id.keys(): # Separa os objetos "Refeição" e adiciona suas datas e tipos
-            cardapios_refeicoes[k] = [ ref for ref in refeicoes if ref.get_id() in cardapios_refeicoes_id[k] ]
-            for ref in cardapios_refeicoes[k]:
-                ref.set_data(refeicoes_datatipo[ref.get_id()].data)
-                ref.set_tipo(refeicoes_datatipo[ref.get_id()].tipo)
-
-        return [
-            Cardapio(row.id, row.data_inicial, row.data_final, cardapios_refeicoes[row.id])
-            for row in rows
-        ]
+        return list(cardapios.values())
     
     @classmethod
     def get(cls, id: int) -> Cardapio:
@@ -83,23 +77,21 @@ class CardapioDAO(AbstractDAO):
         conn.close()
 
         refeicoes = RefeicaoDAO.get_all()
-        cardapios_refeicoes: list[Refeicao] = []
-        cardapios_refeicoes_id: set[int] = set()
-        refeicoes_datatipo: dict[int, dict[str, str]] = {}
-        for row in rows: # De todos os dados pegos dos cardápios, preenche os dados acima
-            if row.refeicao_id is not None:
-                cardapios_refeicoes_id.add(row.refeicao_id)
-                refeicoes_datatipo[row.refeicao_id] = {
-                    "data": row.data,
-                    "tipo": row.tipo
-                }
+        cardapio = Cardapio(rows[0]["id"], rows[0]["data_inicial"], rows[0]["data_final"])
+        for row in rows:
+            if row["refeicao_id"] is not None:
+                refeicao_atual = next((ref for ref in refeicoes if ref.get_id() == row["refeicao_id"]))
+                refeicao = Refeicao( # Cria um novo objeto em Refeicao para evitar compartilhamento de identidade (bug díficil de notar)
+                    refeicao_atual.get_id(), 
+                    refeicao_atual.get_nome(), 
+                    refeicao_atual.get_descricao(), 
+                    refeicao_atual.get_restricoes_compativeis(), 
+                    row["data"], 
+                    row["tipo"]
+                )
+                cardapio.add_refeicao(refeicao)
         
-        cardapios_refeicoes = [ ref for ref in refeicoes if ref.get_id() in cardapios_refeicoes_id ]
-        for ref in cardapios_refeicoes:
-            ref.set_data(refeicoes_datatipo[ref.get_id()].data)
-            ref.set_tipo(refeicoes_datatipo[ref.get_id()].tipo)
-        
-        return Cardapio(rows[0].id, rows[0].data_inicial, rows[0].data_final, cardapios_refeicoes)
+        return cardapio
 
     @classmethod
     def update(cls, new_obj: Cardapio) -> None:
@@ -113,7 +105,7 @@ class CardapioDAO(AbstractDAO):
         cursor.execute(sql_code, (new_obj.get_id(),))
 
         sql_code = "INSERT INTO vincula_cardapio_refeicao (cardapio_id, refeicao_id, data, tipo) VALUES (?, ?, ?, ?)"
-        cursor.executemany(sql_code, [ (new_obj.get_id(), ref.get_id(), ref.get_data(), ref.get_tipo()) for ref in new_obj.get_refeicoes() ])
+        cursor.executemany(sql_code, [ (new_obj.get_id(), ref.get_id(), ref.get_data_formatada(), ref.get_tipo()) for ref in new_obj.get_refeicoes() ])
 
         conn.commit()
         conn.close()

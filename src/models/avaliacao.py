@@ -28,7 +28,7 @@ class Avaliacao:
         if not isinstance(id, (int)): raise ValueError
         self.__id = id
     def set_nota(self, nota: float) -> None: 
-        if not isinstance(nota, (float)): raise ValueError
+        if not isinstance(nota, (float, int)): raise ValueError
         self.__nota = nota
     def set_aluno(self, aluno: Aluno) -> None: 
         if not isinstance(aluno, (Aluno)): raise ValueError

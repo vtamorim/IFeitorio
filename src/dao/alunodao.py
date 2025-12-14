@@ -36,19 +36,16 @@ class AlunoDAO(AbstractDAO):
 
         conn.close()
 
-        alunos_restricoes: dict[str, list[Restricao]] = {}
+        alunos: dict[str, Aluno] = {} # Dicionário de "matrícula" para objeto "Aluno"
 
-        for row in rows: # Cria os objetos "Restricao" do Banco de Dados
-            if row["ra_id"] is not None:
-                if alunos_restricoes.get(row["matricula"]) is None:
-                    alunos_restricoes[row["matricula"]] = []
+        for row in rows:
+            if row["matricula"] not in alunos: # cria objeto aluno se a matrícula não estiver no dicionário
+                alunos[row["matricula"]] = Aluno(row["matricula"], row["nome"], row["senha"], [])
+            
+            if row["ra_id"] is not None: # Adiciona uma restrição ao Aluno
+                alunos[row["matricula"]].add_restricao(Restricao(row["ra_id"], row["ra_nome"]))
 
-                alunos_restricoes[row["matricula"]].append(Restricao(row["ra_id"], row["ra_nome"]))
-
-        return [
-            Aluno(row["matricula"], row["nome"], row["senha"], alunos_restricoes.get(row["matricula"], []))
-            for row in rows
-        ]
+        return list(alunos.values())
 
     @classmethod
     def get(cls, matricula: str) -> Aluno:
@@ -88,8 +85,9 @@ class AlunoDAO(AbstractDAO):
         sql_code = "UPDATE alunos SET nome = ?, senha = ? WHERE matricula = ?"
         cursor.execute(sql_code, (new_obj.get_nome(), new_obj.get_senha(), new_obj.get_matricula()))
 
-        sql_code = "DELETE FROM aluno_restricao WHERE aluno_matricula = ? AND restricao_id NOT IN ?"
-        cursor.execute(sql_code, (new_obj.get_matricula(), tuple(id_restricoes)))
+        restricao_parameters = ",".join([ "?" for _ in range(len(id_restricoes)) ])
+        sql_code = f"DELETE FROM aluno_restricao WHERE aluno_matricula = ? AND restricao_id NOT IN ({restricao_parameters})"
+        cursor.execute(sql_code, (new_obj.get_matricula(), *id_restricoes))
 
         sql_code = "INSERT INTO aluno_restricao VALUES (?, ?) ON CONFLICT (aluno_matricula, restricao_id) DO NOTHING"
         cursor.executemany(sql_code, [ (new_obj.get_matricula(), id_rest) for id_rest in id_restricoes ])

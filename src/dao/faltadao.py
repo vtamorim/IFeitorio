@@ -25,7 +25,7 @@ class FaltaDAO(AbstractDAO):
         conn.close()
 
         return [
-            Falta(row.id, AlunoDAO.get(row.aluno_matricula), CardapioDAO.get(row.cardapio_id), row.data, row.tipo)
+            Falta(row["id"], AlunoDAO.get(row["aluno_matricula"]), CardapioDAO.get(row["cardapio_id"]), row["data"], row["tipo"])
             for row in rows
         ]
 
@@ -40,7 +40,7 @@ class FaltaDAO(AbstractDAO):
         
         conn.close()
 
-        return Falta(row.id, AlunoDAO.get(row.aluno_id), CardapioDAO.get(row.cardapio_id), row.data, row.tipo)
+        return Falta(row["id"], AlunoDAO.get(row["aluno_matricula"]), CardapioDAO.get(row["cardapio_id"]), row["data"], row["tipo"])
 
     @classmethod
     def update(cls, new_obj: Falta) -> None:

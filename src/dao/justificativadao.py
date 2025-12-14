@@ -7,7 +7,7 @@ class JustificativaDAO(AbstractDAO):
         conn = cls._get_db_connection()
         cursor = conn.cursor()
 
-        sql_code = "INSERT INTO justificativas (aluno_falta_id, motivo) VALUES (?, ?, ?)"
+        sql_code = "INSERT INTO justificativas (aluno_falta_id, motivo) VALUES (?, ?)"
         cursor.execute(sql_code, (obj.get_falta().get_id(), obj.get_motivo()))
 
         if obj.get_aprovada() is not None:
@@ -26,7 +26,7 @@ class JustificativaDAO(AbstractDAO):
         sql_code = """
             SELECT
                 j.id, j.aluno_falta_id, j.motivo,
-                aj.aprovacao, aj.coordenador_id
+                aj.aprovacao, aj.coordenador_matricula
             FROM
                 justificativas j
             LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
@@ -38,7 +38,13 @@ class JustificativaDAO(AbstractDAO):
         conn.close()
 
         return [
-            Justificativa(row.id, FaltaDAO.get(row.aluno_falta_id), row.motivo, row.aprovacao == 1 if row.aprovacao else None, CoordenadorDAO.get(row.coordenador_id) if row.coordenador_id else None)
+            Justificativa(
+                row["id"], 
+                FaltaDAO.get(row["aluno_falta_id"]), 
+                row["motivo"], 
+                row["aprovacao"] == 1 if row["aprovacao"] is not None else None, 
+                CoordenadorDAO.get(row["coordenador_matricula"]) if row["coordenador_matricula"] is not None else None
+            )
             for row in rows
         ]
 
@@ -50,7 +56,7 @@ class JustificativaDAO(AbstractDAO):
         sql_code = """
             SELECT
                 j.id, j.aluno_falta_id, j.motivo,
-                aj.aprovacao, aj.coordenador_id
+                aj.aprovacao, aj.coordenador_matricula
             FROM
                 justificativas j
             LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
@@ -61,7 +67,7 @@ class JustificativaDAO(AbstractDAO):
         row = cursor.fetchone()
         conn.close()
 
-        return Justificativa(row.id, FaltaDAO.get(row.aluno_falta_id), row.motivo, row.aprovacao == 1, CoordenadorDAO.get(row.coordenador_id) if row.coordenador_id else None)
+        return Justificativa(row["id"], FaltaDAO.get(row["aluno_falta_id"]), row["motivo"], row["aprovacao"] == 1, CoordenadorDAO.get(row["coordenador_matricula"]) if row["coordenador_matricula"] else None)
 
     @classmethod
     def update(cls, new_obj: Justificativa) -> None:

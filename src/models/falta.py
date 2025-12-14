@@ -37,7 +37,8 @@ class Falta:
     def set_data(self, data: date | str) -> None:
         if isinstance(data, str):
             data = date.strptime(data, "%d/%m/%Y")
-        if not isinstance(data, date): raise ValueError
+        elif not isinstance(data, date): raise ValueError
+        if self.__cardapio.get_data_inicial() > data or self.__cardapio.get_data_final() < data: raise ValueError
 
         self.__data = data
     def set_tipo(self, tipo: str) -> None:

@@ -59,6 +59,11 @@ class Refeicao:
 
         self.__tipo = tipo
     
+    def add_restricao_compativel(self, restricao: Restricao) -> None:
+        if not isinstance(restricao, Restricao): raise ValueError
+
+        self.__restricoes_compativeis.append(restricao)
+    
     def get_data_formatada(self) -> Optional[str]:
         """Retorna a data da Refeição de forma formatada (função "strftime") para uma string."""
         return self.__data.strftime("%d/%m/%Y") if self.__data is not None else None

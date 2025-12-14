@@ -30,6 +30,11 @@ class Aluno:
     def set_restricoes(self, restricoes: list[Restricao]) -> None: 
         if not isinstance(restricoes, (list)): raise ValueError
         self.__restricoes = restricoes
+    
+    def add_restricao(self, restricao: Restricao) -> None:
+        if not isinstance(restricao, Restricao): raise ValueError
+
+        self.__restricoes.append(restricao)
 
     def __str__(self) -> str:
         return f"{self.__matricula} - {self.__nome} - {self.__senha} - {self.__restricoes}"
