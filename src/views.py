@@ -1,7 +1,7 @@
 from dao import *
 from models import *
 from typing import Any, Type, Optional
-
+from datetime import date
 class View:
     # Métodos Abstratos - Todos os DAOs tem um "padrão", esses métodos recebem o DAO e chamam o método apropriado.
     @staticmethod
@@ -107,3 +107,128 @@ class View:
     def restricao_delete(restricao_id: int) -> None:
         View.delete(RestricaoDAO, restricao_id)
     
+    #Métodos - Notificação
+    @staticmethod
+    def notificacao_get_all() -> list[Notificacao]:
+        return View.get_all(NotificacaoDAO)
+    
+    @staticmethod
+    def notificacao_get_id(notificacao_id) -> Notificacao:
+        return Notificacao.get(notificacao_id)
+
+    @staticmethod
+    def notificacao_add(notificacao_id : int, titulo : str, conteudo : Optional[str], aluno_destinatarios : Optional[list[Aluno]] = None) -> None:
+        nova_notificacao = Notificacao(notificacao_id,titulo, conteudo, aluno_destinatarios)
+        View.add(NotificacaoDAO, nova_notificacao)
+
+
+    @staticmethod
+    def notificacao_update(notificacao_id : int, titulo : str, conteudo : Optional[str], aluno_destinatarios : Optional[list[Aluno]] = None) -> None:
+        nova_notificacao = Notificacao(notificacao_id,titulo, conteudo, aluno_destinatarios)
+        View.update(NotificacaoDAO, nova_notificacao)
+
+
+    @staticmethod
+    def notificacao_delete(notificacao_id : int) -> None:
+        View.delete(NotificacaoDAO, notificacao_id)
+    
+    # Métodos - Justificativa 
+
+    @staticmethod
+    def justificativa_get_all() -> list[Justificativa]:
+        return View.get_all(JustificativaDAO)
+    
+    @staticmethod
+    def justificativa_get_id(justificativa_id) -> Justificativa:
+        return Justificativa.get(justificativa_id)
+
+    @staticmethod
+    def justificativa_add(justificativa_id : int, falta : Falta, motivo: str, aprovada : Optional[bool] = None, coordenador: Optional[Coordenador] = None) -> None:
+        nova_justificativa = Justificativa(justificativa_id,falta, motivo, aprovada, coordenador)
+        View.add(JustificativaDAO, nova_justificativa)
+
+
+    @staticmethod
+    def justificativa_update(justificativa_id : int, falta : Falta, motivo :str, aprovada : Optional[bool] = None, coordenador: Optional[Coordenador] = None) -> None:
+        nova_justificativa = justificativa(justificativa_id,falta, motivo, aprovada, coordenador)
+        View.update(JustificativaDAO, nova_justificativa)
+
+
+    @staticmethod
+    def justificativa_delete(justificativa_id : int) -> None:
+        View.delete(JustificativaDAO, justificativa_id)
+    
+    # Métodos - Falta
+
+    @staticmethod
+    def falta_get_all() -> list[Falta]:
+        return View.get_all(FaltaDAO)
+    
+    @staticmethod
+    def falta_get_id(falta_id) -> Falta:
+        return Falta.get(falta_id)
+    
+    @staticmethod
+    def falta_add(falta_id: int, aluno: Aluno, cardapio: Cardapio, data: date | str, tipo: str) -> None: 
+        nova_falta = Falta(falta_id,aluno, cardapio, data, tipo)
+        View.add(JustificativaDAO, nova_falta)
+
+    @staticmethod
+    def falta_update(falta_id : int, aluno : Aluno, cardapio :Cardapio, data : date | str, tipo: str) -> None:
+        nova_falta = Falta(falta_id, aluno, cardapio, data, tipo)
+        View.update(FaltaDAO, nova_falta)
+
+    @staticmethod
+    def falta_delete(falta_id : int) -> None:
+        View.delete(FaltaDAO, falta_id)
+
+
+    # Métodos - Avaliação
+    @staticmethod 
+    def avaliacao_get_all() -> list[Avaliacao]:
+        return View.get_all(AvaliacaoDAO)
+    
+
+    @staticmethod 
+    def avaliacao_get_id(avaliacao_id) ->  Avaliacao:
+        return Avaliacao.get(avaliacao_id)
+
+    @staticmethod
+    def avaliacao_add(avaliacao_id : int, nota : float, aluno : Aluno, refeicao : Refeicao, conteudo : Optional[str],titulo: Optional[str]) -> None:
+        nova_avaliacao = Avaliacao(avaliacao_id, nota, aluno, refeicao,conteudo, titulo)
+        View.add(AvaliacaoDAO, nova_avaliacao)
+
+    @staticmethod
+    def avaliacao_update(avaliacao_id : int, nota : float, aluno : Aluno, refeicao : Refeicao, conteudo : Optional[str], titulo : Optional[str]) -> None:
+        nova_avaliacao = Avaliacao(avaliacao_id, nota, aluno, refeicao, conteudo, titulo)
+        View.update(AvaliacaoDAO, nova_avaliacao)
+    
+    @staticmethod 
+    def avaliacao_delete( avaliacao_id : int) -> None:
+        View.delete(AvaliacaoDAO, avaliacao_id)
+
+
+    # Métodos - Cardapio
+    
+    @staticmethod 
+    def cardapio_get_all() -> list[Cardapio]:
+        return View.get_all(CardapioDAO)
+    
+
+    @staticmethod 
+    def cardapio_get_id(cardapio_id) ->  Cardapio:
+        return Cardapio.get(cardapio_id)
+
+    @staticmethod
+    def cardapio_add(cardapio_id: int, data_inicial: date | str, data_final: date | str, refeicoes: Optional[list[Refeicao]] = None) -> None:
+        novo_cardapio = Cardapio(cardapio_id, data_inicial , data_final, refeicoes)
+        View.add(AvaliacaoDAO, novo_cardapio)
+
+    @staticmethod
+    def cardapio_update(cardapio_id : int, data_inicial : date | str, data_final : date | str, refeicoes : Optional[list[Refeicao]]) -> None:
+        novo_cardapio = Cardapio(cardapio_id,data_inicial, data_final, refeicoes)
+        View.update(CardapioDAO, novo_cardapio)
+    
+    @staticmethod 
+    def cardapio_delete( cardapio_id : int) -> None:
+        View.delete(CardapioDAO, cardapio_id)
