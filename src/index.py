@@ -15,10 +15,13 @@ class IndexUI:
     def menu_aluno() -> None:
         st.sidebar.header("Menu de Aluno")
 
-        op = st.sidebar.selectbox("Menu", ["Meu Perfil", "Ver Cardápio"])
+        op = st.sidebar.selectbox("Menu", ["Meu Perfil", "Ver Cardápio", "Analisar Refeição", "Ver Notificações", "Justificar Faltas"])
 
         if op == "Meu Perfil": AlunoPerfilUI.main()
         elif op == "Ver Cardápio": AlunoVisualizarCardapiosUI.main()
+        elif op == "Analisar Refeição": AlunoAvaliarRefeicaoUI.main()
+        elif op == "Ver Notificações": AlunoVisualizarNotificacoesUI.main()
+        elif op == "Justificar Faltas": AlunoJustificarUI.main()
     
     @staticmethod
     def sidebar() -> None: # Falta analisar o "session_storage" para definir o menu correto
