@@ -24,6 +24,17 @@ class IndexUI:
         elif op == "Justificar Faltas": AlunoJustificarUI.main()
     
     @staticmethod
+    def menu_coordenador() -> None:
+        st.sidebar.header("Menu de Coordenador")
+
+        op = st.sidebar.selectbox("Menu", ["Meu Perfil", "Gerenciar Restrições", "Gerenciar Refeições", "Gerenciar Cardápios"])
+
+        if op == "Meu Perfil": CoordenadorPerfilUI.main()
+        elif op == "Gerenciar Restrições": CoordenadorGerenciarRestricoesUI.main()
+        elif op == "Gerenciar Refeições": CoordenadorGerenciarRefeicoesUI.main()
+        elif op == "Gerenciar Cardápios": CoordenadorGerenciarCardapiosUI.main()
+    
+    @staticmethod
     def sidebar() -> None: # Falta analisar o "session_storage" para definir o menu correto
         IndexUI.menu_visitante()
 
