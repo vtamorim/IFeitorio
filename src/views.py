@@ -1,7 +1,7 @@
 from dao import *
 from models import *
 from typing import Any, Type, Optional
-from datetime import date
+from datetime import date, timedelta
 class View:
     # Métodos Abstratos - Todos os DAOs tem um "padrão", esses métodos recebem o DAO e chamam o método apropriado.
     @staticmethod
@@ -232,3 +232,14 @@ class View:
     @staticmethod 
     def cardapio_delete( cardapio_id : int) -> None:
         View.delete(CardapioDAO, cardapio_id)
+
+    # Métodos - Outros
+    @staticmethod
+    def calc_dias_da_semana(dia: date) -> tuple[date, date]:
+        """Retorna a segunda-feira e a sexta-feira da semana do "dia" enviado."""
+        dias_desde_domingo = (dia.weekday() + 1) % 7
+        inicio_semana = dia - timedelta(days=dias_desde_domingo)
+        primeira_segunda = inicio_semana + timedelta(days=1)
+        primeira_sexta = inicio_semana + timedelta(days=5)
+        return (primeira_segunda, primeira_sexta)
+
