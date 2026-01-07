@@ -243,3 +243,19 @@ class View:
         primeira_sexta = inicio_semana + timedelta(days=5)
         return (primeira_segunda, primeira_sexta)
 
+    # Métodos - Autenticação
+    @staticmethod
+    def auth_user(matricula: str, senha: str) -> Optional[UsersTypeIDs]:
+        alunos = View.aluno_get_all()
+        coords = View.coordenador_get_all()
+
+        for al in alunos:
+            if al.get_matricula() == matricula and al.get_senha() == senha:
+                return UsersTypeIDs.ALUNO
+
+        for co in coords:
+            if co.get_matricula() == matricula and co.get_senha() == senha:
+                return UsersTypeIDs.COORDENADOR
+    
+    @staticmethod
+    def get_user_types() -> Type[UsersTypeIDs]: return UsersTypeIDs

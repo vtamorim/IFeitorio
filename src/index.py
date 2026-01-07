@@ -1,4 +1,5 @@
 import streamlit as st
+from views import View
 from templates import *
 
 class IndexUI:
@@ -39,8 +40,25 @@ class IndexUI:
         elif op == "Gerenciar Justificativas": CoordenadorGerenciarJustificativasUI.main()
     
     @staticmethod
-    def sidebar() -> None: # Falta analisar o "session_storage" para definir o menu correto
-        IndexUI.menu_visitante()
+    def log_out_sidebar() -> None:
+        """Coloca o botão de 'sair da conta' no Sidebar."""
+        if st.sidebar.button("Sair", type="primary"):
+            del st.session_state["user_matricula"]
+            del st.session_state["user_type"]
+            st.rerun()
+
+    @staticmethod
+    def sidebar() -> None:
+        """Mostra o Sidebar."""
+        if "user_matricula" not in st.session_state:
+            IndexUI.menu_visitante()
+        else:
+            users_type = View.get_user_types()
+            match st.session_state["user_type"]:
+                case users_type.ALUNO: IndexUI.menu_aluno()
+                case users_type.COORDENADOR: IndexUI.menu_coordenador()
+            
+            IndexUI.log_out_sidebar()
 
     @staticmethod
     def main() -> None:
