@@ -9,7 +9,7 @@
 
 1. O usuário abre o aplicativo.
 2. O sistema exibe a tela de login.
-3. O usuário informa sua matrícula e senha.
+3. O usuário preenche as informações de matrícula e senha em seus respectivos campos e pressiona o botão "entrar"
 4. O sistema valida as credenciais.
 5. O sistema identifica se o usuário é aluno ou coordenador.
 6. O sistema exibe o menu de funcionalidades correspondente ao perfil do usuário.
