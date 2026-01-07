@@ -1,6 +1,6 @@
 from .aluno import Aluno
 from .cardapio import Cardapio
-from datetime import date
+from datetime import datetime, date
 
 class Falta:
     """Classe que representa a falta de um aluno em uma refeição de um cardápio."""
@@ -36,7 +36,7 @@ class Falta:
         self.__cardapio = cardapio
     def set_data(self, data: date | str) -> None:
         if isinstance(data, str):
-            data = date.strptime(data, "%d/%m/%Y")
+            data = datetime.strptime(data, "%d/%m/%Y").date()
         elif not isinstance(data, date): raise ValueError
         if self.__cardapio.get_data_inicial() > data or self.__cardapio.get_data_final() < data: raise ValueError
 

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime, date
 from .restricao import Restricao
 from typing import Optional
 
@@ -47,7 +47,7 @@ class Refeicao:
         self.__restricoes_compativeis = restricoes_compativeis
     def set_data(self, data: Optional[date | str]) -> None:
         if isinstance(data, str):
-            data = date.strptime(data, "%d/%m/%Y")
+            data = datetime.strptime(data, "%d/%m/%Y").date()
         if data is not None and not isinstance(data, date): raise ValueError
 
         self.__data = data

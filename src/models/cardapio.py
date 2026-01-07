@@ -1,5 +1,5 @@
 from .refeicao import Refeicao
-from datetime import date
+from datetime import datetime, date
 from typing import Optional
 
 class Cardapio:
@@ -24,13 +24,13 @@ class Cardapio:
         self.__id = id
     def set_data_inicial(self, data_inicial: date | str) -> None:
         if isinstance(data_inicial, str):
-            data_inicial = date.strptime(data_inicial, "%d/%m/%Y")
+            data_inicial = datetime.strptime(data_inicial, "%d/%m/%Y").date()
         if not isinstance(data_inicial, date): raise ValueError
 
         self.__data_inicial = data_inicial
     def set_data_final(self, data_final: date | str) -> None:
         if isinstance(data_final, str):
-            data_final = date.strptime(data_final, "%d/%m/%Y")
+            data_final = datetime.strptime(data_final, "%d/%m/%Y").date()
         if not isinstance(data_final, date): raise ValueError
 
         self.__data_final = data_final

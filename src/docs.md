@@ -84,7 +84,6 @@ analise_justificativa
 - id [PK]
 - aprovacao (talvez um bool se foi aceita a justificativa do aluno?)
 - justificativa_id [FK]
-- coordenador_matricula [FK]
 
 avaliacoes
 - id [PK]
@@ -192,12 +191,8 @@ CREATE TABLE IF NOT EXISTS justificativas (
 CREATE TABLE IF NOT EXISTS analise_justificativa (
     justificativa_id INTEGER PRIMARY KEY,
     aprovacao INTEGER NOT NULL,
-    coordenador_matricula TEXT NOT NULL,
     FOREIGN KEY (justificativa_id)
         REFERENCES justificativas (id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (coordenador_matricula)
-        REFERENCES coordenadores (matricula)
         ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS avaliacoes (
@@ -275,7 +270,6 @@ Justificativa
 - falta: Falta
 - motivo: str
 - aprovada: Optional[bool]
-- coordenador: Optional[Coordenador]
 
 Avaliacao
 - id: int

@@ -114,7 +114,7 @@ class View:
     
     @staticmethod
     def notificacao_get_id(notificacao_id) -> Notificacao:
-        return Notificacao.get(notificacao_id)
+        return NotificacaoDAO.get(notificacao_id)
 
     @staticmethod
     def notificacao_add(notificacao_id : int, titulo : str, conteudo : Optional[str], aluno_destinatarios : Optional[list[Aluno]] = None) -> None:
@@ -140,17 +140,17 @@ class View:
     
     @staticmethod
     def justificativa_get_id(justificativa_id) -> Justificativa:
-        return Justificativa.get(justificativa_id)
+        return JustificativaDAO.get(justificativa_id)
 
     @staticmethod
-    def justificativa_add(justificativa_id : int, falta : Falta, motivo: str, aprovada : Optional[bool] = None, coordenador: Optional[Coordenador] = None) -> None:
-        nova_justificativa = Justificativa(justificativa_id,falta, motivo, aprovada, coordenador)
+    def justificativa_add(justificativa_id : int, falta : Falta, motivo: str, aprovada : Optional[bool] = None) -> None:
+        nova_justificativa = Justificativa(justificativa_id,falta, motivo, aprovada)
         View.add(JustificativaDAO, nova_justificativa)
 
 
     @staticmethod
-    def justificativa_update(justificativa_id : int, falta : Falta, motivo :str, aprovada : Optional[bool] = None, coordenador: Optional[Coordenador] = None) -> None:
-        nova_justificativa = justificativa(justificativa_id,falta, motivo, aprovada, coordenador)
+    def justificativa_update(justificativa_id : int, falta : Falta, motivo :str, aprovada : Optional[bool] = None) -> None:
+        nova_justificativa = Justificativa(justificativa_id,falta, motivo, aprovada)
         View.update(JustificativaDAO, nova_justificativa)
 
 
@@ -166,7 +166,7 @@ class View:
     
     @staticmethod
     def falta_get_id(falta_id) -> Falta:
-        return Falta.get(falta_id)
+        return FaltaDAO.get(falta_id)
     
     @staticmethod
     def falta_add(falta_id: int, aluno: Aluno, cardapio: Cardapio, data: date | str, tipo: str) -> None: 
@@ -191,7 +191,7 @@ class View:
 
     @staticmethod 
     def avaliacao_get_id(avaliacao_id) ->  Avaliacao:
-        return Avaliacao.get(avaliacao_id)
+        return AvaliacaoDAO.get(avaliacao_id)
 
     @staticmethod
     def avaliacao_add(avaliacao_id : int, nota : float, aluno : Aluno, refeicao : Refeicao, conteudo : Optional[str],titulo: Optional[str]) -> None:
@@ -217,7 +217,7 @@ class View:
 
     @staticmethod 
     def cardapio_get_id(cardapio_id) ->  Cardapio:
-        return Cardapio.get(cardapio_id)
+        return CardapioDAO.get(cardapio_id)
 
     @staticmethod
     def cardapio_add(cardapio_id: int, data_inicial: date | str, data_final: date | str, refeicoes: Optional[list[Refeicao]] = None) -> None:

@@ -1,4 +1,4 @@
-from dao import AbstractDAO, CoordenadorDAO, FaltaDAO
+from dao import AbstractDAO, FaltaDAO
 from models import Justificativa
 
 class JustificativaDAO(AbstractDAO):
@@ -11,9 +11,9 @@ class JustificativaDAO(AbstractDAO):
         cursor.execute(sql_code, (obj.get_falta().get_id(), obj.get_motivo()))
 
         if obj.get_aprovada() is not None:
-            sql_code = "INSERT INTO analise_justificativa (justificativa_id, aprovacao, coordenador_matricula) VALUES (?, ?, ?)"
+            sql_code = "INSERT INTO analise_justificativa (justificativa_id, aprovacao) VALUES (?, ?)"
             aprovacao_text = 1 if obj.get_aprovada() else 0 # SQLite não tem booleano, então representaremos como "0" e "1"
-            cursor.execute(sql_code, (obj.get_id(), aprovacao_text, obj.get_coordenador().get_matricula()))
+            cursor.execute(sql_code, (obj.get_id(), aprovacao_text))
         
         conn.commit()
         conn.close()
@@ -26,7 +26,7 @@ class JustificativaDAO(AbstractDAO):
         sql_code = """
             SELECT
                 j.id, j.aluno_falta_id, j.motivo,
-                aj.aprovacao, aj.coordenador_matricula
+                aj.aprovacao
             FROM
                 justificativas j
             LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
@@ -42,8 +42,7 @@ class JustificativaDAO(AbstractDAO):
                 row["id"], 
                 FaltaDAO.get(row["aluno_falta_id"]), 
                 row["motivo"], 
-                row["aprovacao"] == 1 if row["aprovacao"] is not None else None, 
-                CoordenadorDAO.get(row["coordenador_matricula"]) if row["coordenador_matricula"] is not None else None
+                row["aprovacao"] == 1 if row["aprovacao"] is not None else None,
             )
             for row in rows
         ]
@@ -56,7 +55,7 @@ class JustificativaDAO(AbstractDAO):
         sql_code = """
             SELECT
                 j.id, j.aluno_falta_id, j.motivo,
-                aj.aprovacao, aj.coordenador_matricula
+                aj.aprovacao
             FROM
                 justificativas j
             LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
@@ -67,7 +66,7 @@ class JustificativaDAO(AbstractDAO):
         row = cursor.fetchone()
         conn.close()
 
-        return Justificativa(row["id"], FaltaDAO.get(row["aluno_falta_id"]), row["motivo"], row["aprovacao"] == 1, CoordenadorDAO.get(row["coordenador_matricula"]) if row["coordenador_matricula"] else None)
+        return Justificativa(row["id"], FaltaDAO.get(row["aluno_falta_id"]), row["motivo"], row["aprovacao"] == 1)
 
     @classmethod
     def update(cls, new_obj: Justificativa) -> None:
@@ -82,16 +81,15 @@ class JustificativaDAO(AbstractDAO):
             cursor.execute(sql_code, (new_obj.get_id(),))
         else: # Atualizar a análise dessa justificativa se ela tiver análise
             sql_code = """
-                INSERT INTO analise_justificativa (justificativa_id, aprovacao, coordenador_matricula) 
-                VALUES (?, ?, ?)
+                INSERT INTO analise_justificativa (justificativa_id, aprovacao) 
+                VALUES (?, ?)
                 ON CONFLICT (justificativa_id) DO
                 UPDATE
                 SET 
-                    aprovacao = excluded.aprovacao,
-                    coordenador_matricula = excluded.coordenador_matricula
+                    aprovacao = excluded.aprovacao
             """
             aprovacao_text = 1 if new_obj.get_aprovada() else 0 # SQLite não tem booleano, então representaremos como "0" e "1"
-            cursor.execute(sql_code, (new_obj.get_id(), aprovacao_text, new_obj.get_coordenador().get_matricula()))
+            cursor.execute(sql_code, (new_obj.get_id(), aprovacao_text))
 
         conn.commit()
         conn.close()

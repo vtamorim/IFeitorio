@@ -1,14 +1,12 @@
-from .coordenador import Coordenador
 from .falta import Falta
 from typing import Optional
 
 class Justificativa:
-    def __init__(self, id: int, falta: Falta, motivo: str, aprovada: Optional[bool] = None, coordenador: Optional[Coordenador] = None) -> None:
+    def __init__(self, id: int, falta: Falta, motivo: str, aprovada: Optional[bool] = None) -> None:
         self.set_id(id)
         self.set_falta(falta)
         self.set_motivo(motivo)
         self.set_aprovada(aprovada)
-        self.set_coordenador(coordenador)
     
     def get_id(self) -> int:
         return self.__id
@@ -18,8 +16,6 @@ class Justificativa:
         return self.__motivo
     def get_aprovada(self) -> Optional[bool]:
         return self.__aprovada
-    def get_coordenador(self) -> Optional[Coordenador]:
-        return self.__coordenador
 
     def set_id(self, id: int) -> None:
         if not isinstance(id, int): raise ValueError
@@ -37,11 +33,7 @@ class Justificativa:
         if aprovada is not None and not isinstance(aprovada, bool): raise ValueError
 
         self.__aprovada = aprovada
-    def set_coordenador(self, coordenador: Optional[Coordenador]) -> None:
-        if coordenador is not None and not isinstance(coordenador, Coordenador): raise ValueError
-
-        self.__coordenador = coordenador
     
     def __str__(self) -> str:
-        aprovada_texto = f" | {self.__aprovada} - {self.__coordenador.get_nome()}" if self.__aprovada is not None and self.__coordenador is not None else " | Ainda Não Analisada"
+        aprovada_texto = f" | {self.__aprovada}" if self.__aprovada is not None is not None else " | Ainda Não Analisada"
         return f"Justificativa {self.__id} - Falta {self.__falta.get_id()}: {self.__motivo}{aprovada_texto}"
