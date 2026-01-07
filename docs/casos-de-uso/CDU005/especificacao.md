@@ -1,32 +1,22 @@
 # CDU005 – Justificar Falta no Almoço
         
 **Ator Primário:** Aluno.  
-**Descrição:** Permite o Aluno enviar a justificativa para o Coordenador.  
-**Pré-condições:** O aluno deve possuir o auxilio do almoço, ter faltado.  
-**Pós-condições:** O coordenador receber a justificativa do aluno que a enviou.  
+**Descrição:** Permite que o aluno envie uma justificativa de falta no almoço para o coordenador.
+**Pré-condições:** O usuario deve estar logado como aluno, possuir o auxilio do almoço e ter faltado.  
+**Pós-condições:** O coordenador recebe a justificativa enviada pelo aluno.
 
 ## Fluxo Principal
 
-1. O aluno acessa o sistema com o login de aluno.
-2. O aluno entra na página de justificativa de forma direta.
-3. O aluno insere os dados exigidos (data e o motivo).
-4. O aluno seleciona o botão "Enviar justificativa".
-5. O sistema registra a justificativa e a envia para o coordenador.
+1. O aluno acessa a página de justificativa de falta no almoço.
+2. O sistema exibe os campos "Selecionar Falta" e "Motivo da Falta".
+3. O aluno seleciona o dia em que houve a falta.
+4. O aluno preenche o motivo da falta.
+5. O aluno clica no botão "Enviar".
+6. O sistema valida os dados informados, registra a justificativa e a envia para o coordenador.
 
-## Fluxo Alternativo 
-
-- **FA1 - Ir para a Página de Justificativa pela notificação**
-**Ponto de inserção:** Após o passo 1 do fluxo principal
-2. O aluno entra na página de justificativa pela aba de notificações.
-3. O aluno insere os dados exigidos (motivo).
-4. O fluxo segue igual ao principal a partir do passo 3. 
 
 ## Fluxos De Exceção
 
-- **FE1 - Inserir Dados Inválidos**
-
-**Ponto de inserção:** Após o passo 4 de ambos os fluxos(principal e alternativo)
-Se algum dos dados necessários não forem preenchidos, o sistema retornará um erro e pedirá que o aluno preencha os campos necessarios. 
-
-5. O sistema retorna uma erro
-6. O aluno é redirecionado para o passo 2 do fluxo principal
+- **FE1 - Dados obrigatórios não preenchidos**
+Caso o aluno tente enviar a justificativa com algum campo obrigatório não preenchido, o sistema exibirá a mensagem de erro:
+"Campos vazios, tente novamente", e a operação não será concluída.

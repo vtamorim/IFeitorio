@@ -17,4 +17,4 @@
 ## Fluxos De Exceção
 
 - **FE1 – Dados inválidos:**  
-  Se o usuário digitar matrícula ou senha incorretos, o sistema exibirá uma mensagem de erro e solicitará nova tentativa.
+  Se o usuário digitar matrícula ou senha incorretos, o sistema exibirá a mensagem de erro: "matricula ou senha incorretas, tente novamente" e solicitará nova tentativa.

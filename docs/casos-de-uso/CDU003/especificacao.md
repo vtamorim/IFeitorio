@@ -1,27 +1,22 @@
-# CDU003 – Cadastrar Restrição Alimentar
+# CDU003 – Gerenciar Perfil
 
-**Ator Primário:** Aluno.  
-**Descrição:** Permite o aluno registrar suas restrições alimentares.  
-**Pré-condições:** O usuário deve estar cadastrado como aluno.  
-**Pós-condições:** O aluno cadastrará suas restrições alimentares no sistema.  
+**Ator Primário:** Aluno e Coordenador.  
+**Descrição:** Permite o usuario visualizar e alterar informações do seu perfil.  
+**Pré-condições:** O usuário deve estar logado como aluno ou coordenador.  
+**Pós-condições:** As informações do perfil do usuário serão atualizadas no sistema.
 
 ## Fluxo Principal
 
-1. O aluno acessa o aplicativo e faz login.
-2. O aluno seleciona a opção "Minhas Restrições".
-3. O aluno preenche os campos informando suas restrições (ex: vegetariano, intolerância à lactose).
-4. O sistema salva as informações e as vincula à matrícula do aluno.
+1. O usuario seleciona a opção "Meu perfil".
+2. O sistema exibe os campos de matricula (não editavel), nome e senha do usuario.<br>
+2.1 Caso o usuário seja aluno, o sistema também exibe o campo de restrições alimentares.
+3. O usuario edita as informações desejadas   
+4. O usuario clica no botão "Atualizar"
+5. O sistema atualiza as informações do usuario.
 
-## Fluxo Alternativo 
+## Fluxo de exeção 
+- **FE1 – Dados obrigatórios não preenchidos:** 
+Caso o usuário tente salvar o perfil com algum campo obrigatório não preenchido, o sistema exibirá a mensagem de erro:
+"Campos obrigatórios vazios, tente novamente", e a operação não será concluída.
 
-- **FA3 – Remover restrição existente**
 
-    **Ponto de inserção:** Após o passo 2 do Fluxo Principal
-O aluno pode optar por excluir uma ou mais restrições previamente cadastradas. O sistema exibirá uma lista das restrições atuais e permitirá que o aluno selecione quais deseja remover. Antes da exclusão, o sistema solicitará uma confirmação para evitar remoções acidentais.
-
-**Fluxo:**
-1. O sistema exibe as restrições alimentares cadastradas para o aluno.
-2. O aluno seleciona as restrições que deseja remover.
-3. O sistema exibe uma mensagem de confirmação: "Tem certeza que deseja remover estas restrições?"
-4. Se o aluno confirmar, o sistema remove as restrições selecionadas e exibe uma mensagem de sucesso.
-5. Se o aluno cancelar, o sistema retorna à tela do perfil do usuário.

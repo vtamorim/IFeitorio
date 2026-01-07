@@ -49,6 +49,5 @@
 
 ## Fluxos De Exceção
 
-- **FE1 – Dados incompletos:**  
-    Caso o coordenador tente salvar ou atualizar um cardápio com campos obrigatórios em branco, o sistema exibirá uma mensagem de erro e não concluirá a operação.
-1. Caso o coordenador tente salvar um cardápio com campos obrigatórios em branco, o sistema exibirá um aviso e não salvará o cardápio ou suas alterações.
+- **FE1 – Dados obrigatórios não preenchidos:**  
+    Caso o coordenador tente salvar um cardápio com campos obrigatórios em branco, o sistema exibirá a mensagem de erro "Campos obrigatorios vazios" e não concluira a operação.
