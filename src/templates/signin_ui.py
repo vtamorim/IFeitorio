@@ -8,16 +8,20 @@ class SigninUI:
     def main() -> None:
         st.header("Abrir Conta no Sistema")
 
-        restricoes_disponiveis = View.restricao_get_all() # Vamos pegar as restrições do banco de dados e os dados do aluno do "session_storage"
+        restricoes_disponiveis = View.restricao_get_all()
 
         matricula = st.text_input("Informe sua Matrícula")
         nome = st.text_input("Informe seu Nome")
         senha = st.text_input("Informe sua Senha", type="password")
-        restricoes = st.multiselect("Informe suas Restrições Alimentares", [ "Vegetariano", "Vegano", "Intolerância à lactose" ])
+        restricoes = st.multiselect("Informe suas Restrições Alimentares", restricoes_disponiveis)
         realizar_criacao = st.button("Abrir")
 
-        if realizar_criacao: # Falta o "add" com a View
-            st.success("Conta criada com Sucesso!")
+        if realizar_criacao:
+            try:
+                View.aluno_add(matricula, nome, senha, restricoes)
+                st.success("Conta criada com Sucesso!")
+            except Exception as e:
+                st.error(f"Um Erro Ocorreu: {e}")
             
             sleep(1)
             st.rerun()

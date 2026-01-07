@@ -8,13 +8,20 @@ class CoordenadorPerfilUI:
     def main() -> None:
         st.header("Meu Perfil")
 
-        matricula = st.text_input("Informe sua Matrícula", "123456789", disabled=True)
-        nome = st.text_input("Informe seu Nome", "Coordenador Teste 1")
-        senha = st.text_input("Informe sua Senha", type="password", value="123456789")
+        coord_matricula = st.session_state["user_matricula"]
+        coord = View.coordenador_get_matricula(coord_matricula)
+
+        st.text_input("Sua Matrícula", coord_matricula, disabled=True)
+        nome = st.text_input("Informe seu Nome", coord.get_nome())
+        senha = st.text_input("Informe sua Senha", type="password", value=coord.get_senha())
         realizar_atualizacao = st.button("Atualizar")
 
-        if realizar_atualizacao: # Falta o "Update" com a View
-            st.success("Conta atualizada com Sucesso!")
+        if realizar_atualizacao:
+            try:
+                View.coordenador_update(coord_matricula, nome, senha)
+                st.success("Conta atualizada com Sucesso!")
+            except Exception as e:
+                st.error(f"Um Erro Ocorreu: {e}")
             
             sleep(1)
             st.rerun()

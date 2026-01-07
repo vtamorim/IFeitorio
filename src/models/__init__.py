@@ -7,6 +7,7 @@ from .justificativa import Justificativa
 from .notificacao import Notificacao
 from .refeicao import Refeicao
 from .restricao import Restricao
+from .users_type import UsersTypeIDs
 
 # Arquivo que importa todas as outras classes dessa pasta.
 # Esse arquivo faz com que a gente tenha que, ao invés de pôr todas essas linhas acima em outros arquivos,

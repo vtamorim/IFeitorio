@@ -8,16 +8,23 @@ class AlunoPerfilUI:
     def main() -> None:
         st.header("Meu Perfil")
 
-        restricoes_disponiveis = View.restricao_get_all() # Vamos pegar as restrições do banco de dados e os dados do aluno do "session_storage"
+        aluno_matricula = st.session_state["user_matricula"]
+        aluno = View.aluno_get_matricula(aluno_matricula)
 
-        matricula = st.text_input("Informe sua Matrícula", "123456789", disabled=True)
-        nome = st.text_input("Informe seu Nome", "Aluno Teste 1")
-        senha = st.text_input("Informe sua Senha", type="password", value="123456789")
-        restricoes = st.multiselect("Informe suas Restrições Alimentares", [ "Vegetariano", "Vegano", "Intolerância à lactose" ], default=[])
+        restricoes_disponiveis = View.restricao_get_all()
+
+        st.text_input("Sua Matrícula", aluno_matricula, disabled=True)
+        nome = st.text_input("Informe seu Nome", aluno.get_nome())
+        senha = st.text_input("Informe sua Senha", type="password", value=aluno.get_senha())
+        restricoes = st.multiselect("Informe suas Restrições Alimentares", restricoes_disponiveis, default=aluno.get_restricoes())
         realizar_atualizacao = st.button("Atualizar")
 
-        if realizar_atualizacao: # Falta o "Update" com a View
-            st.success("Conta atualizada com Sucesso!")
+        if realizar_atualizacao:
+            try:
+                View.aluno_update(aluno_matricula, nome, senha, restricoes)
+                st.success("Conta atualizada com Sucesso!")
+            except Exception as e:
+                st.error(f"Um Erro Ocorreu: {e}")
             
             sleep(1)
             st.rerun()

@@ -18,5 +18,13 @@ class Restricao:
 
         self.__nome = nome
 
+    def __eq__(self, value: object) -> bool: # Métodos "__eq__" e "__hash__" servem para comparar objetos de "Restricao"
+        if not isinstance(value, Restricao): return False
+
+        return hash(self) == hash(value)
+    
+    def __hash__(self) -> int:
+        return hash((self.__id, self.__nome))
+
     def __str__(self) -> str:
         return f"{self.__id}: {self.__nome}"
