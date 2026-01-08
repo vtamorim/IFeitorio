@@ -1,9 +1,9 @@
 # CDU012 – Cadastrar Comunicados
 
 **Ator Primário:** Coordenador.  
-**Descrição:** Permite o coordenador cadastrar e enviar um comunicado/notificação aos alunos.  
-**Pré-condições:** Usuário deve está logado como Coordenador.  
-**Pós-condições:** Um Comunicado será Cadastrado.  
+**Descrição:** Este caso de uso permite que o Coordenador cadastre e envie comunicados aos alunos por meio do sistema.  
+**Pré-condições:** Usuário deve estar logado como Coordenador.  
+**Pós-condições:** Um Comunicado será Cadastrado no Sistema e disponibilizados para os alunos.  
 
 ## Fluxo Principal
 
@@ -18,4 +18,4 @@
 ## Fluxos De Exceção
 
 - **FE1 – Dados incompletos/incorretos:**  
-6. Caso o coordenador tente cadastrar um comunicado com campos obrigatórios em branco ou com dados incorretos, o sistema exibirá um aviso e não salvará as alterações.
+Caso, no passo 6 do Fluxo Principal, existam campos obrigatórios não preenchidos ou dados inválidos, o sistema exibe uma mensagem de erro e solicita a correção das informações, retornando ao formulário de cadastro.

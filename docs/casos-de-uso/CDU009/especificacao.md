@@ -2,7 +2,7 @@
 
 **Ator Primário:** Coordenador.  
 **Descrição:** Permite que o coordenador gerencie as restrições alimentares cadastradas no sistema (ex.: vegetariano, intolerância à lactose, etc.)..  
-**Pré-condições:** O usuário deve estar autenticado no sistema como Coordenador.  
+**Pré-condições:** Usuário deve estar logado como Coordenador.  
 **Pós-condições:** Dados sobre as restrições podem ser modificados.  
 
 ## Fluxo Principal

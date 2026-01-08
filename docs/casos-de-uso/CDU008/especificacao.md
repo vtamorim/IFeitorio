@@ -2,7 +2,7 @@
 
 **Ator Primário:** Coordenador.  
 **Descrição:** Permite que a coordenação gerencie os alunos cadastrados no sistema.  
-**Pré-condições:** Usuário deve está logado como Coordenador.  
+**Pré-condições:** Usuário deve estar logado como Coordenador.    
 **Pós-condições:** Dados sobre os alunos podem ser modificados.  
 
 ## Fluxo Principal
