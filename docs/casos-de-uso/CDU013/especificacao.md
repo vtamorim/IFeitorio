@@ -1,14 +1,11 @@
-# CDU012 – Ver Dados de Frequência
+# CDU013 – Gerar QR-Code
 
-**Ator Primário:** Coordenador.  
-**Descrição:** Permite que o coordenador veja dados de um(uns) aluno(s) em alguma refeição.  
-**Pré-condições:** Usuário deve está logado como Coordenador.  
+**Ator Primário:** Aluno.  
+**Descrição:** Permite ao aluno ver o seu QR-Code de matricula.  
+**Pré-condições:** O Usuário deve estar cadastrado como Aluno.  
 **Pós-condições:** *Nenhuma*.  
 
 ## Fluxo Principal
 
-1. O coordenador acessa o sistema com login de coordenador.
-2. O coordenador seleciona a opção "Ver Dados de Frequência".
-3. O sistema exibe um painel pedindo o aluno ou a refeição que o coordenador deseja analisar.
-4. O coordenador seleciona a opção desejada.
-5. O sistema exibe ou os dados de frequência do aluno selecionado nas refeições, ou os dados de frequência dos alunos na refeição selecionada.
+1. O aluno seleciona a opção de "Ver QR-Code".
+2. O sistema exibe automaticamente o QR-Code do aluno que contem sua matricula.
