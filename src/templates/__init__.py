@@ -13,6 +13,7 @@ from .coord_gerenciar_avaliacoes_ui import CoordenadorGerenciarAvaliacoesUI
 from .coord_gerenciar_notificacoes_ui import CoordenadorGerenciarNotificacoesUI
 from .coord_gerenciar_faltas_ui import CoordenadorGerenciarFaltasUI
 from .coord_gerenciar_justificativas_ui import CoordenadorGerenciarJustificativasUI
+from .coord_gerenciar_alunos_ui import CoordenadorGerenciarAlunosUI
 
 # Arquivo que importa todas as outras classes dessa pasta.
 # Esse arquivo faz com que a gente tenha que, ao invés de pôr todas essas linhas acima em outros arquivos,

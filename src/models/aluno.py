@@ -37,4 +37,4 @@ class Aluno:
         self.__restricoes.append(restricao)
 
     def __str__(self) -> str:
-        return f"{self.__matricula} - {self.__nome} - {self.__senha} - {self.__restricoes}"
+        return f"{self.__matricula} - {self.__nome} - {self.__senha} - {len(self.__restricoes)} Restrições"

@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from views import View
 from time import sleep
 
 class CoordenadorGerenciarRefeicoesUI:
@@ -16,51 +17,72 @@ class CoordenadorGerenciarRefeicoesUI:
     
     @staticmethod
     def visualizar_refeicoes() -> None:
-        refeicoes_dataframe = pd.DataFrame(
-            {
-                "id": [ "1", "2", "3" ],
-                "nome": [ "Pão com Ovos", "Pão com Queijo", "Bolo" ],
-                "descricao": [ "", "", "" ],
-                "restricoes": [ "", "", "" ]
-            }
-        )
+        refeicoes = View.refeicao_get_all()
+        refeicoes_data = [ [ r.get_id(), r.get_nome(), r.get_descricao(), len(r.get_restricoes_compativeis()) ] for r in refeicoes ]
+        refeicoes_dataframe = pd.DataFrame(refeicoes_data, columns=["id", "nome", "descricao", "quant_restricoes"])
         
         st.dataframe(refeicoes_dataframe, hide_index=True)
     
     @staticmethod
     def adicionar_refeicao() -> None:
+        restricoes = View.restricao_get_all()
+        
         nome = st.text_input("Nome da Refeição")
         descricao = st.text_input("Descrição da Refeição")
-        restricoes = st.multiselect("Restrições da Refeição", [ "1 - Intolerância à Lactose", "2 - Vegetariano", "3 - Vegano" ], key="restricoes_adicionadas")
+        restricoes_selecionadas = st.multiselect("Restrições Compatíveis da Refeição", restricoes, key="restricoes_adicionadas")
         adicionar = st.button("Adicionar")
 
         if adicionar:
-            st.success("Refeição Adicionada com Sucesso!")
+            try:
+                View.refeicao_add(nome, descricao, restricoes_selecionadas)
+                st.success("Refeição Adicionada com Sucesso!")
+            except Exception as e:
+                st.error(f"Um Erro Ocorreu: {e}")
 
             sleep(1)
             st.rerun()
     
     @staticmethod
     def atualizar_refeicao() -> None:
-        refeicao_selecionada = st.selectbox("Refeição", [ "1 - Pão com Ovos", "2 - Pão com Queijo", "3 - Bolo" ], key="refeicao_atualizada")
-        nome = st.text_input("Novo Nome da Refeição")
-        descricao = st.text_input("Nova Descrição da Refeição")
-        restricoes = st.multiselect("Novas Restrições da Refeição", [ "1 - Intolerância à Lactose", "2 - Vegetariano", "3 - Vegano" ], key="restricoes_atualizadas")
-        atualizar = st.button("Atualizar")
+        refeicoes = View.refeicao_get_all()
+        restricoes = View.restricao_get_all()
+        refeicao_selecionada = st.selectbox("Refeição", refeicoes, key="refeicao_atualizada")
 
-        if atualizar:
-            st.success("Refeição Atualizada com Sucesso!")
+        if refeicao_selecionada:
+            nome = st.text_input("Novo Nome da Refeição", refeicao_selecionada.get_nome())
+            descricao = st.text_input("Nova Descrição da Refeição", refeicao_selecionada.get_descricao())
+            st.text(f"Restrições Alimentares Compatíveis Originais: \n{' | '.join([ str(i) for i in refeicao_selecionada.get_restricoes_compativeis() ])}")
+            restricoes_selecionadas = st.multiselect("Novas Restrições Compatíveis da Refeição", restricoes, key="restricoes_atualizadas")
+            atualizar = st.button("Atualizar")
 
-            sleep(1)
-            st.rerun()
+            if atualizar:
+                try:
+                    View.refeicao_update(refeicao_selecionada.get_id(), nome, descricao, restricoes_selecionadas)
+                    st.success("Refeição Atualizada com Sucesso!")
+                except Exception as e:
+                    st.error(f"Um Erro Ocorreu: {e}")
+
+                sleep(1)
+                st.rerun()
+        else:
+            st.warning("Nenhuma Refeição Encontrada.")
     
     @staticmethod
     def deletar_refeicao() -> None:
-        refeicao_selecionada = st.selectbox("Refeição", [ "1 - Pão com Ovos", "2 - Pão com Queijo", "3 - Bolo" ], key="refeicao_deletada")
-        deletar = st.button("Deletar")
+        refeicoes = View.refeicao_get_all()
+        refeicao_selecionada = st.selectbox("Refeição", refeicoes, key="refeicao_deletada")
+        
+        if refeicao_selecionada:
+            deletar = st.button("Deletar")
 
-        if deletar:
-            st.success("Refeição Deletada com Sucesso!")
+            if deletar:
+                try:
+                    View.refeicao_delete(refeicao_selecionada.get_id())
+                    st.success("Refeição Deletada com Sucesso!")
+                except Exception as e:
+                    st.error(f"Um Erro Ocorreu: {e}")
 
-            sleep(1)
-            st.rerun()
+                sleep(1)
+                st.rerun()
+        else:
+            st.warning("Nenhuma Refeição Encontrada.")

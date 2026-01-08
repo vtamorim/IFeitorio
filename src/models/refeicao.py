@@ -69,7 +69,5 @@ class Refeicao:
         return self.__data.strftime("%d/%m/%Y") if self.__data is not None else None
     
     def __str__(self) -> str:
-        restricoes = " ".join([ rc.get_nome() for rc in self.__restricoes_compativeis ]) # Junta os nomes de todas as restrições
-        if restricoes == "": restricoes = "Nenhuma Restrição"
         data_tipo = f" | {self.get_data_formatada()} - {self.__tipo}" if self.get_data_formatada() is not None and self.__tipo is not None else "" # Escreve a data e tipo se eles não forem nulos.
-        return f"{self.__id}: {self.__nome} - {self.__descricao} - {restricoes}{data_tipo}"
+        return f"{self.__id}: {self.__nome} - {self.__descricao} - {len(self.__restricoes_compativeis)} Restrições{data_tipo}"

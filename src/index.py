@@ -28,7 +28,7 @@ class IndexUI:
     def menu_coordenador() -> None:
         st.sidebar.header("Menu de Coordenador")
 
-        op = st.sidebar.selectbox("Menu", ["Meu Perfil", "Gerenciar Restrições", "Gerenciar Refeições", "Gerenciar Cardápios", "Gerenciar Avaliações", "Gerenciar Notificações", "Gerenciar Faltas", "Gerenciar Justificativas"])
+        op = st.sidebar.selectbox("Menu", ["Meu Perfil", "Gerenciar Restrições", "Gerenciar Refeições", "Gerenciar Cardápios", "Gerenciar Avaliações", "Gerenciar Notificações", "Gerenciar Faltas", "Gerenciar Justificativas", "Gerenciar Alunos"])
 
         if op == "Meu Perfil": CoordenadorPerfilUI.main()
         elif op == "Gerenciar Restrições": CoordenadorGerenciarRestricoesUI.main()
@@ -38,6 +38,7 @@ class IndexUI:
         elif op == "Gerenciar Notificações": CoordenadorGerenciarNotificacoesUI.main()
         elif op == "Gerenciar Faltas": CoordenadorGerenciarFaltasUI.main()
         elif op == "Gerenciar Justificativas": CoordenadorGerenciarJustificativasUI.main()
+        elif op == "Gerenciar Alunos": CoordenadorGerenciarAlunosUI.main()
     
     @staticmethod
     def log_out_sidebar() -> None:
