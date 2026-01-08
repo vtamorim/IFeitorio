@@ -7,6 +7,5 @@
 
 ## Fluxo Principal
 
-1. O aluno acessa o sistema com o login de aluno.
-2. O aluno seleciona a opção de "Ver Notificações".
-3. O sistema exibe todas as notificações recebidas pelo aluno.
+1. O aluno seleciona a opção de "Ver Notificações".
+2. O sistema exibe todas as notificações recebidas pelo aluno.
