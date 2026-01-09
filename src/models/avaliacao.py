@@ -3,7 +3,7 @@ from .aluno import Aluno
 from .refeicao import Refeicao
 
 class Avaliacao:
-    def __init__(self, id: int, nota: float, aluno: Aluno, refeicao: Refeicao, conteudo: Optional[str], titulo: Optional[str]) -> None:
+    def __init__(self, id: int, nota: int, aluno: Aluno, refeicao: Refeicao, conteudo: Optional[str], titulo: Optional[str]) -> None:
         self.set_id(id)
         self.set_nota(nota)
         self.set_aluno(aluno)
@@ -13,7 +13,7 @@ class Avaliacao:
     
     def get_id(self) -> int:
         return self.__id 
-    def get_nota(self) -> float:
+    def get_nota(self) -> int:
         return self.__nota
     def get_aluno(self) -> Aluno:
         return self.__aluno
@@ -27,8 +27,8 @@ class Avaliacao:
     def set_id(self, id: int) -> None:
         if not isinstance(id, (int)): raise ValueError
         self.__id = id
-    def set_nota(self, nota: float) -> None: 
-        if not isinstance(nota, (float, int)): raise ValueError
+    def set_nota(self, nota: int) -> None: 
+        if not isinstance(nota, int): raise ValueError
         self.__nota = nota
     def set_aluno(self, aluno: Aluno) -> None: 
         if not isinstance(aluno, (Aluno)): raise ValueError
@@ -37,21 +37,19 @@ class Avaliacao:
         if not isinstance(refeicao, (Refeicao)): raise ValueError
         self.__refeicao = refeicao
     def set_conteudo(self, conteudo: Optional[str]) -> None: 
-        if conteudo is None:
+        if conteudo is None or conteudo.strip() == "":
             self.__conteudo = None
             return
-        conteudo = conteudo.strip() # retira "espaços" dos lados da string
-        if conteudo == "": raise ValueError
+        conteudo = conteudo.strip()
 
         self.__conteudo = conteudo
     def set_titulo(self, titulo: Optional[str]) -> None: 
-        if titulo is None:
+        if titulo is None or titulo.strip() == "":
             self.__titulo = None
             return
-        titulo = titulo.strip() # retira "espaços" dos lados da string
-        if titulo == "": raise ValueError
+        titulo = titulo.strip()
 
         self.__titulo = titulo
 
     def __str__(self) -> str:
-           return f"Avaliação {self.__id} - {self.__nota}: {self.__aluno.get_nome()} - {self.__refeicao.get_nome()} | {self.__titulo} - {self.__conteudo}"
+           return f"Avaliação {self.__id}: {self.__aluno.get_nome()}"

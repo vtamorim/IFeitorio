@@ -27,11 +27,10 @@ class Notificacao:
 
         self.__titulo = titulo
     def set_conteudo(self, conteudo: Optional[str]) -> None: 
-        if conteudo is None:
+        if conteudo is None or conteudo.strip() == "":
             self.__conteudo = None
             return
         conteudo = conteudo.strip()
-        if conteudo == "": raise ValueError
         
         self.__conteudo = conteudo
     def set_alunos_destinatarios(self, alunos_destinatarios: list[Aluno]) -> None:
@@ -45,4 +44,4 @@ class Notificacao:
         self.__alunos_destinatarios.append(aluno)
 
     def __str__(self) -> str:
-           return f"{self.__id} - {self.__titulo} - {self.__conteudo}"
+           return f"{self.__id} - {self.__titulo} - {self.__conteudo if self.__conteudo is not None else '(Sem Conteúdo)'}"

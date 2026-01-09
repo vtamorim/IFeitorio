@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from views import View
 from time import sleep
 
 class CoordenadorGerenciarFaltasUI:
@@ -15,38 +16,49 @@ class CoordenadorGerenciarFaltasUI:
 
     @staticmethod
     def visualizar_faltas() -> None:
-        faltas_dataframe = pd.DataFrame(
-            {
-                "id": [ "1", "2", "3" ],
-                "aluno_matricula": [ "219845921", "52817152", "12852012" ],
-                "cardapio_id": [ "212", "251", "317" ],
-                "data": [ "12/09/2025", "31/02/2026", "23/08/2026" ],
-                "tipo": [ "almoço", "almoço", "janta" ]
-            }
-        )
+        faltas = View.falta_get_all()
+        faltas_data = [ [ f.get_id(), f.get_aluno().get_matricula(), f.get_cardapio().get_id(), f.get_data_formatada(), f.get_tipo() ] for f in faltas ]
+        faltas_dataframe = pd.DataFrame(faltas_data, columns=["id", "aluno_matricula", "cardapio_id", "data", "tipo"])
         st.dataframe(faltas_dataframe, hide_index=True)
     
     @staticmethod
     def adicionar_faltas() -> None:
-        cardapio = st.selectbox("Selecionar Cardápio", [ "Cardápio 1 - 12/09/2025 - 16/09/2025", "Cardápio 2 - 18/09/2025 - 22/09/2025" ])
-        data = st.selectbox("Selecionar Data no Cardápio", [ f"{i}/09/2025" for i in range(12, 17) ])
+        alunos = View.aluno_get_all()
+        cardapios = View.cardapio_get_all()
+        cardapio = st.selectbox("Selecionar Cardápio", cardapios)
+        if not cardapio:
+            st.warning("Nenhum Cardápio Encontrado!")
+            return
+        
+        cardapio_datas = View.calc_dias_intermediarios(cardapio.get_data_inicial(), cardapio.get_data_final())
+        
+        data = st.selectbox("Selecionar Data no Cardápio", cardapio_datas, format_func=lambda cd: cardapio.get_data_formatada(cd))
         tipo = st.selectbox("Selecionar Tipo de Refeição", [ "Almoço", "Jantar" ])
-        aluno = st.selectbox("Selecionar Aluno", [ "Aluno 1", "Aluno 2", "Aluno 3", "Aluno 4", "Aluno 5" ])
+        aluno = st.selectbox("Selecionar Aluno", alunos)
         adicionar = st.button("Adicionar")
 
         if adicionar:
-            st.success("Notificação Atualizada com Sucesso!")
+            try:
+                View.falta_add(aluno, cardapio, data, tipo) # Talvez adicionar uma notificação dps...
+                st.success("Falta Adicionada com Sucesso!")
+            except Exception as e:
+                st.error(f"Um Erro Ocorreu: {e}")
 
             sleep(1)
             st.rerun()
 
     @staticmethod
     def deletar_faltas() -> None:
-        falta = st.selectbox("Falta", [ "Falta 2", "Falta 5", "Falta 7" ])
+        faltas = View.falta_get_all()
+        falta = st.selectbox("Escolha uma Falta", faltas)
         deletar = st.button("Deletar")
 
         if deletar:
-            st.success("Falta Deletada com Sucesso!")
+            try:
+                View.falta_delete(falta.get_id())
+                st.success("Falta Deletada com Sucesso!")
+            except Exception as e:
+                st.error(f"Um Erro Ocorreu: {e}")
             
             sleep(1)
             st.rerun()

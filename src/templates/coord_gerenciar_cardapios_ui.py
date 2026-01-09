@@ -98,6 +98,9 @@ class CoordenadorGerenciarCardapiosUI:
             jantar_df = pd.DataFrame(jantar_data)
             st.dataframe(jantar_df, hide_index=True)
     
+        if len(cardapios) <= 0:
+            st.text("Nenhum Cardápio Encontrado!")
+    
     @staticmethod
     def adicionar_cardapio() -> None:
         segunda_atual, sexta_atual = View.calc_dias_da_semana(date.today())
@@ -233,6 +236,10 @@ class CoordenadorGerenciarCardapiosUI:
     def deletar_cardapio() -> None:
         cardapios = View.cardapio_get_all()
         cardapio_selecionado = st.selectbox("Cardápio Escolhido", cardapios, key="cardapio_deletado")
+        if not cardapio_selecionado:
+            st.warning("Nenhum Cardápio Encontrado!")
+            return
+        
         deletar = st.button("Deletar")
 
         if deletar:

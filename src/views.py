@@ -123,8 +123,8 @@ class View:
         return NotificacaoDAO.get(notificacao_id)
 
     @staticmethod
-    def notificacao_add(notificacao_id : int, titulo : str, conteudo : Optional[str], aluno_destinatarios : Optional[list[Aluno]] = None) -> None:
-        nova_notificacao = Notificacao(notificacao_id,titulo, conteudo, aluno_destinatarios)
+    def notificacao_add(titulo : str, conteudo : Optional[str], aluno_destinatarios : Optional[list[Aluno]] = None) -> None:
+        nova_notificacao = Notificacao(0, titulo, conteudo, aluno_destinatarios)
         View.add(NotificacaoDAO, nova_notificacao)
 
 
@@ -175,9 +175,9 @@ class View:
         return FaltaDAO.get(falta_id)
     
     @staticmethod
-    def falta_add(falta_id: int, aluno: Aluno, cardapio: Cardapio, data: date | str, tipo: str) -> None: 
-        nova_falta = Falta(falta_id,aluno, cardapio, data, tipo)
-        View.add(JustificativaDAO, nova_falta)
+    def falta_add(aluno: Aluno, cardapio: Cardapio, data: date | str, tipo: str) -> None: 
+        nova_falta = Falta(0, aluno, cardapio, data, tipo)
+        View.add(FaltaDAO, nova_falta)
 
     @staticmethod
     def falta_update(falta_id : int, aluno : Aluno, cardapio :Cardapio, data : date | str, tipo: str) -> None:
@@ -193,11 +193,10 @@ class View:
     @staticmethod 
     def avaliacao_get_all() -> list[Avaliacao]:
         return View.get_all(AvaliacaoDAO)
-    
 
     @staticmethod 
-    def avaliacao_get_id(avaliacao_id) ->  Avaliacao:
-        return AvaliacaoDAO.get(avaliacao_id)
+    def avaliacao_get_refeicao_id(refeicao_id) ->  list[Avaliacao]:
+        return AvaliacaoDAO.get_refeicao_id(refeicao_id)
 
     @staticmethod
     def avaliacao_add(avaliacao_id : int, nota : float, aluno : Aluno, refeicao : Refeicao, conteudo : Optional[str],titulo: Optional[str]) -> None:

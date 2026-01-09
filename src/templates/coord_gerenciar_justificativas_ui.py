@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from views import View
 from datetime import date
 from time import sleep
 
@@ -16,40 +17,40 @@ class CoordenadorGerenciarJustificativasUI:
 
     @staticmethod
     def ver_nao_analisadas_justificativas() -> None:
-        just_dataframe = pd.DataFrame(
-            {
-                "id": [ "1", "2", "3" ],
-                "falta_id": [ "213", "512", "647" ],
-                "motivo": [ "Alguma razao", "Dormi demais", "Porque eu quis" ]
-            }
-        )
+        justificativas = [ j for j in View.justificativa_get_all() if j.get_aprovada() is None ]
+        just_data = [ [ j.get_id(), j.get_falta().get_id(), j.get_motivo() ] for j in justificativas ]
+        just_dataframe = pd.DataFrame(just_data, columns=["id", "falta_id", "motivo"])
         st.dataframe(just_dataframe, hide_index=True)
 
     @staticmethod
     def ver_analisadas_justificativas() -> None:
-        just_dataframe = pd.DataFrame(
-            {
-                "id": [ "1", "2", "3" ],
-                "falta_id": [ "213", "512", "647" ],
-                "motivo": [ "Alguma razao", "Dormi demais", "Porque eu quis" ],
-                "aprovacao": [ "não", "sim", "não" ]
-            } # É meio desnecessário armazenas o coordenador que executou a aprovação...
-        )
+        justificativas = [ j for j in View.justificativa_get_all() if j.get_aprovada() is not None ]
+        just_data = [ [ j.get_id(), j.get_falta().get_id(), j.get_motivo(), "sim" if j.get_aprovada() else "não" ] for j in justificativas ]
+        just_dataframe = pd.DataFrame(just_data, columns=["id", "falta_id", "motivo", "aprovacao"])
         st.dataframe(just_dataframe, hide_index=True)
     
     @staticmethod
     def analisar_justificativa() -> None:
-        justificativa = st.selectbox("Selecionar Justificativa", [ "Justificativa 1", "Justificativa 4", "Justificativa 7" ])
-        st.text_input("Aluno", "Aluno 1", disabled=True)
-        st.text_input("Cardápio", "Cardápio 231", disabled=True)
-        st.date_input("Data", date(2026, 1, 4), disabled=True)
-        st.text_input("Tipo", "Almoço", disabled=True)
-        st.text_area("Motivo", "Lorem ipsum dolor amet", disabled=True)
+        justificativas = [ j for j in View.justificativa_get_all() if j.get_aprovada() is not None ]
+        justificativa = st.selectbox("Selecionar Justificativa", justificativas)
+        if not justificativa:
+            st.warning("Nenhuma Justificativa Encontrada")
+            return
+        
+        st.text_input("Aluno", justificativa.get_falta().get_aluno(), disabled=True)
+        st.text_input("Cardápio", justificativa.get_falta().get_cardapio(), disabled=True)
+        st.date_input("Data", justificativa.get_falta().get_data_formatada(), disabled=True)
+        st.text_input("Tipo", justificativa.get_falta().get_tipo(), disabled=True)
+        st.text_area("Motivo", justificativa.get_motivo(), disabled=True)
         aprovacao = st.checkbox("Aprovar Justificativa")
         analisar = st.button("Analisar")
 
         if analisar:
-            st.success("Justificativa Analisada com Sucesso!")
+            try:
+                View.justificativa_update(justificativa.get_id(), justificativa.get_falta(), justificativa.get_motivo(), aprovacao)
+                st.success("Justificativa Analisada com Sucesso!")
+            except Exception as e:
+                st.error(f"Um Erro Ocorreu: {e}")
 
             sleep(1)
             st.rerun()

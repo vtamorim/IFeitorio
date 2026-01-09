@@ -138,7 +138,7 @@ class AbstractDAO(ABC):
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS avaliacoes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nota REAL NOT NULL,
+            nota INTEGER NOT NULL,
             aluno_matricula TEXT NOT NULL,
             refeicao_id INTEGER NOT NULL,
             conteudo TEXT,

@@ -30,6 +30,22 @@ class AvaliacaoDAO(AbstractDAO):
         ]
 
     @classmethod
+    def get_refeicao_id(cls, refeicao_id: int) -> list[Avaliacao]:
+        conn = cls._get_db_connection()
+        cursor = conn.cursor()
+
+        sql_code = "SELECT * FROM avaliacoes WHERE refeicao_id = ?"
+        cursor.execute(sql_code, (refeicao_id,))
+
+        rows = cursor.fetchall()
+        conn.close()
+
+        return [
+            Avaliacao(row["id"], row["nota"], AlunoDAO.get(row["aluno_matricula"]), RefeicaoDAO.get(row["refeicao_id"]), row["conteudo"], row["titulo"])
+            for row in rows
+        ]
+
+    @classmethod
     def update(cls, new_obj: Avaliacao) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()
