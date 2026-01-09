@@ -34,11 +34,10 @@ class Refeicao:
 
         self.__nome = nome
     def set_descricao(self, descricao: Optional[str]) -> None:
-        if descricao is None:
+        if descricao is None or descricao.strip() == "":
             self.__descricao = None
             return
         descricao = descricao.strip()
-        if descricao == "": raise ValueError
 
         self.__descricao = descricao
     def set_restricoes_compativeis(self, restricoes_compativeis: list[Restricao]) -> None:
@@ -68,6 +67,25 @@ class Refeicao:
         """Retorna a data da Refeição de forma formatada (função "strftime") para uma string."""
         return self.__data.strftime("%d/%m/%Y") if self.__data is not None else None
     
+    def __eq__(self, value: object) -> bool: # Métodos "__eq__" e "__hash__" servem para comparar objetos de "Refeicao"
+        if not isinstance(value, Refeicao): return False
+
+        return hash(self) == hash(value)
+    
+    def __hash__(self) -> int:
+        components = []
+        components.append(self.__id)
+        components.append(self.__nome)
+        components.append(self.__descricao)
+        for r in self.__restricoes_compativeis:
+            components.append(hash(r))
+        components.append(self.get_data_formatada())
+        components.append(self.__tipo)
+        
+        return hash(tuple(components))
+    
     def __str__(self) -> str:
-        data_tipo = f" | {self.get_data_formatada()} - {self.__tipo}" if self.get_data_formatada() is not None and self.__tipo is not None else "" # Escreve a data e tipo se eles não forem nulos.
-        return f"{self.__id}: {self.__nome} - {self.__descricao} - {len(self.__restricoes_compativeis)} Restrições{data_tipo}"
+        desc = self.__descricao if self.__descricao is not None else "Sem Descrição"
+        if not self.__data:
+            return f"{self.__id}: {self.__nome} - {desc} - {len(self.__restricoes_compativeis)} Restrições"
+        return f"{self.__id}: {self.__nome} - {desc} - {len(self.__restricoes_compativeis)} Restrições | {self.get_data_formatada()} - {self.__tipo}"

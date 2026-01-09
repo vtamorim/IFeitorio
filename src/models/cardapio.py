@@ -1,6 +1,7 @@
 from .refeicao import Refeicao
 from datetime import datetime, date
 from typing import Optional
+import copy
 
 class Cardapio:
     def __init__(self, id: int, data_inicial: date | str, data_final: date | str, refeicoes: Optional[list[Refeicao]] = None) -> None:
@@ -36,15 +37,26 @@ class Cardapio:
         self.__data_final = data_final
     def set_refeicoes(self, refeicoes: list[Refeicao]) -> None:
         if not isinstance(refeicoes, list): raise ValueError
-        if any(ref.get_data() is None or ref.get_tipo() is None for ref in refeicoes):
-            raise ValueError("Todas as Refeições de um Cardápio devem ter data e tipo.")
 
-        self.__refeicoes = refeicoes
+        self.__refeicoes = []
+        for refeicao in refeicoes:
+            self.add_refeicao(refeicao)
 
     def add_refeicao(self, refeicao: Refeicao) -> None:
         """Adiciona uma refeição no cardápio."""
         if refeicao.get_data() is None or refeicao.get_tipo() is None: raise ValueError("Todas as Refeições de um Cardápio devem ter data e tipo.")
         elif self.__data_inicial > refeicao.get_data() or refeicao.get_data() > self.__data_final: raise ValueError # Data da refeição não está entre o período do cardápio
+
+        if refeicao.get_tipo() == "lanche":
+            refeicao_m = copy.deepcopy(refeicao)
+            refeicao_m.set_tipo("lanche_manha")
+            refeicao_t = copy.deepcopy(refeicao)
+            refeicao_t.set_tipo("lanche_tarde")
+            refeicao_n = copy.deepcopy(refeicao)
+            refeicao_n.set_tipo("lanche_noite")
+
+            self.__refeicoes.extend([refeicao_m, refeicao_t, refeicao_n])
+            return
 
         self.__refeicoes.append(refeicao)
 

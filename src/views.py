@@ -30,6 +30,9 @@ class View:
     
     @staticmethod
     def aluno_add(matricula: str, nome: str, senha: str, restricoes: list[Restricao]) -> None:
+        if View.verificar_matricula(matricula):
+            raise ValueError("Matrícula já está sendo Utilizada.")
+        
         novo_aluno = Aluno(matricula, nome, senha, restricoes)
         View.add(AlunoDAO, novo_aluno)
     
@@ -53,6 +56,9 @@ class View:
     
     @staticmethod
     def coordenador_add(matricula: str, nome: str, senha: str) -> None:
+        if View.verificar_matricula(matricula):
+            raise ValueError("Matrícula já está sendo Utilizada.")
+        
         novo_coordenador = Coordenador(matricula, nome, senha)
         View.add(CoordenadorDAO, novo_coordenador)
     
@@ -75,12 +81,12 @@ class View:
         return RefeicaoDAO.get(refeicao_id)
     
     @staticmethod
-    def refeicao_add(nome: str, descricao: str, restricoes_compativeis: list[Restricao]) -> None:
+    def refeicao_add(nome: str, descricao: Optional[str], restricoes_compativeis: list[Restricao]) -> None:
         nova_refeicao = Refeicao(0, nome, descricao, restricoes_compativeis)
         View.add(RefeicaoDAO, nova_refeicao)
     
     @staticmethod
-    def refeicao_update(refeicao_id: int, nome: str, descricao: str, restricoes_compativeis: list[Restricao]) -> None:
+    def refeicao_update(refeicao_id: int, nome: str, descricao: Optional[str], restricoes_compativeis: list[Restricao]) -> None:
         nova_refeicao = Refeicao(refeicao_id, nome, descricao, restricoes_compativeis)
         View.update(RefeicaoDAO, nova_refeicao)
     
@@ -220,9 +226,9 @@ class View:
         return CardapioDAO.get(cardapio_id)
 
     @staticmethod
-    def cardapio_add(cardapio_id: int, data_inicial: date | str, data_final: date | str, refeicoes: Optional[list[Refeicao]] = None) -> None:
-        novo_cardapio = Cardapio(cardapio_id, data_inicial , data_final, refeicoes)
-        View.add(AvaliacaoDAO, novo_cardapio)
+    def cardapio_add(data_inicial: date | str, data_final: date | str, refeicoes: Optional[list[Refeicao]] = None) -> None:
+        novo_cardapio = Cardapio(0, data_inicial , data_final, refeicoes)
+        View.add(CardapioDAO, novo_cardapio)
 
     @staticmethod
     def cardapio_update(cardapio_id : int, data_inicial : date | str, data_final : date | str, refeicoes : Optional[list[Refeicao]]) -> None:
@@ -230,7 +236,7 @@ class View:
         View.update(CardapioDAO, novo_cardapio)
     
     @staticmethod 
-    def cardapio_delete( cardapio_id : int) -> None:
+    def cardapio_delete(cardapio_id : int) -> None:
         View.delete(CardapioDAO, cardapio_id)
 
     # Métodos - Outros
@@ -243,9 +249,28 @@ class View:
         primeira_sexta = inicio_semana + timedelta(days=5)
         return (primeira_segunda, primeira_sexta)
 
+    @staticmethod
+    def calc_dias_intermediarios(data_inicial: date, data_final: date) -> list[date]:
+        datas = []
+        data_atual = data_inicial
+        while data_atual <= data_final:
+            datas.append(data_atual)
+            data_atual += timedelta(days=1)
+        return datas
+
+    @staticmethod
+    def set_cardapio_dia_diferente(cardapio: Cardapio, refeicoes: list[Refeicao], data: date) -> None:
+        card_refeicoes = cardapio.get_refeicoes()
+        card_refeicoes = [ r for r in card_refeicoes if r.get_data() != data ]
+        for ref in refeicoes:
+            ref.set_data(data)
+        card_refeicoes.extend(refeicoes)
+        cardapio.set_refeicoes(card_refeicoes)
+
     # Métodos - Autenticação
     @staticmethod
     def auth_user(matricula: str, senha: str) -> Optional[UsersTypeIDs]:
+        """Retorna o tipo de Usuário caso a matrícula e a senha estejam corretas."""
         alunos = View.aluno_get_all()
         coords = View.coordenador_get_all()
 
@@ -256,6 +281,22 @@ class View:
         for co in coords:
             if co.get_matricula() == matricula and co.get_senha() == senha:
                 return UsersTypeIDs.COORDENADOR
+        
+    @staticmethod
+    def verificar_matricula(matricula: str) -> bool:
+        """Retorna se a matrícula já está sendo utilizada"""
+        alunos = View.aluno_get_all()
+        coords = View.coordenador_get_all()
+
+        for al in alunos:
+            if al.get_matricula() == matricula:
+                return True
+
+        for co in coords:
+            if co.get_matricula() == matricula:
+                return True
+
+        return False
     
     @staticmethod
     def get_user_types() -> Type[UsersTypeIDs]: return UsersTypeIDs

@@ -18,140 +18,229 @@ class CoordenadorGerenciarCardapiosUI:
     
     @staticmethod
     def visualizar_cardapios() -> None:
-        st.title("Cardápio 21/12/2025 - 26/12/2025")
-        st.subheader("Cardápio do Lanche")
-        lanche_df = pd.DataFrame(
-            {
-                "21/12/2025": [ "Pão com Ovos + Banana + Suco de Manga", "Pão com Ovos + Banana + Suco de Manga", "Pão com Ovos + Banana + Suco de Manga" ],
-                "16/12/2025": [ "Bolo de Chocolate + Melancia + Suco de Goiaba", "Bolo de Chocolate + Melancia + Suco de Goiaba", "Bolo de Chocolate + Melancia + Suco de Goiaba" ],
-                "17/12/2025": [ "Pão com Queijo + Bolo de Chocolate + Manga + Suco de Manga", "Pão com Queijo + Manga + Suco de Manga", "Pão com Queijo + Manga + Suco de Manga" ],
-                "18/12/2025": [ "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite", "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite", "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite" ],
-                "19/12/2025": [ "Arroz com Frango + Maçã + Suco de Maracujá", "Arroz com Frango + Maçã + Suco de Maracujá", "Arroz com Frango + Maçã + Suco de Maracujá" ]
-            },
-            index=["Manhã", "Tarde", "Noite"]
-        )
-        st.dataframe(lanche_df)
+        cardapios = View.cardapio_get_all()
+        weekdays = {
+            0: "Segunda",
+            1: "Terça",
+            2: "Quarta",
+            3: "Quinta",
+            4: "Sexta"
+        }
 
-        st.subheader("Cardápio do Almoço")
-        almoco_df = pd.DataFrame(
-            {
-                "21/12/2025": [ "Salada Crua", "Isca de carne ao molho", "Almondega de abobrinha", "Macarrão", "Suco de Acerola" ],
-                "22/12/2025": [ "Salada Cozida", "Frango em cubos ao molho de tomate", "Soja refogada ao molho", "Arroz refogado", "Suco de Manga" ],
-                "23/12/2025": [ "Cardápio Natalino", "", "", "", "" ],
-                "24/12/2025": [ "Salada Crua", "Bife Acebolado", "Omelete", "Arroz refogado", "Suco de Goaiba" ],
-                "25/12/2025": [ "Salada Cozida", "Ensopado de peixe", "Estrogonofe de soja c/ vegetais", "Arroz integral", "Suco de Uva" ]
+        for cardapio in cardapios:
+            card_refeicoes = cardapio.get_refeicoes()
+            refeicoes_horarios = {
+                "lanche_manha": [],
+                "lanche_tarde": [],
+                "lanche_noite": [],
+                "almoco": [],
+                "jantar": []
             }
-        )
-        st.dataframe(almoco_df, hide_index=True)
+            dias_intermediarios = View.calc_dias_intermediarios(cardapio.get_data_inicial(), cardapio.get_data_final())
+            for ref in card_refeicoes:
+                tipo = ref.get_tipo()
+                refeicoes_horarios[tipo].append(ref)
+            
+            st.title(cardapio)
 
-        st.subheader("Cardápio do Jantar")
-        jantar_df = pd.DataFrame(
-            {
-                "21/12/2025": [ "Feijão Preto", "Farofa", "Suco de Acerola" ],
-                "22/12/2025": [ "Feijão Carioca", "Suco de Manga", "" ],
-                "23/12/2025": [ "Cardápio Natalino", "", "" ],
-                "24/12/2025": [ "Feijão Preto", "Farofa", "Suco de Goaiba" ],
-                "25/12/2025": [ "Feijão Branco", "Farofa de cuscuz", "Suco de Uva" ]
-            }
-        )
-        st.dataframe(jantar_df, hide_index=True)
+            st.subheader("Cardápio do Lanche")
+            lanche_dia_tipo = { di : { "manha": [], "tarde": [], "noite": [] } for di in dias_intermediarios }
+            for l_m in refeicoes_horarios["lanche_manha"]:
+                lanche_dia_tipo[l_m.get_data()]["manha"].append(l_m)
+            for l_t in refeicoes_horarios["lanche_tarde"]:
+                lanche_dia_tipo[l_t.get_data()]["tarde"].append(l_t)
+            for l_n in refeicoes_horarios["lanche_noite"]:
+                lanche_dia_tipo[l_n.get_data()]["noite"].append(l_n)
+        
+            lanche_data = {}
+            for di in lanche_dia_tipo.keys():
+                lanche_data_key = f"{cardapio.get_data_formatada(di)} - {weekdays[di.weekday()]}"
+                lanche_data[lanche_data_key] = []
+                for refeicoes in lanche_dia_tipo[di].values():
+                    lanche_data[lanche_data_key].append(" + ".join([ r.get_nome() for r in refeicoes ]))
+            
+            lanche_df = pd.DataFrame(lanche_data, index=["Manhã", "Tarde", "Noite"])
+            st.dataframe(lanche_df)
 
-        st.title("Cardápio 15/12/2025 - 25/12/2025")
-        st.subheader("Cardápio do Lanche")
-        lanche_df = pd.DataFrame(
-            {
-                "15/12/2025": [ "Pão com Ovos + Banana + Suco de Manga", "Pão com Ovos + Banana + Suco de Manga", "Pão com Ovos + Banana + Suco de Manga" ],
-                "22/12/2025": [ "Bolo de Chocolate + Melancia + Suco de Goiaba", "Bolo de Chocolate + Melancia + Suco de Goiaba", "Bolo de Chocolate + Melancia + Suco de Goiaba" ],
-                "23/12/2025": [ "Pão com Queijo + Bolo de Chocolate + Manga + Suco de Manga", "Pão com Queijo + Manga + Suco de Manga", "Pão com Queijo + Manga + Suco de Manga" ],
-                "24/12/2025": [ "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite", "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite", "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite" ],
-                "19/12/2025": [ "Arroz com Frango + Maçã + Suco de Maracujá", "Arroz com Frango + Maçã + Suco de Maracujá", "Arroz com Frango + Maçã + Suco de Maracujá" ]
-            },
-            index=["Manhã", "Tarde", "Noite"]
-        )
-        st.dataframe(lanche_df)
+            st.subheader("Cardápio do Almoço")
+            almoco_dia = { di : [] for di in dias_intermediarios }
+            for al in refeicoes_horarios["almoco"]:
+                almoco_dia[al.get_data()].append(al)
+            max_almoco_refeicoes = max(len(i) for i in almoco_dia.values())
 
-        st.subheader("Cardápio do Almoço")
-        almoco_df = pd.DataFrame(
-            {
-                "15/12/2025": [ "Salada Crua", "Isca de carne ao molho", "Almondega de abobrinha", "Macarrão", "Suco de Acerola" ],
-                "16/12/2025": [ "Salada Cozida", "Frango em cubos ao molho de tomate", "Soja refogada ao molho", "Arroz refogado", "Suco de Manga" ],
-                "17/12/2025": [ "Cardápio Natalino", "", "", "", "" ],
-                "18/12/2025": [ "Salada Crua", "Bife Acebolado", "Omelete", "Arroz refogado", "Suco de Goaiba" ],
-                "19/12/2025": [ "Salada Cozida", "Ensopado de peixe", "Estrogonofe de soja c/ vegetais", "Arroz integral", "Suco de Uva" ]
-            }
-        )
-        st.dataframe(almoco_df, hide_index=True)
+            almoco_data: dict[str, list[str]] = {}
+            for di in almoco_dia.keys():
+                almoco_data_key = f"{cardapio.get_data_formatada(di)} - {weekdays[di.weekday()]}"
+                almoco_data[almoco_data_key] = []
+                for refeicoes in almoco_dia[di]:
+                    almoco_data[almoco_data_key].append(refeicoes.get_nome())
+                for _ in range(max_almoco_refeicoes - len(almoco_dia[di])):
+                    almoco_data[almoco_data_key].append("")
+        
+            almoco_df = pd.DataFrame(almoco_data)
+            st.dataframe(almoco_df, hide_index=True)
 
-        st.subheader("Cardápio do Jantar")
-        jantar_df = pd.DataFrame(
-            {
-                "15/12/2025": [ "Feijão Preto", "Farofa", "Suco de Acerola" ],
-                "16/12/2025": [ "Feijão Carioca", "Suco de Manga", "" ],
-                "17/12/2025": [ "Cardápio Natalino", "", "" ],
-                "18/12/2025": [ "Feijão Preto", "Farofa", "Suco de Goaiba" ],
-                "19/12/2025": [ "Feijão Branco", "Farofa de cuscuz", "Suco de Uva" ]
-            }
-        )
-        st.dataframe(jantar_df, hide_index=True)
+            st.subheader("Cardápio do Jantar")
+            jantar_dia = { di : [] for di in dias_intermediarios }
+            for ja in refeicoes_horarios["jantar"]:
+                jantar_dia[ja.get_data()].append(ja)
+            max_jantar_refeicoes = max(len(i) for i in jantar_dia.values())
+
+            jantar_data: dict[str, list[str]] = {}
+            for di in jantar_dia.keys():
+                jantar_data_key = f"{cardapio.get_data_formatada(di)} - {weekdays[di.weekday()]}"
+                jantar_data[jantar_data_key] = []
+                for refeicoes in jantar_dia[di]:
+                    jantar_data[jantar_data_key].append(refeicoes.get_nome())
+                for _ in range(max_jantar_refeicoes - len(jantar_dia[di])):
+                    jantar_data[jantar_data_key].append("")
+        
+            jantar_df = pd.DataFrame(jantar_data)
+            st.dataframe(jantar_df, hide_index=True)
     
     @staticmethod
     def adicionar_cardapio() -> None:
         segunda_atual, sexta_atual = View.calc_dias_da_semana(date.today())
+        gerar_refeicoes = View.refeicao_get_all # Guardamos a função ao invés dos objetos para evitar uns problemas de referência com os diversos "multiselect"
 
         data_inicial = st.date_input("Data Inicial", segunda_atual, format="DD/MM/YYYY")
         data_final = st.date_input("Data Final", sexta_atual, format="DD/MM/YYYY")
-        adicionar = False
         
         if data_inicial and data_final:
             dif_dias = data_final - data_inicial
+            quant_datas = dif_dias.days + 1
 
-            for i in range(dif_dias.days + 1):
+            for i in range(quant_datas):
                 dia_atual = data_inicial + timedelta(days=i)
 
                 st.divider()
                 st.subheader(f'Data: {dia_atual.strftime("%d/%m/%Y")}')
 
-                lanche = st.multiselect("Lanche", [ "Pão com Ovo", "Pão com Queijo", "Bolo de Chocolate" ], key=f"lanche_adicionar_{i}")
-                almoco = st.multiselect("Almoço", [ "Macarrão com Queijo", "Suco de Laranja", "Ovos Cozidos" ], key=f"almoco_adicionar_{i}")
-                janta = st.multiselect("Janta", [ "Macarrão com Queijo", "Suco de Laranja", "Ovos Cozidos" ], key=f"janta_adicionar_{i}")
+                st.multiselect("Lanche", gerar_refeicoes(), key=f"lanche_adicionar_{i}")
+                st.multiselect("Almoço", gerar_refeicoes(), key=f"almoco_adicionar_{i}")
+                st.multiselect("Jantar", gerar_refeicoes(), key=f"jantar_adicionar_{i}")
             
             adicionar = st.button("Adicionar")
 
-        if adicionar:
-            st.success("Cardápio Adicionado com Sucesso!")
+            if adicionar:
+                try:
+                    refeicoes = []
+                    for i in range(quant_datas):
+                        dia_atual = data_inicial + timedelta(days=i)
+                        refs_lanche = st.session_state[f"lanche_adicionar_{i}"]
+                        refs_almoco = st.session_state[f"almoco_adicionar_{i}"]
+                        refs_janta = st.session_state[f"jantar_adicionar_{i}"]
 
-            sleep(1)
-            st.rerun()
+                        for ref in refs_lanche:
+                            ref.set_data(dia_atual)
+                            ref.set_tipo("lanche")
+                        for ref in refs_almoco:
+                            ref.set_data(dia_atual)
+                            ref.set_tipo("almoco")
+                        for ref in refs_janta:
+                            ref.set_data(dia_atual)
+                            ref.set_tipo("jantar")
+                        
+                        refeicoes.extend([*refs_lanche, *refs_almoco, *refs_janta])
+                    View.cardapio_add(data_inicial, data_final, refeicoes)
+                    st.success("Cardápio Adicionado com Sucesso!")
+                except Exception as e:
+                    st.error(f"Um Erro Ocorreu: {e}")
+
+                sleep(1)
+                st.rerun()
     
     @staticmethod
     def atualizar_cardapio() -> None:
-        cardapio_selecionado = st.selectbox("Cardápio Escolhido", [ "Cardápio 1 - 12/09/2025 - 16/09/2025", "Cardápio 2 - 18/09/2025 - 22/09/2025" ], key="cardapio_atualizado")
-        data_escolhida = st.selectbox("Data do Cardápio", [ f"{i}/09/2025" for i in range(12, 17) ])
+        gerar_refeicoes = View.refeicao_get_all # Guardamos a função ao invés dos objetos para evitar uns problemas de referência com os diversos "multiselect"
+        cardapios = View.cardapio_get_all()
+        cardapio_selecionado = st.selectbox("Cardápio Escolhido", cardapios, key="cardapio_atualizado")
+        if not cardapio_selecionado:
+            st.warning("Nenhum Cardápio Encontrado!")
+            return
+
+        dias_intermediarios = View.calc_dias_intermediarios(cardapio_selecionado.get_data_inicial(), cardapio_selecionado.get_data_final())
+        data_escolhida = st.selectbox("Data do Cardápio", [ di for di in dias_intermediarios ], format_func=lambda di: cardapio_selecionado.get_data_formatada(di))
         
         if data_escolhida:
+            refeicoes_do_cardapio = cardapio_selecionado.get_refeicoes()
+            refeicoes_cardapio_por_tipo = {
+                "lanche_manha" : [],
+                "lanche_tarde" : [],
+                "lanche_noite" : [],
+                "almoco" : [],
+                "jantar" : []
+            }
+            for ref in refeicoes_do_cardapio:
+                if ref.get_data() == data_escolhida:
+                    refeicoes_cardapio_por_tipo[ref.get_tipo()].append(ref)
+            
             st.divider()
             
-            lanche_manha = st.multiselect("Lanche da Manhã", [ "Pão com Ovo", "Pão com Queijo", "Bolo de Chocolate" ], key="lanche_manha_atualizar")
-            lanche_tarde = st.multiselect("Lanche da Tarde", [ "Pão com Ovo", "Pão com Queijo", "Bolo de Chocolate" ], key="lanche_tarde_atualizar")
-            lanche_noite = st.multiselect("Lanche da Noite", [ "Pão com Ovo", "Pão com Queijo", "Bolo de Chocolate" ], key="lanche_noite_atualizar")
-            almoco = st.multiselect("Almoço", [ "Macarrão com Queijo", "Suco de Laranja", "Ovos Cozidos" ], key="almoco_atualizar")
-            janta = st.multiselect("Janta", [ "Macarrão com Queijo", "Suco de Laranja", "Ovos Cozidos" ], key="janta_atualizar")
-        atualizar = st.button("Atualizar")
-        
-        if atualizar:
-            st.success("Cardápio Atualizado com Sucesso!")
+            if len(refeicoes_cardapio_por_tipo["lanche_manha"]) > 0:
+                st.text("Refeições Originais do Lanche da Manhã:")
+                st.text(" + ".join([ r.get_nome() for r in  refeicoes_cardapio_por_tipo["lanche_manha"]]))
+            lanche_manha = st.multiselect("Lanche da Manhã", gerar_refeicoes(), key="lanche_manha_atualizar")
+            if len(refeicoes_cardapio_por_tipo["lanche_tarde"]) > 0:
+                st.text("Refeições Originais do Lanche da Tarde:")
+                st.text(" + ".join([ r.get_nome() for r in  refeicoes_cardapio_por_tipo["lanche_tarde"]]))
+            lanche_tarde = st.multiselect("Lanche da Tarde", gerar_refeicoes(), key="lanche_tarde_atualizar")
+            if len(refeicoes_cardapio_por_tipo["lanche_noite"]) > 0:
+                st.text("Refeições Originais do Lanche da Noite:")
+                st.text(" + ".join([ r.get_nome() for r in  refeicoes_cardapio_por_tipo["lanche_noite"]]))
+            lanche_noite = st.multiselect("Lanche da Noite", gerar_refeicoes(), key="lanche_noite_atualizar")
+            if len(refeicoes_cardapio_por_tipo["almoco"]) > 0:
+                st.text("Refeições Originais do Almoço:")
+                st.text(" + ".join([ r.get_nome() for r in  refeicoes_cardapio_por_tipo["almoco"]]))
+            almoco = st.multiselect("Almoço", gerar_refeicoes(), key="almoco_atualizar")
+            if len(refeicoes_cardapio_por_tipo["jantar"]) > 0:
+                st.text("Refeições Originais do Jantar:")
+                st.text(" + ".join([ r.get_nome() for r in  refeicoes_cardapio_por_tipo["jantar"]]))
+            jantar = st.multiselect("Jantar", gerar_refeicoes(), key="jantar_atualizar")
+            atualizar = st.button("Atualizar")
+            
+            if atualizar:
+                try:
+                    refeicoes = []
+                    for ref in lanche_manha:
+                        ref.set_tipo("lanche_manha")
+                    for ref in lanche_tarde:
+                        ref.set_tipo("lanche_tarde")
+                    for ref in lanche_noite:
+                        ref.set_tipo("lanche_noite")
+                    for ref in almoco:
+                        ref.set_tipo("almoco")
+                    for ref in jantar:
+                        ref.set_tipo("jantar")
+                    refeicoes.extend([*lanche_manha, *lanche_tarde, *lanche_noite, *almoco, *jantar])
+                    View.set_cardapio_dia_diferente(cardapio_selecionado, refeicoes, data_escolhida)
+                    View.cardapio_update(
+                        cardapio_selecionado.get_id(), 
+                        cardapio_selecionado.get_data_inicial(), 
+                        cardapio_selecionado.get_data_final(),
+                        cardapio_selecionado.get_refeicoes()
+                    )
+                    st.success("Cardápio Atualizado com Sucesso!")
+                except Exception as e:
+                    st.error(f"Um Erro Ocorreu: {e}")
 
-            sleep(1)
-            st.rerun()
+                sleep(1)
+                st.rerun()
+        else:
+            st.warning("Nenhuma Data Encontrada!")
      
     @staticmethod
     def deletar_cardapio() -> None:
- 
-        cardapio_selecionado = st.selectbox("Cardápio Escolhido", [ "Cardápio 1 - 12/09/2025 - 16/09/2025", "Cardápio 2 - 18/09/2025 - 22/09/2025" ], key="cardapio_deletado")
+        cardapios = View.cardapio_get_all()
+        cardapio_selecionado = st.selectbox("Cardápio Escolhido", cardapios, key="cardapio_deletado")
         deletar = st.button("Deletar")
 
         if deletar:
-            st.success("Cardápio Deletado com Sucesso!")
+            try:
+                View.cardapio_delete(cardapio_selecionado.get_id())
+                st.success("Cardápio Deletado com Sucesso!")
+            except Exception as e:
+                st.error(f"Um Erro Ocorreu: {e}")
 
             sleep(1)
             st.rerun()

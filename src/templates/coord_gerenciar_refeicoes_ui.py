@@ -28,7 +28,7 @@ class CoordenadorGerenciarRefeicoesUI:
         restricoes = View.restricao_get_all()
         
         nome = st.text_input("Nome da Refeição")
-        descricao = st.text_input("Descrição da Refeição")
+        descricao = st.text_input("Descrição da Refeição (Opcional)")
         restricoes_selecionadas = st.multiselect("Restrições Compatíveis da Refeição", restricoes, key="restricoes_adicionadas")
         adicionar = st.button("Adicionar")
 
@@ -50,8 +50,11 @@ class CoordenadorGerenciarRefeicoesUI:
 
         if refeicao_selecionada:
             nome = st.text_input("Novo Nome da Refeição", refeicao_selecionada.get_nome())
-            descricao = st.text_input("Nova Descrição da Refeição", refeicao_selecionada.get_descricao())
-            st.text(f"Restrições Alimentares Compatíveis Originais: \n{' | '.join([ str(i) for i in refeicao_selecionada.get_restricoes_compativeis() ])}")
+            descricao = st.text_input("Nova Descrição da Refeição (Opcional)", refeicao_selecionada.get_descricao())
+            if len(refeicao_selecionada.get_restricoes_compativeis()) > 0:
+                st.text(f"Restrições Alimentares Compatíveis Originais:")
+                for r in refeicao_selecionada.get_restricoes_compativeis():
+                    st.text(f"- {r}")
             restricoes_selecionadas = st.multiselect("Novas Restrições Compatíveis da Refeição", restricoes, key="restricoes_atualizadas")
             atualizar = st.button("Atualizar")
 

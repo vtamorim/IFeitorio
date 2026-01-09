@@ -53,7 +53,10 @@ class CoordenadorGerenciarAlunosUI:
             matricula = st.text_input("Matrícula do Aluno", aluno.get_matricula(), disabled=True)
             nome = st.text_input("Nome do Aluno", aluno.get_nome())
             senha = st.text_input("Senha do Aluno", aluno.get_senha())
-            st.text(f"Restrições Alimentares Originais: \n{' | '.join([ str(i) for i in aluno.get_restricoes() ])}")
+            if len(aluno.get_restricoes()) > 0:
+                st.text("Restrições Alimentares Originais:")
+                for r in aluno.get_restricoes():
+                    st.text(f"- {r}")
             restricoes_selecionadas = st.multiselect("Restrições Alimentares do Aluno", restricoes, key="restricoes_atualizadas")
             atualizar = st.button("Atualizar")
 
