@@ -18,19 +18,19 @@ class Justificativa:
         return self.__aprovada
 
     def set_id(self, id: int) -> None:
-        if not isinstance(id, int): raise ValueError
+        if not isinstance(id, int): raise ValueError("ID Inválido")
 
         self.__id = id
     def set_falta(self, falta: Falta) -> None:
-        if not isinstance(falta, Falta): raise ValueError
+        if not isinstance(falta, Falta): raise ValueError("Falta Inválida")
 
         self.__falta = falta
     def set_motivo(self, motivo: str) -> None:
-        if not isinstance(motivo, str): raise ValueError
+        if not isinstance(motivo, str): raise ValueError("Motivo Inválido")
 
         self.__motivo = motivo
     def set_aprovada(self, aprovada: Optional[bool]) -> None:
-        if aprovada is not None and not isinstance(aprovada, bool): raise ValueError
+        if aprovada is not None and not isinstance(aprovada, bool): raise ValueError("Aprovação Inválida")
 
         self.__aprovada = aprovada
     

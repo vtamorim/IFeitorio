@@ -31,7 +31,7 @@ class CoordenadorGerenciarJustificativasUI:
     
     @staticmethod
     def analisar_justificativa() -> None:
-        justificativas = [ j for j in View.justificativa_get_all() if j.get_aprovada() is not None ]
+        justificativas = [ j for j in View.justificativa_get_all() if j.get_aprovada() is None ]
         justificativa = st.selectbox("Selecionar Justificativa", justificativas)
         if not justificativa:
             st.warning("Nenhuma Justificativa Encontrada")
@@ -39,7 +39,7 @@ class CoordenadorGerenciarJustificativasUI:
         
         st.text_input("Aluno", justificativa.get_falta().get_aluno(), disabled=True)
         st.text_input("Cardápio", justificativa.get_falta().get_cardapio(), disabled=True)
-        st.date_input("Data", justificativa.get_falta().get_data_formatada(), disabled=True)
+        st.date_input("Data", justificativa.get_falta().get_data(), disabled=True)
         st.text_input("Tipo", justificativa.get_falta().get_tipo(), disabled=True)
         st.text_area("Motivo", justificativa.get_motivo(), disabled=True)
         aprovacao = st.checkbox("Aprovar Justificativa")

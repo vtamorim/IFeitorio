@@ -69,6 +69,37 @@ class JustificativaDAO(AbstractDAO):
         return Justificativa(row["id"], FaltaDAO.get(row["aluno_falta_id"]), row["motivo"], row["aprovacao"] == 1)
 
     @classmethod
+    def get_aluno_matricula(cls, aluno_matricula: str) -> list[Justificativa]:
+        conn = cls._get_db_connection()
+        cursor = conn.cursor()
+
+        sql_code = """
+            SELECT
+                j.id, j.aluno_falta_id, j.motivo,
+                aj.aprovacao
+            FROM
+                justificativas j
+            LEFT JOIN analise_justificativa aj ON aj.justificativa_id = j.id
+            LEFT JOIN aluno_falta af ON af.id = j.aluno_falta_id
+            WHERE af.aluno_matricula = ?
+            ORDER BY j.id
+        """
+        cursor.execute(sql_code, (aluno_matricula,))
+
+        rows = cursor.fetchall()
+        conn.close()
+
+        return [
+            Justificativa(
+                row["id"], 
+                FaltaDAO.get(row["aluno_falta_id"]), 
+                row["motivo"], 
+                row["aprovacao"] == 1 if row["aprovacao"] is not None else None,
+            )
+            for row in rows
+        ]
+
+    @classmethod
     def update(cls, new_obj: Justificativa) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()

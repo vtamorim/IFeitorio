@@ -23,27 +23,27 @@ class Falta:
         return self.__tipo
 
     def set_id(self, id: int) -> None:
-        if not isinstance(id, int): raise ValueError
+        if not isinstance(id, int): raise ValueError("ID Inválido")
 
         self.__id = id
     def set_aluno(self, aluno: Aluno) -> None:
-        if not isinstance(aluno, Aluno): raise ValueError
+        if not isinstance(aluno, Aluno): raise ValueError("Aluno Inválido")
 
         self.__aluno = aluno
     def set_cardapio(self, cardapio: Cardapio) -> None:
-        if not isinstance(cardapio, Cardapio): raise ValueError
+        if not isinstance(cardapio, Cardapio): raise ValueError("Cardápio Inválido")
 
         self.__cardapio = cardapio
     def set_data(self, data: date | str) -> None:
         if isinstance(data, str):
             data = datetime.strptime(data, "%d/%m/%Y").date()
-        elif not isinstance(data, date): raise ValueError
+        elif not isinstance(data, date): raise ValueError("Data Inválida")
         if self.__cardapio.get_data_inicial() > data or self.__cardapio.get_data_final() < data: raise ValueError
 
         self.__data = data
     def set_tipo(self, tipo: str) -> None:
         tipo = tipo.strip()
-        if tipo == "": raise ValueError
+        if tipo == "": raise ValueError("Tipo Inválido")
 
         self.__tipo = tipo
     

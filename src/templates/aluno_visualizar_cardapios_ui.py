@@ -9,40 +9,86 @@ class AlunoVisualizarCardapiosUI:
         st.set_page_config(layout="wide")
         st.header("Visualizar Cardápios")
 
-        st.title("Cardápio 15/12/2025 - 19/12/2025") # Vamos pegar esses Dados da View
-        st.subheader("Cardápio do Lanche")
-        lanche_df = pd.DataFrame(
-            {
-                "15/12/2025": [ "Pão com Ovos + Banana + Suco de Manga", "Pão com Ovos + Banana + Suco de Manga", "Pão com Ovos + Banana + Suco de Manga" ],
-                "16/12/2025": [ "Bolo de Chocolate + Melancia + Suco de Goiaba", "Bolo de Chocolate + Melancia + Suco de Goiaba", "Bolo de Chocolate + Melancia + Suco de Goiaba" ],
-                "17/12/2025": [ "Pão com Queijo + Bolo de Chocolate + Manga + Suco de Manga", "Pão com Queijo + Manga + Suco de Manga", "Pão com Queijo + Manga + Suco de Manga" ],
-                "18/12/2025": [ "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite", "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite", "Cuscuz com Frango + Melancia + Suco de Acerola ao Leite" ],
-                "19/12/2025": [ "Arroz com Frango + Maçã + Suco de Maracujá", "Arroz com Frango + Maçã + Suco de Maracujá", "Arroz com Frango + Maçã + Suco de Maracujá" ]
-            },
-            index=["Manhã", "Tarde", "Noite"]
-        )
-        st.dataframe(lanche_df)
+        cardapios = sorted(View.cardapio_get_all(), reverse=True, key=lambda c: c.get_data_inicial())
+        weekdays = {
+            0: "Segunda",
+            1: "Terça",
+            2: "Quarta",
+            3: "Quinta",
+            4: "Sexta"
+        }
 
-        st.subheader("Cardápio do Almoço")
-        almoco_df = pd.DataFrame(
-            {
-                "15/12/2025": [ "Salada Crua", "Isca de carne ao molho", "Almondega de abobrinha", "Macarrão", "Suco de Acerola" ],
-                "16/12/2025": [ "Salada Cozida", "Frango em cubos ao molho de tomate", "Soja refogada ao molho", "Arroz refogado", "Suco de Manga" ],
-                "17/12/2025": [ "Cardápio Natalino", "", "", "", "" ],
-                "18/12/2025": [ "Salada Crua", "Bife Acebolado", "Omelete", "Arroz refogado", "Suco de Goaiba" ],
-                "19/12/2025": [ "Salada Cozida", "Ensopado de peixe", "Estrogonofe de soja c/ vegetais", "Arroz integral", "Suco de Uva" ]
+        for cardapio in cardapios:
+            card_refeicoes = cardapio.get_refeicoes()
+            refeicoes_horarios = {
+                "lanche_manha": [],
+                "lanche_tarde": [],
+                "lanche_noite": [],
+                "almoco": [],
+                "jantar": []
             }
-        )
-        st.dataframe(almoco_df, hide_index=True)
+            dias_intermediarios = View.calc_dias_intermediarios(cardapio.get_data_inicial(), cardapio.get_data_final())
+            for ref in card_refeicoes:
+                tipo = ref.get_tipo()
+                refeicoes_horarios[tipo].append(ref)
+            
+            st.divider()
+            st.title(cardapio)
 
-        st.subheader("Cardápio do Jantar")
-        jantar_df = pd.DataFrame(
-            {
-                "15/12/2025": [ "Feijão Preto", "Farofa", "Suco de Acerola" ],
-                "16/12/2025": [ "Feijão Carioca", "Suco de Manga", "" ],
-                "17/12/2025": [ "Cardápio Natalino", "", "" ],
-                "18/12/2025": [ "Feijão Preto", "Farofa", "Suco de Goaiba" ],
-                "19/12/2025": [ "Feijão Branco", "Farofa de cuscuz", "Suco de Uva" ]
-            }
-        )
-        st.dataframe(jantar_df, hide_index=True)
+            st.subheader("Cardápio do Lanche")
+            lanche_dia_tipo = { di : { "manha": [], "tarde": [], "noite": [] } for di in dias_intermediarios }
+            for l_m in refeicoes_horarios["lanche_manha"]:
+                lanche_dia_tipo[l_m.get_data()]["manha"].append(l_m)
+            for l_t in refeicoes_horarios["lanche_tarde"]:
+                lanche_dia_tipo[l_t.get_data()]["tarde"].append(l_t)
+            for l_n in refeicoes_horarios["lanche_noite"]:
+                lanche_dia_tipo[l_n.get_data()]["noite"].append(l_n)
+        
+            lanche_data = {}
+            for di in lanche_dia_tipo.keys():
+                lanche_data_key = f"{cardapio.get_data_formatada(di)} - {weekdays[di.weekday()]}"
+                lanche_data[lanche_data_key] = []
+                for refeicoes in lanche_dia_tipo[di].values():
+                    lanche_data[lanche_data_key].append(" + ".join([ r.get_nome() for r in refeicoes ]))
+            
+            lanche_df = pd.DataFrame(lanche_data, index=["Manhã", "Tarde", "Noite"])
+            st.dataframe(lanche_df)
+
+            st.subheader("Cardápio do Almoço")
+            almoco_dia = { di : [] for di in dias_intermediarios }
+            for al in refeicoes_horarios["almoco"]:
+                almoco_dia[al.get_data()].append(al)
+            max_almoco_refeicoes = max(len(i) for i in almoco_dia.values())
+
+            almoco_data: dict[str, list[str]] = {}
+            for di in almoco_dia.keys():
+                almoco_data_key = f"{cardapio.get_data_formatada(di)} - {weekdays[di.weekday()]}"
+                almoco_data[almoco_data_key] = []
+                for refeicoes in almoco_dia[di]:
+                    almoco_data[almoco_data_key].append(refeicoes.get_nome())
+                for _ in range(max_almoco_refeicoes - len(almoco_dia[di])):
+                    almoco_data[almoco_data_key].append("")
+        
+            almoco_df = pd.DataFrame(almoco_data)
+            st.dataframe(almoco_df, hide_index=True)
+
+            st.subheader("Cardápio do Jantar")
+            jantar_dia = { di : [] for di in dias_intermediarios }
+            for ja in refeicoes_horarios["jantar"]:
+                jantar_dia[ja.get_data()].append(ja)
+            max_jantar_refeicoes = max(len(i) for i in jantar_dia.values())
+
+            jantar_data: dict[str, list[str]] = {}
+            for di in jantar_dia.keys():
+                jantar_data_key = f"{cardapio.get_data_formatada(di)} - {weekdays[di.weekday()]}"
+                jantar_data[jantar_data_key] = []
+                for refeicoes in jantar_dia[di]:
+                    jantar_data[jantar_data_key].append(refeicoes.get_nome())
+                for _ in range(max_jantar_refeicoes - len(jantar_dia[di])):
+                    jantar_data[jantar_data_key].append("")
+        
+            jantar_df = pd.DataFrame(jantar_data)
+            st.dataframe(jantar_df, hide_index=True)
+    
+        if len(cardapios) <= 0:
+            st.warning("Nenhum Cardápio Encontrado!")

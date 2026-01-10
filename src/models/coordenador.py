@@ -12,15 +12,15 @@ class Coordenador:
         return self.__senha
 
     def set_matricula(self, matricula: str) -> None: 
-        if matricula == "": raise ValueError
+        if matricula == "": raise ValueError("Matrícula Inexistente")
         self.__matricula = matricula
     def set_nome(self, nome: str) -> None: 
         nome = nome.strip() # retira "espaços" dos lados da string
-        if nome == "": raise ValueError
+        if nome == "": raise ValueError("Nome não pode ser Nulo")
         self.__nome = nome
     def set_senha(self, senha: str) -> None: 
         senha = senha.strip() # retira "espaços" dos lados da string
-        if senha == "": raise ValueError
+        if senha == "": raise ValueError("Senha não pode ser Nula")
         self.__senha = senha
 
     def __str__(self):

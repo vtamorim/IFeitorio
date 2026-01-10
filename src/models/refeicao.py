@@ -25,12 +25,12 @@ class Refeicao:
         return self.__tipo
 
     def set_id(self, id: int) -> None:
-        if not isinstance(id, int): raise ValueError
+        if not isinstance(id, int): raise ValueError("ID Inválido")
 
         self.__id = id
     def set_nome(self, nome: str) -> None:
         nome = nome.strip()
-        if nome == "": raise ValueError
+        if nome == "": raise ValueError("Nome não pode ser vazio")
 
         self.__nome = nome
     def set_descricao(self, descricao: Optional[str]) -> None:
@@ -41,25 +41,25 @@ class Refeicao:
 
         self.__descricao = descricao
     def set_restricoes_compativeis(self, restricoes_compativeis: list[Restricao]) -> None:
-        if not isinstance(restricoes_compativeis, list): raise ValueError
+        if not isinstance(restricoes_compativeis, list): raise ValueError("Restrições Compatíveis Inválidas")
 
         self.__restricoes_compativeis = restricoes_compativeis
     def set_data(self, data: Optional[date | str]) -> None:
         if isinstance(data, str):
             data = datetime.strptime(data, "%d/%m/%Y").date()
-        if data is not None and not isinstance(data, date): raise ValueError
+        if data is not None and not isinstance(data, date): raise ValueError("Data Inválida")
 
         self.__data = data
     def set_tipo(self, tipo: Optional[str]) -> None:
         if tipo is None:
             self.__tipo = None
             return
-        if not isinstance(tipo, str): raise ValueError
+        if not isinstance(tipo, str): raise ValueError("Tipo Inválido")
 
         self.__tipo = tipo
     
     def add_restricao_compativel(self, restricao: Restricao) -> None:
-        if not isinstance(restricao, Restricao): raise ValueError
+        if not isinstance(restricao, Restricao): raise ValueError("Restrição Inválida")
 
         self.__restricoes_compativeis.append(restricao)
     

@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS aluno_falta (
 );
 CREATE TABLE IF NOT EXISTS justificativas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    aluno_falta_id INTEGER NOT NULL,
+    aluno_falta_id INTEGER NOT NULL UNIQUE,
     motivo TEXT NOT NULL,
     FOREIGN KEY (aluno_falta_id)
         REFERENCES aluno_falta (id)

@@ -20,23 +20,24 @@ class Cardapio:
         return self.__refeicoes
 
     def set_id(self, id: int) -> None:
-        if not isinstance(id, int): raise ValueError
+        if not isinstance(id, int): raise ValueError("ID Inválido")
 
         self.__id = id
     def set_data_inicial(self, data_inicial: date | str) -> None:
         if isinstance(data_inicial, str):
             data_inicial = datetime.strptime(data_inicial, "%d/%m/%Y").date()
-        if not isinstance(data_inicial, date): raise ValueError
+        if not isinstance(data_inicial, date): raise ValueError("Data Inicial Inválida")
 
         self.__data_inicial = data_inicial
     def set_data_final(self, data_final: date | str) -> None:
         if isinstance(data_final, str):
             data_final = datetime.strptime(data_final, "%d/%m/%Y").date()
-        if not isinstance(data_final, date): raise ValueError
+        if not isinstance(data_final, date): raise ValueError("Data Final Inválida")
+        if data_final < self.get_data_inicial(): raise ValueError("Data Final não pode vim antes da Data Inicial")
 
         self.__data_final = data_final
     def set_refeicoes(self, refeicoes: list[Refeicao]) -> None:
-        if not isinstance(refeicoes, list): raise ValueError
+        if not isinstance(refeicoes, list): raise ValueError("Refeições Inválidas")
 
         self.__refeicoes = []
         for refeicao in refeicoes:
@@ -45,7 +46,7 @@ class Cardapio:
     def add_refeicao(self, refeicao: Refeicao) -> None:
         """Adiciona uma refeição no cardápio."""
         if refeicao.get_data() is None or refeicao.get_tipo() is None: raise ValueError("Todas as Refeições de um Cardápio devem ter data e tipo.")
-        elif self.__data_inicial > refeicao.get_data() or refeicao.get_data() > self.__data_final: raise ValueError # Data da refeição não está entre o período do cardápio
+        elif self.__data_inicial > refeicao.get_data() or refeicao.get_data() > self.__data_final: raise ValueError("Data da refeição não está entre o período do cardápio")
 
         if refeicao.get_tipo() == "lanche":
             refeicao_m = copy.deepcopy(refeicao)

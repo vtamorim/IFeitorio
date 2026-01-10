@@ -9,12 +9,12 @@ class Restricao:
         return self.__nome
     
     def set_id(self, id: int) -> None:
-        if not isinstance(id, int): raise ValueError
+        if not isinstance(id, int): raise ValueError("ID Inválido")
 
         self.__id = id
     def set_nome(self, nome: str) -> None:
         nome = nome.strip()
-        if nome == "": raise ValueError
+        if nome == "": raise ValueError("Nome não pode ser Vazio!")
 
         self.__nome = nome
 

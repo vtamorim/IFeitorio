@@ -51,6 +51,10 @@ class CoordenadorGerenciarFaltasUI:
     def deletar_faltas() -> None:
         faltas = View.falta_get_all()
         falta = st.selectbox("Escolha uma Falta", faltas)
+        if not falta:
+            st.warning("Nenhuma Falta Encontrada!")
+            return
+        
         deletar = st.button("Deletar")
 
         if deletar:

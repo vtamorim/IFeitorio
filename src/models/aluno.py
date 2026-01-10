@@ -17,22 +17,22 @@ class Aluno:
         return self.__restricoes
     
     def set_matricula(self, matricula: str) -> None: 
-        if matricula == "": raise ValueError
+        if matricula == "": raise ValueError("Matrícula não pode ser Vazia")
         self.__matricula = matricula
     def set_nome(self, nome: str) -> None: 
         nome = nome.strip() # retira "espaços" dos lados da string
-        if nome == "": raise ValueError
+        if nome == "": raise ValueError("Nome não pode ser Vazio")
         self.__nome = nome
     def set_senha(self, senha: str) -> None: 
         senha = senha.strip() # retira "espaços" dos lados da string
-        if senha == "": raise ValueError
+        if senha == "": raise ValueError("Senha não pode ser Vazia")
         self.__senha = senha
     def set_restricoes(self, restricoes: list[Restricao]) -> None: 
-        if not isinstance(restricoes, (list)): raise ValueError
+        if not isinstance(restricoes, (list)): raise ValueError("Restrições Inválidas")
         self.__restricoes = restricoes
     
     def add_restricao(self, restricao: Restricao) -> None:
-        if not isinstance(restricao, Restricao): raise ValueError
+        if not isinstance(restricao, Restricao): raise ValueError("Restrição Inválida")
 
         self.__restricoes.append(restricao)
 

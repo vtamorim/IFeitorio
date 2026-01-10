@@ -25,16 +25,16 @@ class Avaliacao:
         return self.__titulo
     
     def set_id(self, id: int) -> None:
-        if not isinstance(id, (int)): raise ValueError
+        if not isinstance(id, (int)): raise ValueError("ID Inválido")
         self.__id = id
     def set_nota(self, nota: int) -> None: 
-        if not isinstance(nota, int): raise ValueError
+        if not isinstance(nota, int): raise ValueError("Nota deve ser um Inteiro")
         self.__nota = nota
     def set_aluno(self, aluno: Aluno) -> None: 
-        if not isinstance(aluno, (Aluno)): raise ValueError
+        if not isinstance(aluno, (Aluno)): raise ValueError("Aluno Inválido")
         self.__aluno = aluno
     def set_refeicao(self, refeicao: Refeicao) -> None: 
-        if not isinstance(refeicao, (Refeicao)): raise ValueError
+        if not isinstance(refeicao, (Refeicao)): raise ValueError("Refeição Inválida")
         self.__refeicao = refeicao
     def set_conteudo(self, conteudo: Optional[str]) -> None: 
         if conteudo is None or conteudo.strip() == "":

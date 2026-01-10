@@ -41,6 +41,27 @@ class FaltaDAO(AbstractDAO):
         conn.close()
 
         return Falta(row["id"], AlunoDAO.get(row["aluno_matricula"]), CardapioDAO.get(row["cardapio_id"]), row["data"], row["tipo"])
+    
+    @classmethod
+    def get_sem_justificativas(cls, aluno_matricula: str) -> list[Falta]:
+        conn = cls._get_db_connection()
+        cursor = conn.cursor()
+
+        sql_code = """
+            SELECT a.id, a.aluno_matricula, a.cardapio_id, a.data, a.tipo 
+            FROM aluno_falta a 
+            LEFT JOIN justificativas j ON a.id = j.aluno_falta_id
+            WHERE j.id IS NULL AND a.aluno_matricula = ?
+        """
+        cursor.execute(sql_code, (aluno_matricula,))
+        rows = cursor.fetchall()
+        
+        conn.close()
+
+        return [
+            Falta(row["id"], AlunoDAO.get(row["aluno_matricula"]), CardapioDAO.get(row["cardapio_id"]), row["data"], row["tipo"])
+            for row in rows
+        ]
 
     @classmethod
     def update(cls, new_obj: Falta) -> None:

@@ -1,4 +1,5 @@
 import streamlit as st
+from views import View
 
 class AlunoVisualizarNotificacoesUI:
     """Página que exibe as notificações recebidas do Aluno."""
@@ -6,14 +7,15 @@ class AlunoVisualizarNotificacoesUI:
     def main() -> None:
         st.header("Visualizar Notificações")
 
-        st.divider()
-        st.subheader("Título 1")
-        st.text("lorem ipsum dolor amet")
+        aluno_matricula = st.session_state["user_matricula"]
+        notificacoes = View.notificacao_get_aluno_matricula(aluno_matricula)
 
-        st.divider()
-        st.subheader("Título 2")
-        st.text("(Sem conteúdo)")
-
-        st.divider()
-        st.subheader("Título 3")
-        st.text("lorem ipsum dolor amet 2.")
+        if len(notificacoes) > 0:
+            for notif in notificacoes:
+                st.divider()
+                st.subheader(f"Notificação {notif.get_id()}")
+                st.subheader(notif.get_titulo())
+                st.text(notif.get_conteudo() if notif.get_conteudo() is not None else "(Sem Conteúdo)")
+        else:
+            st.divider()
+            st.info("Nenhuma Notificação Encontrada para Você.")

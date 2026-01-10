@@ -49,6 +49,37 @@ class NotificacaoDAO(AbstractDAO):
         return list(notificacoes.values())
 
     @classmethod
+    def get_aluno_matricula(cls, matricula: str) -> list[Notificacao]:
+        conn = cls._get_db_connection()
+        cursor = conn.cursor()
+
+        sql_code = """
+            SELECT
+                n.id, n.titulo, n.conteudo,
+                na.aluno_matricula
+            FROM
+                notificacoes n
+            LEFT JOIN notificacao_aluno na ON na.notificacao_id = n.id
+            WHERE aluno_matricula = ?
+            ORDER BY n.id
+        """
+        cursor.execute(sql_code, (matricula,))
+
+        rows = cursor.fetchall()
+        conn.close()
+
+        notificacoes: dict[int, Notificacao] = {} # Dicionário de "id Notificação" para objeto "Notificação"
+
+        for row in rows:
+            if row["id"] not in notificacoes: # Cria objeto Notificação
+                notificacoes[row["id"]] = Notificacao(row["id"], row["titulo"], row["conteudo"])
+            
+            if row["aluno_matricula"] is not None: # Adiciona os Alunos Destinatários se houver.
+                notificacoes[row["id"]].add_aluno_destinatario(AlunoDAO.get(row["aluno_matricula"]))
+
+        return list(notificacoes.values())
+
+    @classmethod
     def update(cls, new_obj: Notificacao) -> None:
         conn = cls._get_db_connection()
         cursor = conn.cursor()

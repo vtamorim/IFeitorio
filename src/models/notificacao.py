@@ -18,12 +18,12 @@ class Notificacao:
         return self.__alunos_destinatarios
     
     def set_id(self, id: int) -> None:
-        if not isinstance(id, (int)): raise ValueError
+        if not isinstance(id, (int)): raise ValueError("ID Inválido")
 
         self.__id = id
     def set_titulo(self, titulo: str) -> None: 
         titulo = titulo.strip()
-        if titulo == "": raise ValueError
+        if titulo == "": raise ValueError("Título não pode ser Vazio")
 
         self.__titulo = titulo
     def set_conteudo(self, conteudo: Optional[str]) -> None: 
@@ -34,12 +34,12 @@ class Notificacao:
         
         self.__conteudo = conteudo
     def set_alunos_destinatarios(self, alunos_destinatarios: list[Aluno]) -> None:
-        if not isinstance(alunos_destinatarios, list): raise ValueError
+        if not isinstance(alunos_destinatarios, list): raise ValueError("Lista de Alunos inválida")
 
         self.__alunos_destinatarios = alunos_destinatarios
     
     def add_aluno_destinatario(self, aluno: Aluno) -> None:
-        if not isinstance(aluno, Aluno): raise ValueError
+        if not isinstance(aluno, Aluno): raise ValueError("Aluno Inválido")
 
         self.__alunos_destinatarios.append(aluno)
 
