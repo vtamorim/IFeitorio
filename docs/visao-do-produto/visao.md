@@ -3,7 +3,7 @@
 ## Objetivo
 
 <div style="font-size:2.9rem; color: red; position:absolute; top: 6.63rem; left: 8.5rem;" >.</div>
-O sistema &nbsp;<b style="font-size:1.2rem; color: green">iFeitório</b>&nbsp; tem como objetivo gerenciar as ações relacionadas ao refeitório do Campus, como consultar o cardápio do dia/semana**.
+O sistema &nbsp;<b style="font-size:1.2rem; color: green">iFeitório</b>&nbsp; tem como objetivo gerenciar as ações relacionadas ao refeitório do Campus, como consultar o cardápio do dia/semana.
 
 ## Problema
 

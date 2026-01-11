@@ -1,7 +1,7 @@
 # CDU006 – Gerenciar Justificativa
 
 **Ator Primário:** Coordenador.  
-**Descrição:** Permite que a coordenação gerencie as justificativas de falta do almoço.  
+**Descrição:** Permite que a coordenação gerencie as justificativas de falta.  
 **Pré-condições:** O usuário deve estar logado como coordenador.  
 **Pós-condições:** A justificativa selecionada terá seu status atualizado para aprovada ou recusada.  
 

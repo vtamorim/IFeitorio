@@ -6,6 +6,7 @@ from .aluno_avaliar_refeicao_ui import AlunoAvaliarRefeicaoUI
 from .aluno_visualizar_notificacoes_ui import AlunoVisualizarNotificacoesUI
 from .aluno_justificar_ui import AlunoJustificarUI
 from .aluno_ver_justificativas_ui import AlunoVerJustificativasUI
+from .aluno_ver_qrcode_ui import AlunoVerQRCodeUI
 from .coord_perfil_ui import CoordenadorPerfilUI
 from .coord_gerenciar_restricoes_ui import CoordenadorGerenciarRestricoesUI
 from .coord_gerenciar_refeicoes_ui import CoordenadorGerenciarRefeicoesUI

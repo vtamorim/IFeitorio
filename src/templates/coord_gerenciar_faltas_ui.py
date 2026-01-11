@@ -17,6 +17,10 @@ class CoordenadorGerenciarFaltasUI:
     @staticmethod
     def visualizar_faltas() -> None:
         faltas = View.falta_get_all()
+        if len(faltas) <= 0:
+            st.warning("Nenhuma Falta Encontrada!")
+            return
+        
         faltas_data = [ [ f.get_id(), f.get_aluno().get_matricula(), f.get_cardapio().get_id(), f.get_data_formatada(), f.get_tipo() ] for f in faltas ]
         faltas_dataframe = pd.DataFrame(faltas_data, columns=["id", "aluno_matricula", "cardapio_id", "data", "tipo"])
         st.dataframe(faltas_dataframe, hide_index=True)
@@ -40,7 +44,12 @@ class CoordenadorGerenciarFaltasUI:
         if adicionar:
             try:
                 View.falta_add(aluno, cardapio, data, tipo) # Talvez adicionar uma notificação dps...
-                st.success("Falta Adicionada com Sucesso!")
+
+                notif_titulo = "Falta Adicionada"
+                notif_conteudo = f"Uma falta no Cardápio {cardapio.get_id()} - {cardapio.get_data_formatada(data)} no {tipo} foi cadastrada em seu nome."
+                View.notificacao_add(notif_titulo, notif_conteudo, [ aluno ])
+                
+                st.success("Falta Adicionada com Sucesso! Aluno notificado.")
             except Exception as e:
                 st.error(f"Um Erro Ocorreu: {e}")
 
@@ -60,7 +69,12 @@ class CoordenadorGerenciarFaltasUI:
         if deletar:
             try:
                 View.falta_delete(falta.get_id())
-                st.success("Falta Deletada com Sucesso!")
+
+                notif_titulo = "Falta Removida"
+                notif_conteudo = f"A Falta {falta.get_id()} foi removida do seu nome."
+                View.notificacao_add(notif_titulo, notif_conteudo, [ falta.get_aluno() ])
+
+                st.success("Falta Deletada com Sucesso! Aluno notificado.")
             except Exception as e:
                 st.error(f"Um Erro Ocorreu: {e}")
             

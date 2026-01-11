@@ -9,6 +9,7 @@ class AlunoVisualizarNotificacoesUI:
 
         aluno_matricula = st.session_state["user_matricula"]
         notificacoes = View.notificacao_get_aluno_matricula(aluno_matricula)
+        notificacoes.reverse()
 
         if len(notificacoes) > 0:
             for notif in notificacoes:

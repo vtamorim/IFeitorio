@@ -1,4 +1,4 @@
-# CDU011 – Gerenciar faltas dos alunos
+# CDU011 – Gerenciar Faltas dos Alunos
 
 **Ator Primário:** Coordenador.  
 **Descrição:** Permite o coordenador adicionar ou editar as faltas dos alunos.  
@@ -12,6 +12,7 @@
 3. O sistema abre por padrão a aba "Visualizar", exibindo as faltas registradas.
 
 ## Fluxos Alternativos
+
 **FA1 – Adicionar Falta**
 
 **Ponto de inserção:** Após o passo 2 do Fluxo Principal, quando o coordenador seleciona a aba "Adicionar".
@@ -22,7 +23,7 @@
 4. O coordenador seleciona a data, tipo de refeição e o aluno.
 5. O coordenador clica no botão "Adicionar".
 6. O sistema valida os dados informados.
-7. O sistema registra a falta do aluno.
+7. O sistema registra a falta do aluno e o notifica.
 
 **FA2 – Deletar Falta**
 
@@ -31,9 +32,10 @@
 1. O sistema exibe um campo de seleção com as faltas registradas.
 2. O coordenador seleciona uma falta.
 3. O coordenador clica no botão "Deletar".
-4. O sistema remove a falta do sistema.
+4. O sistema remove a falta do sistema e notifica o aluno.
 
-**Fluxos de Exceção**
+## Fluxos de Exceção
+
 **FE1 – Dados obrigatórios não preenchidos**
 
 Pode ocorrer no fluxo FA1 – Adicionar Falta.

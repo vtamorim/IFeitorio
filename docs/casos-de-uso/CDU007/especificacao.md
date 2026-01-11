@@ -19,9 +19,11 @@
     Nota em formato de estrelas
     Título (quando informado)
     Comentário da avaliação
+
 ## Fluxos Alternativos
+
 **FA1 – Deletar Avaliação**
-Ponto de inserção: Após o passo 2 do Fluxo Principal, caso o coordenador selecione a aba "Deletar".
+- Ponto de inserção: Após o passo 2 do Fluxo Principal, caso o coordenador selecione a aba "Deletar".
 1. O coordenador seleciona uma avaliação.
 2. O coordenador clica no botão "deletar".
 3. O sistema remove a avaliação selecionada.

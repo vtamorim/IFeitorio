@@ -7,12 +7,13 @@
 
 ## Fluxo Principal
 
-1. O usuario seleciona a opção "Meu perfil".
-2. O sistema exibe os campos de matricula (não editavel), nome e senha do usuario.<br>
+1. O usuario seleciona a opção "Meu Perfil".
+2. O sistema exibe os campos de matricula (não editavel), nome e senha do usuario.  
 2.1 Caso o usuário seja aluno, o sistema também exibe o campo de restrições alimentares.
 3. O usuario edita as informações desejadas   
 4. O usuario clica no botão "Atualizar"
-5. O sistema atualiza as informações do usuario.
+5. O sistema valida as novas informações
+6. O sistema atualiza as informações do usuario.
 
 ## Fluxo de exeção 
 - **FE1 – Dados obrigatórios não preenchidos:** 

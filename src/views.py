@@ -1,7 +1,9 @@
 from dao import *
 from models import *
 from typing import Any, Type, Optional
+import qrcode
 from datetime import date, timedelta
+
 class View:
     # Métodos Abstratos - Todos os DAOs tem um "padrão", esses métodos recebem o DAO e chamam o método apropriado.
     @staticmethod
@@ -273,6 +275,13 @@ class View:
             ref.set_data(data)
         card_refeicoes.extend(refeicoes)
         cardapio.set_refeicoes(card_refeicoes)
+    
+    @staticmethod
+    def gerar_qrcode(texto: str):
+        qr = qrcode.QRCode(border=3)
+        qr.add_data(texto)
+        img = qr.make_image(fill_color="black", back_color="#01BE64")
+        return img.get_image()
 
     # Métodos - Autenticação
     @staticmethod

@@ -1,6 +1,6 @@
 # CDU001 – Iniciar Sessão
 
-**Ator Primário:** Visistante.  
+**Ator Primário:** Visitante.  
 **Descrição:** Permite que o usuário faça login no sistema utilizando sua matrícula e senha.  
 **Pré-condições:** *Nenhuma*.  
 **Pós-condições:** Usuário estará logado.  
@@ -17,4 +17,4 @@
 ## Fluxos De Exceção
 
 - **FE1 – Dados inválidos:**  
-  Se o usuário digitar matrícula ou senha incorretos, o sistema exibirá a mensagem de erro: "matricula ou senha incorretas, tente novamente" e solicitará nova tentativa.
+  Se o usuário digitar matrícula ou senha incorretos, o sistema exibirá a mensagem de erro: "matricula ou senha inválidos!" e solicitará nova tentativa.

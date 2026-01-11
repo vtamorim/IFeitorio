@@ -26,7 +26,9 @@ class Justificativa:
 
         self.__falta = falta
     def set_motivo(self, motivo: str) -> None:
+        motivo = motivo.strip()
         if not isinstance(motivo, str): raise ValueError("Motivo Inválido")
+        if motivo == "": raise ValueError("Motivo da Falta não pode ser Vazio!")
 
         self.__motivo = motivo
     def set_aprovada(self, aprovada: Optional[bool]) -> None:

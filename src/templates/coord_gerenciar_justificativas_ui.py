@@ -18,6 +18,10 @@ class CoordenadorGerenciarJustificativasUI:
     @staticmethod
     def ver_nao_analisadas_justificativas() -> None:
         justificativas = [ j for j in View.justificativa_get_all() if j.get_aprovada() is None ]
+        if len(justificativas) <= 0:
+            st.warning("Nenhuma Justificativa não Analisada Encontrada!")
+            return
+        
         just_data = [ [ j.get_id(), j.get_falta().get_id(), j.get_motivo() ] for j in justificativas ]
         just_dataframe = pd.DataFrame(just_data, columns=["id", "falta_id", "motivo"])
         st.dataframe(just_dataframe, hide_index=True)
@@ -25,6 +29,10 @@ class CoordenadorGerenciarJustificativasUI:
     @staticmethod
     def ver_analisadas_justificativas() -> None:
         justificativas = [ j for j in View.justificativa_get_all() if j.get_aprovada() is not None ]
+        if len(justificativas) <= 0:
+            st.warning("Nenhuma Justificativa Analisada Encontrada!")
+            return
+        
         just_data = [ [ j.get_id(), j.get_falta().get_id(), j.get_motivo(), "sim" if j.get_aprovada() else "não" ] for j in justificativas ]
         just_dataframe = pd.DataFrame(just_data, columns=["id", "falta_id", "motivo", "aprovacao"])
         st.dataframe(just_dataframe, hide_index=True)
@@ -48,6 +56,11 @@ class CoordenadorGerenciarJustificativasUI:
         if analisar:
             try:
                 View.justificativa_update(justificativa.get_id(), justificativa.get_falta(), justificativa.get_motivo(), aprovacao)
+
+                notif_titulo = "Justificativa Verificada"
+                notif_conteudo = f"Sua Justificativa da Falta {justificativa.get_id()} foi {'Aprovada' if aprovacao else 'Negada'}."
+                View.notificacao_add(notif_titulo, notif_conteudo, [ justificativa.get_falta().get_aluno() ])
+                
                 st.success("Justificativa Analisada com Sucesso!")
             except Exception as e:
                 st.error(f"Um Erro Ocorreu: {e}")

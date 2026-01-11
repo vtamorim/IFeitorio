@@ -9,6 +9,10 @@ class AlunoVerJustificativasUI:
         
         aluno_matricula = st.session_state["user_matricula"]
         justificativas = View.justificativa_get_aluno_matricula(aluno_matricula)
+
+        if len(justificativas) <= 0:
+            st.warning("Nenhuma Justificativa Encontrada!")
+            return
         
         just_data = []
         for j in justificativas:
@@ -21,6 +25,3 @@ class AlunoVerJustificativasUI:
 
         just_dataframe = pd.DataFrame(just_data, columns=["id", "falta", "motivo", "aprovacao"])
         st.dataframe(just_dataframe, hide_index=True)
-
-        if len(justificativas) <= 0:
-            st.warning("Nenhuma Justificativa Encontrada!")

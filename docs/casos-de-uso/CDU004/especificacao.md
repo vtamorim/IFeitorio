@@ -14,5 +14,8 @@
 
 ## Fluxo de Exceção
 
-- **FE3 – Conta já registrada**
-Caso os dados registrados pelo usuário já estejam inseridos no sistema, o próprio sistema exibirá uma mensagem de erro "Esta conta já está cadastrada, Tente Novamente"
+- **FE1 – Dados obrigatórios não preenchidos:** 
+Caso o usuário tente abrir uma conta com algum campo obrigatório não preenchido, o sistema exibirá a mensagem de erro:
+"Campos obrigatórios vazios, tente novamente", e a operação não será concluída.
+- **FE2 – Conta já registrada**
+Caso os dados registrados pelo usuário já estejam inseridos no sistema, o próprio sistema exibirá uma mensagem de erro "Matrícula já está sendo Utilizada", e a operação não será concluída.

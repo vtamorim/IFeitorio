@@ -1,7 +1,7 @@
 # CDU009 – Gerenciar Restrições
 
 **Ator Primário:** Coordenador.  
-**Descrição:** Permite que o coordenador gerencie as restrições alimentares cadastradas no sistema (ex.: vegetariano, intolerância à lactose, etc.)..  
+**Descrição:** Permite que o coordenador gerencie as restrições alimentares cadastradas no sistema (ex.: vegetariano, intolerância à lactose, etc.).  
 **Pré-condições:** Usuário deve estar logado como Coordenador.  
 **Pós-condições:** Dados sobre as restrições podem ser modificados.  
 
@@ -12,6 +12,7 @@
 3. O sistema abre por padrão a aba "Visualizar", permitindo consultar as restrições cadastradas.
 
 ## Fluxos Alternativos
+
 **FA1 – Adicionar Restrição Alimentar**
 
 **Ponto de inserção:** Após o passo 2 do Fluxo Principal, quando o coordenador seleciona a aba "Adicionar".
@@ -43,6 +44,7 @@
 4. O sistema remove a restrição do sistema.
 
 ## Fluxos de Exceção
+
 **FE1 – Dados inválidos ou campo vazio**
 
 Pode ocorrer nos fluxos FA1 e FA2.

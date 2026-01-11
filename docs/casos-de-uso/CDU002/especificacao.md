@@ -1,9 +1,9 @@
 # CDU002 – Gerenciar Cardápio
 
-**Ator Primário:** Coordenação.  
-**Descrição:** Permite que a coordenação visualize, adicione, atualize e delete os cardápios semanais, definindo informações como data, turno e pratos.  
+**Ator Primário:** Coordenador.  
+**Descrição:** Permite que a coordenação visualize, adicione, atualize e delete os cardápios escolares, definindo informações como data, turno e refeições.  
 **Pré-condições:** Usuário deve estar logado como Coordenador.  
-**Pós-condições:** Caso haja operações de adição, atualização ou exclusão, os cardápios semanais são atualizados no sistema.  
+**Pós-condições:** Caso haja operações de adição, atualização ou exclusão, os cardápios escolares são atualizados no sistema.  
 
 ## Fluxo Principal
 
@@ -28,6 +28,7 @@
 6. O coordenador clica no botão "Adicionar".
 7. O sistema valida os dados informados.
 8. O sistema salva o novo cardápio.
+9. O sistema notifica todos os alunos da criação desse cardápio.
 
 - **FA2 – Atualizar cardápio:**  
 **Ponto de inserção:** Após o passo 2 do Fluxo Principal caso o Coordenador selecione a aba "Atualizar"
@@ -39,6 +40,7 @@
 6. O coordenador clica no botão "Atualizar".
 7. O sistema valida os dados informados.
 8. O sistema atualiza o cardápio.
+9. O sistema notifica todos os alunos da atualização desse cardápio.
 
 - **FA3 – Deletar cardápio:**  
 **Ponto de inserção:** Após o passo 2 do Fluxo Principal caso o Coordenador selecione a aba "Deletar"
@@ -50,4 +52,7 @@
 ## Fluxos De Exceção
 
 - **FE1 – Dados obrigatórios não preenchidos:**  
-    Caso o coordenador tente salvar um cardápio com campos obrigatórios em branco, o sistema exibirá a mensagem de erro "Campos obrigatorios vazios" e não concluira a operação.
+    Caso o coordenador tente salvar um cardápio com campos obrigatórios em branco, o sistema exibirá a mensagem de erro "Campos obrigatorios vazios" e não concluirá a operação.
+
+- **FE2 - Datas Inválidas:**
+    Caso o coordenador tente adicionar um cardápio com uma Data Inicial depois da Data Final, o sistema exibirá uma mensagem de erro e não concluirá a operação.

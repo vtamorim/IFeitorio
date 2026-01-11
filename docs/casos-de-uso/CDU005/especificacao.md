@@ -1,15 +1,15 @@
-# CDU005 – Justificar Falta no Almoço
+# CDU005 – Justificar Falta
         
 **Ator Primário:** Aluno.  
-**Descrição:** Permite que o aluno envie uma justificativa de falta no almoço para o coordenador.
-**Pré-condições:** O usuario deve estar logado como aluno, possuir o auxilio do almoço e ter faltado.  
+**Descrição:** Permite que o aluno envie uma justificativa de falta para o coordenador.  
+**Pré-condições:** O usuario deve estar logado como aluno e ter alguma falta cadastrada no sistema.  
 **Pós-condições:** O coordenador recebe a justificativa enviada pelo aluno.
 
 ## Fluxo Principal
 
-1. O aluno acessa a página de justificativa de falta no almoço.
+1. O aluno acessa a página de "Justificar Faltas".
 2. O sistema exibe os campos "Selecionar Falta" e "Motivo da Falta".
-3. O aluno seleciona o dia em que houve a falta.
+3. O aluno seleciona uma falta.
 4. O aluno preenche o motivo da falta.
 5. O aluno clica no botão "Enviar".
 6. O sistema valida os dados informados, registra a justificativa e a envia para o coordenador.

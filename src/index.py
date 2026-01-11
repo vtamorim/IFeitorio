@@ -16,7 +16,7 @@ class IndexUI:
     def menu_aluno() -> None:
         st.sidebar.header("Menu de Aluno")
 
-        op = st.sidebar.selectbox("Menu", ["Meu Perfil", "Ver Cardápio", "Analisar Refeição", "Ver Notificações", "Justificar Faltas", "Ver Justificativas"])
+        op = st.sidebar.selectbox("Menu", ["Meu Perfil", "Ver Cardápio", "Analisar Refeição", "Ver Notificações", "Justificar Faltas", "Ver Justificativas", "Ver QR-Code"])
 
         if op == "Meu Perfil": AlunoPerfilUI.main()
         elif op == "Ver Cardápio": AlunoVisualizarCardapiosUI.main()
@@ -24,6 +24,7 @@ class IndexUI:
         elif op == "Ver Notificações": AlunoVisualizarNotificacoesUI.main()
         elif op == "Justificar Faltas": AlunoJustificarUI.main()
         elif op == "Ver Justificativas": AlunoVerJustificativasUI.main()
+        elif op == "Ver QR-Code": AlunoVerQRCodeUI.main()
     
     @staticmethod
     def menu_coordenador() -> None:

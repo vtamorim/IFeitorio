@@ -99,7 +99,7 @@ class CoordenadorGerenciarCardapiosUI:
             st.dataframe(jantar_df, hide_index=True)
     
         if len(cardapios) <= 0:
-            st.text("Nenhum Cardápio Encontrado!")
+            st.warning("Nenhum Cardápio Encontrado!")
     
     @staticmethod
     def adicionar_cardapio() -> None:
@@ -146,7 +146,12 @@ class CoordenadorGerenciarCardapiosUI:
                         
                         refeicoes.extend([*refs_lanche, *refs_almoco, *refs_janta])
                     View.cardapio_add(data_inicial, data_final, refeicoes)
-                    st.success("Cardápio Adicionado com Sucesso!")
+                    
+                    notif_titulo = f"Cardápio Criado entre {data_inicial.strftime('%d/%m/%Y')} e {data_final.strftime('%d/%m/%Y')}"
+                    notif_conteudo = f"O Cardápio foi criado em {date.today().strftime('%d/%m/%Y')} com {len(refeicoes)} Refeições cadastradas."
+                    View.notificacao_add(notif_titulo, notif_conteudo, View.aluno_get_all())
+
+                    st.success("Cardápio Adicionado com Sucesso! Alunos foram notificados.")
                 except Exception as e:
                     st.error(f"Um Erro Ocorreu: {e}")
 
@@ -223,7 +228,12 @@ class CoordenadorGerenciarCardapiosUI:
                         cardapio_selecionado.get_data_final(),
                         cardapio_selecionado.get_refeicoes()
                     )
-                    st.success("Cardápio Atualizado com Sucesso!")
+                    
+                    notif_titulo = f"Cardápio {cardapio_selecionado.get_id()} foi Atualizado"
+                    notif_conteudo = f"Agora o Cardápio {cardapio_selecionado.get_id()} está com {len(refeicoes)} Refeições cadastradas."
+                    View.notificacao_add(notif_titulo, notif_conteudo, View.aluno_get_all())
+
+                    st.success("Cardápio Atualizado com Sucesso! Alunos foram notificados.")
                 except Exception as e:
                     st.error(f"Um Erro Ocorreu: {e}")
 
@@ -245,7 +255,11 @@ class CoordenadorGerenciarCardapiosUI:
         if deletar:
             try:
                 View.cardapio_delete(cardapio_selecionado.get_id())
-                st.success("Cardápio Deletado com Sucesso!")
+                    
+                notif_titulo = f"Cardápio {cardapio_selecionado.get_id()} foi Deletado"
+                View.notificacao_add(notif_titulo, None, View.aluno_get_all())
+                
+                st.success("Cardápio Deletado com Sucesso! Alunos foram notificados.")
             except Exception as e:
                 st.error(f"Um Erro Ocorreu: {e}")
 
