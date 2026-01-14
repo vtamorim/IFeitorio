@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 from views import View
-from datetime import date
 from time import sleep
 
 class CoordenadorGerenciarJustificativasUI:
