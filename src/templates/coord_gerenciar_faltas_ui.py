@@ -43,7 +43,7 @@ class CoordenadorGerenciarFaltasUI:
 
         if adicionar:
             try:
-                View.falta_add(aluno, cardapio, data, tipo) # Talvez adicionar uma notificação dps...
+                View.falta_add(aluno, cardapio, data, tipo)
 
                 notif_titulo = "Falta Adicionada"
                 notif_conteudo = f"Uma falta no Cardápio {cardapio.get_id()} - {cardapio.get_data_formatada(data)} no {tipo} foi cadastrada em seu nome."
