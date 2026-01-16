@@ -1,6 +1,6 @@
 from dao import *
 from models import *
-
+# Código de teste requisitado pela "Tarefa 02" de POO.
 r1 = Restricao(1, "Vegetariano")
 RestricaoDAO.add(r1)
 a1 = Aluno("12345", "Gilbert", "abc", [ r1 ])
