@@ -177,7 +177,7 @@ class View:
         return View.get_all(FaltaDAO)
     
     @staticmethod
-    def falta_get_id(falta_id) -> Falta:
+    def falta_get_id(falta_id: int) -> Falta:
         return FaltaDAO.get(falta_id)
 
     @staticmethod
