@@ -38,7 +38,6 @@ Alunos: **todos os matriculados do Campus**.
 Coordenadores: **todos os coordenadores matriculados do Campus**.
 - Precisam definir e informar sobre alterações dos cardápios aos alunos.
 
-Admin: **administra os alunos, coordenadores e o aplicativo**.
 
 
 ## Requisitos Funcionais
@@ -87,7 +86,7 @@ Os alunos devem ter a opção de avaliar os pratos servidos, utilizando notas ou
 
 #### RF010 – Painel Administrativo para a Coordenação
 
-O sistema deve oferecer uma área exclusiva para os administradores da cantina e da coordenação, onde poderão cadastrar e editar cardápios, visualizar justificativas recebidas, responder aos alunos e consultar estatísticas de uso.
+O sistema deve oferecer uma área exclusiva para os administradores da cantina e da coordenação, onde poderão cadastrar e editar cardápios, visualizar justificativas recebidas, responder aos alunos, etc...
 
 #### RF011 – Enviar Cardápio
 
@@ -104,10 +103,6 @@ A coordenação deve poder enviar avisos ou comunicados importantes para todos o
 #### RF014 – Verificação de Justificativa
 
 A coordenação deve poder acessar as justificativas de falta ao almoço e avaliá-las como aceitas ou recusadas.
-
-#### RF015 – Verificação de Dados
-
-O sistema deve permitir que a coordenação visualize dados de frequência dos alunos no lanche e no almoço, incluindo dias mais frequentados, quantidades servidas e avaliações dos pratos, a fim de auxiliar no controle de desperdício e planejamento de refeições.
 
 ## Requisitos Não-Funcionais
 

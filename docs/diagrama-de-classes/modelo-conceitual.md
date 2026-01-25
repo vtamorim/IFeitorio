@@ -10,9 +10,9 @@
 - **Administrador** : Representa os gerenciadores dos cardápios do refeitório e da cantina.
 - **Cardápio** : Lista de Refeições do dia/semana.
 - **Refeição** : Prato de comida.
-- **Avaliação** : Avaliação realizada por um aluno ou administrador sobre uma Refeição.
+- **Avaliação** : Avaliação realizada por um aluno ou coordenador sobre uma Refeição.
 - **Justificativa** : Justificativa de falta de uma refeição importante, por exemplo: almoço, realizada por um aluno.
-- **Notificação** : Mensagem enviada por um administrador para um/uns alunos, por exemplo: mudança repentina do cardápio.
+- **Notificação** : Mensagem enviada por um coordenador para um/uns alunos, por exemplo: mudança repentina do cardápio.
 - **Restrição Alimentar** : Exclusão de determinados alimentos de um aluno, por exemplo: intolerância à lactose.
 
 ## Atributos das Entidades:
@@ -32,7 +32,7 @@
 - Um aluno pode realizar várias justificativas e uma justificativa deve ser realizada por um aluno.
 - Uma justificativa está relacionada a refeição de um dia específico e uma refeição pode estar associada a várias justificativas de falta.
 - Um aluno pode estar associado a várias refeições e uma refeição pode estar associada a vários alunos.
-- Um aluno/administador pode realizar várias avaliações e um avaliação precisa ter um usuário.
+- Um aluno pode realizar várias avaliações e um avaliação precisa ter um usuário.
 - Uma avaliação precisa estar associada a uma refeição específica e uma refeição pode ter várias avaliações.
 - Uma refeição pode estar contida em vários cardápios e um Cardápio precisa ter várias refeições.
-- Um administrador cria e envia uma notificação a vários alunos e um aluno pode receber várias notificações que são criadas por um administrador específico.
+- Um coordenador cria e envia uma notificação a vários alunos e um aluno pode receber várias notificações que são criadas por um coordenador específico.
